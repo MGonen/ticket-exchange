@@ -10,21 +10,21 @@
     <div class="row"></div>
 
 
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
 
             <div class="homepage">
-                <h1>A safe place to buy and sell your e-tickets</h1>
+                <h1>A safe place to buy and sell your e&#8209;tickets</h1>
             </div>
 
             <div class="search_bar">
                 <form method="POST" >{% csrf_token %}
 
                     {{ form }}
-                    <button name="search_button" class="save btn btn-default">Search</button>
+                    <button name="search_button" class="btn btn-primary search_button">Search</button>
                 </form>
             </div>
 
-        <div class="col-md-3"></div>
+        <div class="col-md-2"></div>
     </div>
 {% endblock %}

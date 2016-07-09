@@ -50,7 +50,7 @@ class UserForm(forms.ModelForm):
 
 
 class NameLocationSearchForm(forms.Form):
-    search_query = forms.CharField(widget=forms.TextInput(attrs={'id': 'search_input'}))
+    search_query = forms.CharField(widget=forms.TextInput(attrs={'id': 'search_input', 'autocomplete': 'off', 'placeholder': 'Search Events'}), label='')
 
 class DateSearchForm(forms.Form):
     date = forms.CharField(widget=forms.DateInput(attrs={'class': 'date'}))
