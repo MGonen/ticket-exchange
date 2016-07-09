@@ -21,10 +21,29 @@ import calendar
 import scriptine
 
 
-def select_event(request, event_id=None):
+def select_event(request):
+    form = NameLocationSearchForm()
+
+    return render(request, 'sell_ticket/select_event.html', {'form': form})
+
+
+def selected_event(request, event_id):
     print 'arrived at select-event view'
-    if not event_id:
-        return render(request, 'sell_ticket/select_event.html', {})
+    event = Event.objects.get(id=event_id)
+    return render(request, 'sell_ticket/selected_event.html', {'event': event})
 
 
-# Create your views here.
+def upload_ticket(request):
+    return render(request, 'sell_ticket/upload_ticket.html', {})
+
+
+def set_price(request):
+    return render(request, 'sell_ticket/set_price.html', {})
+
+
+def personal_details(request):
+    return render(request, 'sell_ticket/personal_details.html', {})
+
+
+def confirmation(request):
+    return render(request, 'sell_ticket/confirmation.html', {})

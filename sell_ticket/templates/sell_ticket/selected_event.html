@@ -1,0 +1,13 @@
+{% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <p>Sell Ticket - Select Event</p>
+
+    {{ event.name }}
+    {{ event.location }}
+    {{ event.start_date }}
+    {{ event.end_date }}
+
+{% endblock %}

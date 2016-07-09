@@ -20,7 +20,6 @@ function ajax_search_call(search_query) {
     $.ajax({
         url: url,
         type: "GET",
-        // async: false,
         success: function(results) {
             $('.list-group').remove();
             var event_list = create_event_search_list(results.events);

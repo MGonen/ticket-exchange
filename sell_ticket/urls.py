@@ -13,16 +13,18 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import url
 
 import views
 
 urlpatterns = (
 
-
     url(r'^select-event/$', views.select_event, name='select_event'),
-
+    url(r'^selected-event/(?P<event_id>[0-9]+)/$', views.selected_event, name='selected_event'),
+    url(r'^upload-ticket/$', views.upload_ticket, name='upload_ticket'),
+    url(r'^set-price/$', views.set_price, name='set_price'),
+    url(r'^personal-details/$', views.personal_details, name='personal_details'),
+    url(r'^confirmation/$', views.confirmation, name='confirmation'),
 
 
 
