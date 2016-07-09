@@ -1,0 +1,19 @@
+{% extends 'ticketexchange/base.html' %}
+
+{% block content %}
+    <h4>My Bought tickets</h4>
+
+    {% if tickets %}
+        {% for ticket in tickets %}
+            <p>{{ ticket.event.name }} - {{ ticket.price }}</p>
+        {% endfor %}
+
+    {% else %}
+        <p>You have not bought any tickets yet</p>
+
+
+    {% endif %}
+
+
+
+{% endblock %}

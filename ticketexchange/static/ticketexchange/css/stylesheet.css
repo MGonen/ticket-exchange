@@ -1,0 +1,91 @@
+body {
+background: url("/static/ticketexchange/images/festival2.jpg") no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+
+
+.alert {
+    width: 95%;
+}
+
+.homepage > h1, .home-link {
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.homepage {
+    text-align: center;
+}
+
+/*.home-link {*/
+    /*display: inline;*/
+    /*float: left;*/
+/*}*/
+
+.home-link {
+    color: white;
+}
+
+.home-link:hover {
+    color: #fbf7ed;
+    text-decoration: none;
+}
+
+.top-menu {
+    display: inline-block;
+    color: lightgrey;
+}
+
+.top-menu:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.pagetools {
+    float: right;
+    padding-top: 5%;
+}
+
+
+.list-group {
+    width: 40%;
+}
+
+.image-button {
+    background-color: transparent !important;
+    border: none;
+}
+
+.image-button:focus {
+    outline: none;
+}
+
+.image-button:hover {
+
+}
+
+.facebook-image {
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.facebook-image:hover {
+    opacity: 0.8;
+}
+
+
+/* Forms */
+.post-form textarea, .post-form input {
+    width: 100%;
+    border-style: outset;
+}
+
+.date {
+    width: 30% !important;
+    color: green;
+}
+

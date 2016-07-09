@@ -1,0 +1,10 @@
+{% extends "ticketexchange/Admin/base_admin.html" %}
+
+{% block content %}
+
+    <img src="{{ person.photo }}">
+    <h4>Name: <a href="{% url 'person_edit' person.pk %}">{{ person.fullname }} - {{ person.user.email }} - {{ person.bank_account }} </a></h4>
+
+    <p>Tickets: {{ person.tickets.all }}</p>
+
+{% endblock %}

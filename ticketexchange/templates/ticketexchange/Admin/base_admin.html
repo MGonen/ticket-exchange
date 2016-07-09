@@ -1,0 +1,12 @@
+{% extends 'ticketexchange/base.html' %}
+
+{% block admin_header %}
+    <div class="navigation buttons">
+        <a href="{% url 'person_index' %}" class="btn btn-default" style="width: 30%">Persons</a>
+        <a href="{% url 'event_index' %}" class="btn btn-default" style="width: 30%">Events</a>
+        <a href="{% url 'ticket_index' %}" class="btn btn-default" style="width: 30%">Tickets</a>
+
+    </div>
+
+
+{% endblock %}

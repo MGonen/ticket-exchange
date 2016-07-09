@@ -1,0 +1,32 @@
+{% extends 'ticketexchange/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+
+    <h1>Event</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button name="save" class="save btn btn-default">Save</button>
+        <button name="cancel" class="save btn btn-default">Cancel</button>
+    </form>
+
+
+
+
+{% endblock %}
+
+
+{##}
+{#<script>#}
+{##}
+{#     $(function() {#}
+{#         $( ".datepicker" ).datepicker({#}
+{#             changeMonth: true,#}
+{#             changeYear: true,#}
+{#             yearRange: "1900:2012"#}
+{#            // You can put more options here.#}
+{#         });#}
+{#     });#}
+{# </script>#}

@@ -1,0 +1,30 @@
+{% extends "ticketexchange/base.html" %}
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'ticketexchange/js/search.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="row" style="height: 20%"></div>
+    <div class="row"></div>
+
+
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            <div class="homepage">
+                <h1>A safe place to buy and sell your e-tickets</h1>
+            </div>
+
+            <div>
+                <form method="POST" >{% csrf_token %}
+
+                    {{ form }}
+                    <button name="search_button" class="save btn btn-default">Search</button>
+                </form>
+            </div>
+
+        <div class="col-md-3"></div>
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "ticketexchange/Admin/base_admin.html" %}
+
+{% block content %}
+
+    <h4><a href="{% url 'ticket_edit' ticket.pk %}">{{ ticket.event.name }}</a></h4>
+    <p>{{ ticket.seller.user.username }}</p>
+
+{% endblock %}
