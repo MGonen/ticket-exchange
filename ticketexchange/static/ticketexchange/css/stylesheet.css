@@ -1,5 +1,5 @@
 body {
-background: url("/static/ticketexchange/images/festival2.jpg") no-repeat center center fixed;
+background: url("/static/ticketexchange/images/festival4.jpg") no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -52,7 +52,7 @@ background-size: cover;
 
 
 .list-group {
-    width: 40%;
+    /*width: 80%;*/
 }
 
 .image-button {

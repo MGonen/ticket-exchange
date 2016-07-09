@@ -41,7 +41,8 @@ function ajax_search_results() {
 
                     event_list.appendChild(event_item)
                 }
-                document.body.appendChild(event_list)
+                $('.search_bar').after(event_list);
+                // document.body.appendChild(event_list)
             },
             error: function () {
                 console.log('js error')
