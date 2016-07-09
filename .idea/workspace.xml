@@ -1,24 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cb9d6fcc-fd6d-4f98-815c-f70ce4d4e119" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Admin/admin_home.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Admin/base_admin.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Event/event_detail.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Event/event_edit.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Event/event_index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Person/person_detail.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Person/person_edit.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Person/person_index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_detail.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_edit.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/views/events.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/views/persons.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/views/tickets.py" afterPath="" />
+    <list default="true" id="cb9d6fcc-fd6d-4f98-815c-f70ce4d4e119" name="Default" comment="Project seperated into 3 apps: my_info, sell_ticket, ticket_exchange">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/my_info/admin.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/my_info/models.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/my_info/urls.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/my_info/views.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/admin.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/migrations/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/models.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/confirm.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/personal_details.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/select_event.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/set_price.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/upload_ticket.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/tests.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/urls.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/views.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/migrations/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/search_events.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/select_events.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/home.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/search.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/tests.py" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/migrations/0001_initial.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/search.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/home.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/views/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/ticketexchange/views/my.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/admin.py" afterPath="$PROJECT_DIR$/ticket_exchange/admin.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/apps.py" afterPath="$PROJECT_DIR$/ticket_exchange/apps.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/forms.py" afterPath="$PROJECT_DIR$/ticket_exchange/forms.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/migrations/__init__.py" afterPath="$PROJECT_DIR$/my_info/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/models.py" afterPath="$PROJECT_DIR$/ticket_exchange/models.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/pipeline.py" afterPath="$PROJECT_DIR$/ticket_exchange/pipeline.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/signals.py" afterPath="$PROJECT_DIR$/ticket_exchange/signals.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/css/stylesheet.css" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/css/stylesheet.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/festival.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/festival.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/festival1.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/festival1.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/festival2.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/festival2.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/festival3.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/festival3.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/festival4.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/festival4.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/images/white clouds.jpg" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/images/white clouds.jpg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/scripts.js" afterPath="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/scripts.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/My/bought_tickets.html" afterPath="$PROJECT_DIR$/my_info/templates/my_info/bought_tickets.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/My/payouts.html" afterPath="$PROJECT_DIR$/my_info/templates/my_info/payouts.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/My/profile.html" afterPath="$PROJECT_DIR$/my_info/templates/my_info/profile.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/My/tickets_for_sale.html" afterPath="$PROJECT_DIR$/my_info/templates/my_info/tickets_for_sale.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/SellTicket/sell_ticket.html" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/sell_ticket.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/advanced_search.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/advanced_search.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/base.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/base.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/create_event.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/create_event.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/event_tickets.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/event_tickets.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/search.html" afterPath="$PROJECT_DIR$/my_info/migrations/__init__.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/tests.py" afterPath="$PROJECT_DIR$/my_info/tests.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/urls.py" afterPath="$PROJECT_DIR$/ticket_exchange/urls.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/ticketexchange/views/views.py" afterPath="$PROJECT_DIR$/ticket_exchange/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticketexchange/urls.py" afterPath="$PROJECT_DIR$/ticketexchange/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticketexchange/views/__init__.py" afterPath="$PROJECT_DIR$/ticketexchange/views/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TX/settings.py" afterPath="$PROJECT_DIR$/TX/settings.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TX/urls.py" afterPath="$PROJECT_DIR$/TX/urls.py" />
     </list>
     <ignored path="TS.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,71 +86,103 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="stylesheet.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/static/ticketexchange/css/stylesheet.css">
+      <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2482">
-              <caret line="155" column="22" selection-start-line="155" selection-start-column="22" selection-end-line="155" selection-end-column="22" />
+            <state relative-caret-position="511">
+              <caret line="62" column="53" selection-start-line="62" selection-start-column="53" selection-end-line="62" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ticket_exchange/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="38" column="28" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/urls.py">
+        <entry file="file://$PROJECT_DIR$/my_info/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state relative-caret-position="323">
+              <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/views/__init__.py">
+      <file leaf-file-name="stylesheet.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/css/stylesheet.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="create_event.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/create_event.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="52" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="52" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="home.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="476">
+              <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/views/views.py">
+        <entry file="file://$PROJECT_DIR$/sell_ticket/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="39" column="10" selection-start-line="35" selection-start-column="6" selection-end-line="39" selection-end-column="10" />
+            <state relative-caret-position="374">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="search_events.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/search_events.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="579">
+              <caret line="76" column="1" selection-start-line="76" selection-start-column="1" selection-end-line="76" selection-end-column="1" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="event_tickets.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/event_tickets.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ticket_exchange/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/my_info/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="46" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TX/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="698">
+              <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bought_tickets.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/my_info/templates/my_info/bought_tickets.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="32" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -128,21 +203,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../TS/TS/urls.py" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/pipeline.py" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/signals.py" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/SellTicket/sell_ticket.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/views/tickets.py" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/base_admin.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Person/person_detail.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Person/person_index.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Person/person_edit.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Ticket/ticket_detail.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Ticket/ticket_edit.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Ticket/ticket_index.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Event/event_detail.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/admin_home.html" />
-        <option value="$PROJECT_DIR$/../TS/ticketswap/views/persons.py" />
         <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Event/event_tickets.html" />
         <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/advanced_search.html" />
         <option value="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/My/bought_tickets.html" />
@@ -168,17 +228,32 @@
         <option value="$PROJECT_DIR$/../TS/ticketswap/models.py" />
         <option value="$PROJECT_DIR$/ticketexchange/apps.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/ticketexchange/forms.py" />
-        <option value="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/home.html" />
-        <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/search.js" />
-        <option value="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/base.html" />
         <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/css/stylesheet.css" />
         <option value="$PROJECT_DIR$/ticketexchange/views/events.py" />
         <option value="$PROJECT_DIR$/ticketexchange/views/tickets.py" />
         <option value="$PROJECT_DIR$/ticketexchange/views/persons.py" />
         <option value="$PROJECT_DIR$/ticketexchange/views/views.py" />
+        <option value="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/search.html" />
+        <option value="$PROJECT_DIR$/ticketexchange/forms.py" />
+        <option value="$PROJECT_DIR$/ticketexchange/models.py" />
+        <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/search.js" />
+        <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/select_event.js" />
+        <option value="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/home.html" />
+        <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/select_events.js" />
+        <option value="$PROJECT_DIR$/ticketexchange/views/sell_ticket.py" />
+        <option value="$PROJECT_DIR$/sellticket/urls.py" />
+        <option value="$PROJECT_DIR$/sellticket/views.py" />
+        <option value="$PROJECT_DIR$/sellticket/templates/sellticket/select_event.html" />
+        <option value="$PROJECT_DIR$/TX/urls.py" />
         <option value="$PROJECT_DIR$/ticketexchange/urls.py" />
+        <option value="$PROJECT_DIR$/my_info/urls.py" />
         <option value="$PROJECT_DIR$/ticketexchange/views/__init__.py" />
+        <option value="$PROJECT_DIR$/ticketexchange/views/my.py" />
+        <option value="$PROJECT_DIR$/TX/settings.py" />
+        <option value="$PROJECT_DIR$/ticketexchange/templates/ticketexchange/base.html" />
+        <option value="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/search_events.js" />
+        <option value="$PROJECT_DIR$/my_info/views.py" />
+        <option value="$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/css/stylesheet.css" />
       </list>
     </option>
   </component>
@@ -253,7 +328,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
+              <option name="myItemId" value="ticket_exchange" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -267,11 +342,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
+              <option name="myItemId" value="ticket_exchange" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ticket_exchange" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -285,7 +364,65 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
+              <option name="myItemId" value="ticket_exchange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ticket_exchange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ticket_exchange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="migrations" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sell_ticket" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="TX" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sell_ticket" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -293,7 +430,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
+              <option name="myItemId" value="sell_ticket" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -307,19 +444,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
+              <option name="myItemId" value="sell_ticket" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -333,41 +462,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
               <option name="myItemId" value="TX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TX" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ticketexchange" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -382,18 +477,18 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap" />
-      <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Ticket" />
-      <recent name="$PROJECT_DIR$/../TS/ticketswap" />
-      <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Person" />
-      <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Event" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ticketexchange" />
+      <recent name="$PROJECT_DIR$/sellticket/templates/sellticket" />
       <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap" />
       <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Admin" />
       <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/My" />
-      <recent name="$PROJECT_DIR$/../TS/ticketswap/views" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/my_info/templates/my_info" />
+      <recent name="$PROJECT_DIR$/my_info" />
+      <recent name="$PROJECT_DIR$/ticketexchange/static/ticketexchange/js" />
+      <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap" />
       <recent name="$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/Ticket" />
     </key>
   </component>
@@ -698,7 +793,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468091679356</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Unnecessary custom admin content removed">
+      <created>1468091786928</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1468091786928</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -741,99 +843,14 @@
     <MESSAGE value="pagetools update" />
     <MESSAGE value="homepage update" />
     <MESSAGE value="homepage update.&#10;Admin things disabled" />
-    <option name="LAST_COMMIT_MESSAGE" value="homepage update.&#10;Admin things disabled" />
+    <MESSAGE value="Unnecessary custom admin content removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="Unnecessary custom admin content removed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/static/ticketexchange/css/stylesheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/base_org.html" />
-    <entry file="file://$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/My/wanted_listings.html" />
-    <entry file="file://$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/log_out.html" />
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/social/apps/django_app/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python2.7/dist-packages/social/apps/django_app/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="37" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TX/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../TS/ticketswap/templates/ticketswap/logged_in.html" />
-    <entry file="file://$PROJECT_DIR$/ticketexchange/signals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Person/person_index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="33" selection-start-line="0" selection-start-column="33" selection-end-line="0" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Admin/base_admin.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="21" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Person/person_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="27" selection-start-line="0" selection-start-column="27" selection-end-line="0" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="33" selection-start-line="0" selection-start-column="33" selection-end-line="0" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="33" selection-start-line="0" selection-start-column="33" selection-end-line="0" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Ticket/ticket_index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="33" selection-start-line="0" selection-start-column="33" selection-end-line="0" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/Event/event_detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -842,7 +859,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/pipeline.py">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/pipeline.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="8" column="53" selection-start-line="8" selection-start-column="53" selection-end-line="8" selection-end-column="53" />
@@ -858,17 +875,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/SellTicket/sell_ticket.html">
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/sell_ticket.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/advanced_search.html">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/advanced_search.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="45" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="45" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -878,13 +897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TX/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="13" column="6" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -909,16 +921,6 @@
         <state relative-caret-position="85">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/views/my.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="45" column="96" selection-start-line="45" selection-start-column="96" selection-end-line="45" selection-end-column="96" />
-          <folding>
-            <element signature="e#0#64#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -952,10 +954,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/apps.py">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/apps.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -963,66 +966,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="52" column="139" selection-start-line="52" selection-start-column="139" selection-end-line="52" selection-end-column="139" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/search.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="24" column="10" selection-start-line="24" selection-start-column="10" selection-end-line="24" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/scripts.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="3" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="58" column="74" selection-start-line="58" selection-start-column="74" selection-end-line="58" selection-end-column="74" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/search.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="67" selection-start-line="21" selection-start-column="67" selection-end-line="21" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/static/ticketexchange/css/stylesheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2482">
-          <caret line="155" column="22" selection-start-line="155" selection-start-column="22" selection-end-line="155" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1050,7 +993,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/create_event.html">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/create_event.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="11" column="52" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="52" />
@@ -1058,15 +1001,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/templates/ticketexchange/event_tickets.html">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/event_tickets.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="32" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
@@ -1074,18 +1009,185 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/views/views.py">
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/forms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="39" column="10" selection-start-line="35" selection-start-column="6" selection-end-line="39" selection-end-column="10" />
+        <state relative-caret-position="443">
+          <caret line="34" column="27" selection-start-line="34" selection-start-column="27" selection-end-line="34" selection-end-column="27" />
+          <folding>
+            <marker date="1468091969331" expanded="true" signature="863:932" ph="..." />
+            <marker date="1468091969331" expanded="true" signature="880:932" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/upload_ticket.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ticketexchange/urls.py">
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/set_price.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/personal_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/confirm.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/scripts.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="3" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticketexchange/static/ticketexchange/js/select_event.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/select_events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="59" column="22" selection-start-line="59" selection-start-column="22" selection-end-line="59" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticketexchange/views/sell_ticket.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="26" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="25" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+          <folding>
+            <element signature="e#611#652#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TX/wsgi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/templates/sell_ticket/select_event.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="14" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="14" selection-start-line="22" selection-start-column="14" selection-end-line="22" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TX/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="21" column="67" selection-start-line="21" selection-start-column="67" selection-end-line="21" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TX/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="43" column="14" selection-start-line="43" selection-start-column="14" selection-end-line="43" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/my_info/templates/my_info/bought_tickets.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/my_info/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticketexchange/views/my.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="45" column="98" selection-start-line="0" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sell_ticket/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#67#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="62" column="53" selection-start-line="62" selection-start-column="53" selection-end-line="62" selection-end-column="53" />
           <folding />
         </state>
       </provider>
@@ -1093,7 +1195,47 @@
     <entry file="file://$PROJECT_DIR$/ticketexchange/views/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+          <caret line="1" column="16" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/my_info/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="46" selection-start-line="8" selection-start-column="46" selection-end-line="8" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="38" column="28" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/css/stylesheet.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ticket_exchange/static/ticket_exchange/js/search_events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="579">
+          <caret line="76" column="1" selection-start-line="76" selection-start-column="1" selection-end-line="76" selection-end-column="1" />
           <folding />
         </state>
       </provider>

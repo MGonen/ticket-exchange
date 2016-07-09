@@ -1,0 +1,17 @@
+{% extends "ticket_exchange/base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <p>Create event</p>
+
+    <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
+        {{ event_form.as_p }}
+        {{ upload_form.as_p }}
+        <button name="Submit" class="btn btn-default">Submit</button>
+    </form>
+
+
+
+{% endblock %}

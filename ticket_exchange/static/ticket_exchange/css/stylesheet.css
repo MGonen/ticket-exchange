@@ -1,0 +1,169 @@
+/* Forms */
+
+form > input {
+    width: 80%;
+    vertical-align: middle;
+    font: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    margin-right: 0;
+
+    border: 0;
+    /*border: 1px solid;*/
+    border-color: darkgray;
+
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+
+    box-shadow: 0 1px 2px #666666;
+
+}
+
+
+form {
+    align-content: center;
+    margin-top: 40px;
+
+}
+
+
+/*  Base  */
+body {
+background: url("/static/ticket_exchange/images/festival1.jpg") no-repeat center center fixed;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+
+
+.alert {
+    width: 95%;
+}
+
+.home-link {
+    color: white;
+    font-size: 40px;
+}
+
+
+
+
+.home-link {
+    color: white;
+}
+
+.home-link:hover {
+    color: #fbf7ed;
+    text-decoration: none;
+}
+
+.top-menu {
+    display: inline-block;
+    color: lightgrey;
+}
+
+.top-menu:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.pagetools {
+    float: right ;
+    padding-top: 2%;
+}
+
+.pagetools > li {
+    display: inline;
+    margin: 5px;
+}
+
+.pagetools > li > ul {
+    margin-top: 28px;
+}
+
+.dropdown-menu::after {
+  position: absolute;
+  top: -6px;
+  left: 25px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  border-left: 6px solid transparent;
+  content: '';
+}
+
+.image-button {
+    background-color: transparent !important;
+    border: none;
+}
+
+.image-button:focus {
+    outline: none;
+}
+
+.facebook-image {
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.facebook-image:hover {
+    opacity: 0.8;
+}
+
+
+
+
+/* Home */
+
+.homepage > h1 {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+
+.homepage {
+    text-align: center;
+}
+
+
+
+.search_bar {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+.search_button{
+    font: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 20%;
+    margin-left: -4px;
+    box-shadow: 0 1px 2px #444444;
+    border: 0;
+}
+
+
+
+.homepage-search-results {
+    width: 80%;
+    margin-top: -10px;
+}
+
+
+/* Forms */
+.post-form textarea, .post-form input {
+    width: 100%;
+    border-style: outset;
+}
+
+.date {
+    width: 30% !important;
+}
+

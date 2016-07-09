@@ -1,0 +1,17 @@
+{% extends 'ticket_exchange/base.html' %}
+
+{% block content %}
+    <h4>My Profile</h4>
+
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ user_form.as_p }}
+        {{ person_form.as_p }}
+        <button name="save" class="save btn btn-default">Save</button>
+    </form>
+
+
+
+
+
+
+{% endblock %}

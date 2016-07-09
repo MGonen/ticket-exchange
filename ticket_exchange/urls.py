@@ -16,12 +16,27 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('ticket_exchange.urls')),
-    url(r'my-info/', include('my_info.urls', namespace='my_info')),
-    url(r'sell-ticket/', include('sell_ticket.urls', namespace='sell_ticket')),
-    url(r'', include('social.apps.django_app.urls', namespace='social')),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+import views
 
-]
+urlpatterns = (
+    url(r'^$', views.home, name='home'),
+
+    url(r'^get_search_results/(?P<search_query>.+)/$', views.get_ajax_search_results, name='get_ajax_search_results'),
+    url(r'^advanced_search/(?P<search_query>.+)/$', views.advanced_search, name='advanced_search'),
+
+    url(r'^create_event/$', views.create_event, name='create_event'),
+
+    url(r'^event/(?P<event_pk>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
+
+
+
+    # url(r'sell-ticket', views.sell_ticket, name='sell_ticket'),
+
+
+
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+
+
+
+
+)

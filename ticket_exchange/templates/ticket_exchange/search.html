@@ -1,0 +1,9 @@
+
+
+    <div class="search_bar">
+        <form method="POST" >{% csrf_token %}
+
+            {{ form }}
+            <button name="search_button" class="btn btn-primary search_button">Search</button>
+        </form>
+    </div>

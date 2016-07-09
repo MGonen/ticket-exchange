@@ -39,7 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     # 'haystack',
-    'ticketexchange',
+    'ticket_exchange',
+    'sell_ticket',
+    'my_info',
 
 )
 
@@ -113,7 +115,7 @@ LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_FACEBOOK_KEY = '1677099975876619'
 SOCIAL_AUTH_FACEBOOK_SECRET = '492021a2face02ca6b1e13498de0b6ad'
 
-AUTH_PROFILE_MODULE = 'ticketexchange.Person'
+AUTH_PROFILE_MODULE = 'ticket_exchange.Person'
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
@@ -125,7 +127,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    'ticketexchange.pipeline.create_profile'  #Custom pipeline
+    'ticket_exchange.pipeline.create_profile'  #Custom pipeline
 )
 
 

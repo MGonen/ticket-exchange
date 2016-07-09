@@ -16,12 +16,21 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('ticket_exchange.urls')),
-    url(r'my-info/', include('my_info.urls', namespace='my_info')),
-    url(r'sell-ticket/', include('sell_ticket.urls', namespace='sell_ticket')),
-    url(r'', include('social.apps.django_app.urls', namespace='social')),
-    url('', include('django.contrib.auth.urls', namespace='auth')),
+import views
 
-]
+urlpatterns = (
+
+    url(r'tickets/for-sale/$', views.my_tickets_for_sale, name='my_tickets_for_sale'),
+    url(r'tickets/bought/$', views.my_tickets_bought, name='my_tickets_bought'),
+    # url(r'my-wanted_listings/$', views.my_wanted_listings, name='my_wanted_listings'),
+    url(r'payouts/$', views.my_payouts, name='my_payouts'),
+    url(r'profile/$', views.my_profile, name='my_profile'),
+
+
+
+
+
+
+
+
+)
