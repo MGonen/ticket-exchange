@@ -39,23 +39,6 @@ urlpatterns = (
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 
 
-    # url(r'^person/index/$', views.person_index, name='person_index'),
-    # url(r'^person/(?P<person_pk>[0-9]+)/$', views.person_detail, name='person_detail'),
-    # url(r'^person/(?P<person_pk>[0-9]+)/edit/$', views.person_edit, name='person_edit'),
-    #
-    # url(r'^event/index/$', views.event_index, name='event_index'),
-    # url(r'^event/new/$', views.event_new, name='event_new'),
-    # url(r'^event/(?P<event_pk>[0-9]+)/$', views.event_detail, name='event_detail'),
-    # url(r'^event/(?P<event_pk>[0-9]+)/edit/$', views.event_edit, name='event_edit'),
-    #
-    #
-    # url(r'^ticket/index/$', views.ticket_index, name='ticket_index'),
-    # url(r'^ticket/new/$', views.ticket_new, name='ticket_new'),
-    # url(r'^ticket/(?P<ticket_pk>[0-9]+)/$', views.ticket_detail, name='ticket_detail'),
-    # url(r'^ticket/(?P<ticket_pk>[0-9]+)/edit/$', views.ticket_edit, name='ticket_edit'),
-    #
-    # url(r'^admin_home/$', views.admin_home, name='admin_home'),
-
 
 
 )
