@@ -1,5 +1,35 @@
+/* Forms */
+
+form > input {
+    width: 80%;
+    vertical-align: middle;
+    font: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    margin-right: 0;
+
+    border: 0;
+    /*border: 1px solid;*/
+    border-color: darkgray;
+
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+
+    box-shadow: 0 1px 2px #666666;
+
+}
+
+
+form {
+    align-content: center;
+    margin-top: 40px;
+
+}
+
+
+/*  Base  */
 body {
-background: url("/static/ticketexchange/images/festival4.jpg") no-repeat center center fixed;
+background: url("/static/ticketexchange/images/festival1.jpg") no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -16,20 +46,8 @@ background-size: cover;
     font-size: 40px;
 }
 
-.homepage > h1 {
-    color: white;
-    font-size: 60px;
-    font-weight: bold;
-}
 
-.homepage {
-    text-align: center;
-}
 
-/*.home-link {*/
-    /*display: inline;*/
-    /*float: left;*/
-/*}*/
 
 .home-link {
     color: white;
@@ -75,15 +93,6 @@ background-size: cover;
   content: '';
 }
 
-/*.dropdown-menu {*/
-    /*margin-top: 20px;*/
-/*}*/
-
-.homepage-search-results {
-    width: 80%;
-
-}
-
 .image-button {
     background-color: transparent !important;
     border: none;
@@ -93,10 +102,6 @@ background-size: cover;
     outline: none;
 }
 
-.image-button:hover {
-
-}
-
 .facebook-image {
     border-radius: 50%;
     opacity: 0.6;
@@ -104,6 +109,51 @@ background-size: cover;
 
 .facebook-image:hover {
     opacity: 0.8;
+}
+
+
+
+
+/* Home */
+
+.homepage > h1 {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+
+.homepage {
+    text-align: center;
+}
+
+
+
+.search_bar {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+.search_button{
+    font: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 20%;
+    margin-left: -4px;
+    box-shadow: 0 1px 2px #444444;
+    border: 0;
+}
+
+
+
+.homepage-search-results {
+    width: 80%;
+    margin-top: -10px;
 }
 
 
@@ -117,38 +167,3 @@ background-size: cover;
     width: 30% !important;
 }
 
-
-.search_bar {
-    width: 100%;
-    text-align: center;
-}
-
-form > input {
-    font: sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    /*border-radius: 4px;*/
-    border: 1px solid;
-    border-color: darkgray;
-    width: 80%;
-    margin-right: 0 !important;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-}
-
-form {
-    align-content: center;
-    margin-top: 30px;
-}
-
-
-.search_button{
-    margin-top: -4px;
-    font: sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    width: 20%;
-    margin-left: -4px;
-}

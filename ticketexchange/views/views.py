@@ -33,11 +33,11 @@ def home(request):
     return render(request, 'ticketexchange/home.html', {'form':form})
 
 
-def admin_home(request):
-    persons = Person.objects.filter(user__is_superuser=False)
-    events = Event.objects.all()
-    tickets = Ticket.objects.all()
-    return render(request, 'ticketexchange/Admin/admin_home.html', {'persons': persons, 'events': events, 'tickets': tickets})
+# def admin_home(request):
+#     persons = Person.objects.filter(user__is_superuser=False)
+#     events = Event.objects.all()
+#     tickets = Ticket.objects.all()
+#     return render(request, 'ticketexchange/Admin/admin_home.html', {'persons': persons, 'events': events, 'tickets': tickets})
 
 
 
@@ -129,7 +129,7 @@ def create_event(request):
 
             event = event_form.save()
             messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
-            return redirect('event_index')
+            return redirect('event_tickets', event.id)
 
         else:
             messages.add_message(request, messages.ERROR, 'The creation of the event failed. Please try again.')

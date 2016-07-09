@@ -43,10 +43,10 @@ urlpatterns = (
     # url(r'^person/(?P<person_pk>[0-9]+)/$', views.person_detail, name='person_detail'),
     # url(r'^person/(?P<person_pk>[0-9]+)/edit/$', views.person_edit, name='person_edit'),
     #
-    url(r'^event/index/$', views.event_index, name='event_index'),
+    # url(r'^event/index/$', views.event_index, name='event_index'),
     # url(r'^event/new/$', views.event_new, name='event_new'),
     # url(r'^event/(?P<event_pk>[0-9]+)/$', views.event_detail, name='event_detail'),
-    url(r'^event/(?P<event_pk>[0-9]+)/edit/$', views.event_edit, name='event_edit'),
+    # url(r'^event/(?P<event_pk>[0-9]+)/edit/$', views.event_edit, name='event_edit'),
     #
     #
     # url(r'^ticket/index/$', views.ticket_index, name='ticket_index'),
