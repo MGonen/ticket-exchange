@@ -6,25 +6,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row" style="height: 20%"></div>
-    <div class="row"></div>
 
+    <div class="homepage">
+        <h1>A safe place to buy and sell your e&#8209;tickets</h1>
+    </div>
 
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+    <div class="search_bar">
+        <form method="POST" >{% csrf_token %}
 
-            <div class="homepage">
-                <h1>A safe place to buy and sell your e&#8209;tickets</h1>
-            </div>
-
-            <div class="search_bar">
-                <form method="POST" >{% csrf_token %}
-
-                    {{ form }}
-                    <button name="search_button" class="btn btn-primary search_button">Search</button>
-                </form>
-            </div>
-
-        <div class="col-md-2"></div>
+            {{ form }}
+            <button name="search_button" class="btn btn-primary search_button">Search</button>
+        </form>
     </div>
 {% endblock %}

@@ -19,7 +19,7 @@ function ajax_search_results() {
                 $('.list-group').remove();
                 events = results.events;
                 var event_list = document.createElement('div');
-                event_list.className = 'list-group';
+                event_list.className = 'list-group homepage-search-results';
 
                 for (var i=0; i < events.length; i++ ){
                     var event_item = document.createElement('a');
