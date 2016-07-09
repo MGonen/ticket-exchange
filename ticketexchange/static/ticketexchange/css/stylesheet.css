@@ -46,10 +46,33 @@ background-size: cover;
 }
 
 .pagetools {
-    float: right;
+    float: right ;
     padding-top: 2%;
 }
 
+.pagetools > li {
+    display: inline;
+    margin: 5px;
+}
+
+.pagetools > li > ul {
+    margin-top: 28px;
+}
+
+.dropdown-menu::after {
+  position: absolute;
+  top: -6px;
+  left: 25px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  border-left: 6px solid transparent;
+  content: '';
+}
+
+/*.dropdown-menu {*/
+    /*margin-top: 20px;*/
+/*}*/
 
 .list-group {
     width: 80%;

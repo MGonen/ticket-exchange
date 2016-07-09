@@ -38,39 +38,47 @@
 
         <div class="content container-fluid">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <h1><a href="/" class="home-link">ticket exchange</a></h1>
                 </div>
 
-                <div class="col-md-5"></div>
-                <div class="col-md-5 dropdown pagetools">
-{#                    <div class="">#}
-                        <a href="{% url 'home' %}" class="top-menu"><h4>Search</h4></a>
-                        &nbsp;
+                <div class="col-md-3"></div>
+                <div class="col-md-5">
+                    <ul class="pagetools">
+                        <li><a href="{% url 'home' %}" class="top-menu"><h4>Search</h4></a></li>
+
                         {% if user.is_staff %}
-                            <a href="{% url 'create_event' %}" class="top-menu"><h4>Create Event</h4></a>
-                            &nbsp;
+                            <li><a href="{% url 'create_event' %}" class="top-menu"><h4>Create Event</h4></a></li>
                         {% endif %}
-                        {% if user.is_authenticated %}
+
+                    {% if user.is_authenticated %}
+
+                        <li class="dropdown">
                             <button type="button" data-toggle="dropdown" class="image-button"><img src="{{ user.person.photo }}?width=50&height=50" class="facebook-image"><span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'my_tickets_for_sale' %}">My tickets for sale</a></li>
-                                    <li><a href="{% url 'my_tickets_bought' %}">My bought tickets</a></li>
-        {#                                <li><a href="{% url 'my_wanted_listings' %}">My wanted listings</a></li>#}
-                                    <li><a href="{% url 'my_payouts' %}">My payouts</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{% url 'my_profile' %}">Profile</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{% url 'auth:logout' %}" class="top-menu">Log out</a>
-                                </ul>
-                            &nbsp;
-                            <a href="{% url 'sell_ticket' %}" class="btn btn-success"><b>Sell your e-ticket</b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'my_tickets_for_sale' %}">My tickets for sale</a></li>
+                                <li><a href="{% url 'my_tickets_bought' %}">My bought tickets</a></li>
+    {#                                <li><a href="{% url 'my_wanted_listings' %}">My wanted listings</a></li>#}
+                                <li><a href="{% url 'my_payouts' %}">My payouts</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'my_profile' %}">Profile</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{% url 'auth:logout' %}" class="top-menu">Log out</a>
+                            </ul>
+                        </li>
 
-                        {% else %}
+                        <li><a href="{% url 'sell_ticket' %}" class="btn btn-success"><b>Sell your e-ticket</b></a></li>
 
-                            <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="top-menu"><h4>Log in</h4></a>
-                        {% endif %}
-                    </div>
+                    {% else %}
+                        <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="top-menu"><h4>Log in</h4></a></li>
+                    {% endif %}
+
+
+
+
+
+                    </ul>
+
                 </div>
             </div>
 
