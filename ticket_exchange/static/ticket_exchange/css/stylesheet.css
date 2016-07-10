@@ -58,16 +58,6 @@ background-size: cover;
     text-decoration: none;
 }
 
-.top-menu {
-    display: inline-block;
-    color: lightgrey;
-}
-
-.top-menu:hover {
-    color: white;
-    text-decoration: none;
-}
-
 .pagetools {
     float: right ;
     padding-top: 2%;
@@ -80,6 +70,24 @@ background-size: cover;
 
 .pagetools > li > ul {
     margin-top: 28px;
+}
+
+.pagetools > li > a {
+    display: inline-block;
+    color: lightgrey;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.pagetools > li > a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+#sell-ticket-button {
+    color: white;
+    font-weight: bold;
+    font-size: 16;
 }
 
 .dropdown-menu::after {

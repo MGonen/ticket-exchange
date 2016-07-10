@@ -46,7 +46,7 @@
                         <li><a href="{% url 'home' %}" class="top-menu"><h4>Search</h4></a></li>
 
                         {% if user.is_staff %}
-                            <li><a href="{% url 'create_event' %}" class="top-menu"><h4>Create Event</h4></a></li>
+                            <li><a href="{% url 'create_event' %}" class="top-menu">Create Event</a></li>
                         {% endif %}
 
                     {% if user.is_authenticated %}
@@ -64,10 +64,10 @@
                             </ul>
                         </li>
 
-                        <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-success"><b>Sell your e-ticket</b></a></li>
+                        <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-success" id="sell-ticket-button">Sell your e-ticket</a></li>
 
                     {% else %}
-                        <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="top-menu"><h4>Log in</h4></a></li>
+                        <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="top-menu " id="login-button">Log in</a></li>
                     {% endif %}
 
                     </ul>

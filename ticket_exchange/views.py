@@ -22,6 +22,9 @@ import scriptine
 
 
 def home(request):
+    # access_token = get_access_token(request.user)
+    # print access_token
+
     if request.method == "POST":
         form = NameLocationSearchForm(request.POST)
         if form.is_valid and "search_button" in request.POST:
@@ -30,14 +33,14 @@ def home(request):
     else:
         form = NameLocationSearchForm()
 
-    return render(request, 'ticket_exchange/home.html', {'form':form})
+    return render(request, 'ticket_exchange/home.html', {'form':form, 'access_token': access_token})
 
 
-# def admin_home(request):
-#     persons = Person.objects.filter(user__is_superuser=False)
-#     events = Event.objects.all()
-#     tickets = Ticket.objects.all()
-#     return render(request, 'ticket_exchange/Admin/admin_home.html', {'persons': persons, 'events': events, 'tickets': tickets})
+# def get_access_token(user):
+#     try:
+#         return user.social_auth.get(provider='facebook').extra_data['access_token']
+#     except AttributeError:
+#         return None
 
 
 

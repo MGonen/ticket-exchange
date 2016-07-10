@@ -34,6 +34,7 @@ def selected_event(request, event_id):
 
 
 def upload_ticket(request):
+    """pdf security analysis and content analysis: text and barcode"""
     return render(request, 'sell_ticket/upload_ticket.html', {})
 
 
