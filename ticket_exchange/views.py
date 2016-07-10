@@ -33,7 +33,7 @@ def home(request):
     else:
         form = NameLocationSearchForm()
 
-    return render(request, 'ticket_exchange/home.html', {'form':form, 'access_token': access_token})
+    return render(request, 'ticket_exchange/home.html', {'form':form})
 
 
 # def get_access_token(user):
