@@ -15,7 +15,6 @@ def create_person_object_for_user(sender, **kwargs):
         person.save()
 
     # create Person fullname
-    print 'signal fullname creation reached'
     person = Person.objects.get(user_id=user.id)
     person.fullname = '%s %s' % (user.first_name, user.last_name)
     person.save()

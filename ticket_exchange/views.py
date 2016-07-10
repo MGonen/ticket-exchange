@@ -9,6 +9,7 @@ from django.db.models import Q
 from ticket_exchange.models import Person, Event, Ticket
 from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicket, EventForm
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.views import logout as auth_logout
 
 from TX.settings import BASE_DIR
 # Create your views here.
@@ -22,9 +23,6 @@ import scriptine
 
 
 def home(request):
-    # access_token = get_access_token(request.user)
-    # print access_token
-
     if request.method == "POST":
         form = NameLocationSearchForm(request.POST)
         if form.is_valid and "search_button" in request.POST:
@@ -36,12 +34,20 @@ def home(request):
     return render(request, 'ticket_exchange/home.html', {'form':form})
 
 
-# def get_access_token(user):
-#     try:
-#         return user.social_auth.get(provider='facebook').extra_data['access_token']
-#     except AttributeError:
-#         return None
+def _get_access_token(user):
+    try:
+        return user.social_auth.get(provider='facebook').extra_data['access_token']
+    except AttributeError:
+        return None
 
+
+def fb_logout(request):
+    redirect_url = request.build_absolute_uri(reverse('home'))
+    access_token = _get_access_token(request.user)
+    fb_logout_url = "https://www.facebook.com/logout.php?next=%s&access_token=%s" % (redirect_url, access_token)
+    auth_logout(request)
+
+    return redirect(fb_logout_url)
 
 
 @json_view

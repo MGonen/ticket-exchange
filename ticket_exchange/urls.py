@@ -25,18 +25,9 @@ urlpatterns = (
     url(r'^advanced_search/(?P<search_query>.+)/$', views.advanced_search, name='advanced_search'),
 
     url(r'^create_event/$', views.create_event, name='create_event'),
-
     url(r'^event/(?P<event_pk>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
 
-
-
-    # url(r'sell-ticket', views.sell_ticket, name='sell_ticket'),
-
-
-
+    url(r'^fb_logout/$', views.fb_logout, name='fb_logout'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
-
-
-
 
 )
