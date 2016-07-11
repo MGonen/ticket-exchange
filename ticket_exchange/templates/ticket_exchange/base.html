@@ -11,6 +11,9 @@
 
         {#    Date picker   #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.0.0/bootstrap-social.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/js/bootstrap-datepicker.min.js"></script>
 
@@ -43,10 +46,13 @@
 
                 <div class="col-md-6">
                     <ul class="pagetools">
-                        <li><a href="{% url 'home' %}" class="top-menu"><h4>Search</h4></a></li>
+
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'home' %}" class="top-menu pagetools-item">Search</a></li>
+                        {% endif %}
 
                         {% if user.is_staff %}
-                            <li><a href="{% url 'create_event' %}" class="top-menu">Create Event</a></li>
+                            <li><a href="{% url 'create_event' %}" class="top-menu pagetools-item">Create Event</a></li>
                         {% endif %}
 
                     {% if user.is_authenticated %}
@@ -67,7 +73,8 @@
                         <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-success" id="sell-ticket-button">Sell your e-ticket</a></li>
 
                     {% else %}
-                        <li><a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="top-menu " id="login-button">Log in</a></li>
+                        <li><a class="btn btn-social btn-facebook" id="login-button" onclick="open_login_popup('{% url 'social:begin' 'facebook' %}')">
+    <span class="fa fa-facebook"></span> Sign in with facebook</a></li>
                     {% endif %}
 
                     </ul>

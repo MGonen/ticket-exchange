@@ -17,14 +17,9 @@ function profile_picture_opacity() {
 }
 
 
-function logging_in() {
-    $('#login-button').click(function () {
-        document.getElementById("login-button").innerText = "Logging in...";
-        document.getElementById("login-button").className = "logging-in";
-        document.getElementById("login-button").style.color = "white";
-    })
+function open_login_popup(url) {
+    window.open(url, "", "width=650,height=500,scrollbars=no,status=yes");
 }
-
 
 
 /**************************************************************/
@@ -32,5 +27,4 @@ function logging_in() {
 /**************************************************************/
 $(document).ready( function() {
     profile_picture_opacity();
-    logging_in();
 });

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
 
 from django.core.urlresolvers import reverse
 from jsonview.decorators import json_view
@@ -39,6 +39,12 @@ def _get_access_token(user):
         return user.social_auth.get(provider='facebook').extra_data['access_token']
     except AttributeError:
         return None
+
+
+def facebook_login_handler(request):
+    print 'arrived in facebook_login_handler'
+
+    return HttpResponse('<script type="text/javascript">window.opener.location.href = window.opener.location.href;window.close();</script>')
 
 
 def fb_logout(request):

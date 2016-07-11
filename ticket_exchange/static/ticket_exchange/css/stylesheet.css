@@ -72,14 +72,14 @@ background-size: cover;
     margin-top: 28px;
 }
 
-.pagetools > li > a {
+.pagetools-item {
     display: inline-block;
     color: lightgrey;
     font-size: 18px;
     text-decoration: none;
 }
 
-.pagetools > li > a:hover {
+.pagetools-item:hover {
     color: white;
     text-decoration: none;
 }
@@ -87,7 +87,7 @@ background-size: cover;
 #sell-ticket-button {
     color: white;
     font-weight: bold;
-    font-size: 16;
+    font-size: 16px;
 }
 
 .dropdown-menu::after {
