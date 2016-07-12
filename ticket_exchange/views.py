@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect, HttpRespons
 from django.core.urlresolvers import reverse
 from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
@@ -34,13 +35,6 @@ def home(request):
     return render(request, 'ticket_exchange/home.html', {'form':form})
 
 
-def _get_access_token(user):
-    try:
-        return user.social_auth.get(provider='facebook').extra_data['access_token']
-    except AttributeError:
-        return None
-
-
 def facebook_login_handler(request):
     print 'arrived in facebook_login_handler'
 
@@ -50,10 +44,21 @@ def facebook_login_handler(request):
 def fb_logout(request):
     redirect_url = request.build_absolute_uri(reverse('home'))
     access_token = _get_access_token(request.user)
-    fb_logout_url = "https://www.facebook.com/logout.php?next=%s&access_token=%s" % (redirect_url, access_token)
-    auth_logout(request)
 
-    return redirect(fb_logout_url)
+    if access_token:
+        fb_logout_url = "https://www.facebook.com/logout.php?next=%s&access_token=%s" % (redirect_url, access_token)
+        auth_logout(request)
+        return redirect(fb_logout_url)
+    else:
+        auth_logout(request)
+        return redirect('home')
+
+
+def _get_access_token(user):
+    try:
+        return user.social_auth.get(provider='facebook').extra_data['access_token']
+    except (AttributeError, ObjectDoesNotExist) as e:
+        return None
 
 
 @json_view
@@ -83,9 +88,6 @@ def _get_search_results(search_query):
     event_objects += filter(lambda item: not item in event_objects, event_objects_contains)
 
     return event_objects[:7]
-
-
-
 
 
 def create_event_dicts(event_objects):
@@ -156,8 +158,6 @@ def create_event(request):
         return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
 
 
-
-
 def handle_uploaded_file(file, event, date):
     if not pdf_is_safe(file):
         return True
@@ -187,7 +187,6 @@ def create_ticket_file_location(event, date):
 
 def get_date(date):
     return datetime.datetime.strptime(date, '%d-%m-%Y').strftime('%Y%m%d')
-
 
 
 def event_tickets(request, event_pk):

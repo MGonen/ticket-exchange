@@ -26,11 +26,4 @@ urlpatterns = (
     url(r'payouts/$', views.my_payouts, name='my_payouts'),
     url(r'profile/$', views.my_profile, name='my_profile'),
 
-
-
-
-
-
-
-
 )

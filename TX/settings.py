@@ -138,8 +138,6 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
 }
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/facebook-login-handler/'
-# SOCIAL_AUTH_LOGIN_NEW_USER_REDIRECT_URL = '/my-info/profile'
-
 
 DATE_FORMAT = 'd-m-Y'
 SHORT_DATE_FORMAT = 'd-m-Y'

@@ -28,27 +28,6 @@ class TicketForm(forms.ModelForm):
         fields = ('event', 'seller', 'price')
 
 
-class SellTicketForm(forms.ModelForm):
-
-    class Meta:
-        model = Ticket
-        fields = ('price', )
-
-
-class PersonForm(forms.ModelForm):
-
-    class Meta:
-        model = Person
-        fields = ('bank_account',)
-
-class UserForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email')
-
-
-
 class NameLocationSearchForm(forms.Form):
     search_query = forms.CharField(widget=forms.TextInput(attrs={'id': 'search_input', 'autocomplete': 'off', 'placeholder': 'Search Events'}), label='')
 

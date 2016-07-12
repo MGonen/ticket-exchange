@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 
-from ticket_exchange.models import Person, Event, Ticket
-from ticket_exchange.forms import PersonForm, SellTicketForm, UserForm
+from ticket_exchange.models import Person, Ticket
+from my_info.forms import PersonForm, UserForm
 
 facebook_login_url = '/login/facebook'
 
@@ -33,10 +33,6 @@ def my_profile(request):
     person = get_object_or_404(Person, pk=request.user.person.id)
 
     if request.method == "POST":
-
-        if "cancel" in request.POST:
-            return redirect('person_index')
-
         user_form = UserForm(request.POST, instance=user)
         person_form = PersonForm(request.POST, instance=person)
 
@@ -51,23 +47,3 @@ def my_profile(request):
         user_form = UserForm(instance=user)
 
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
-
-
-# @login_required(login_url=facebook_login_url)
-# def sell_ticket(request):
-#     if request.method == "POST":
-#
-#         if "cancel" in request.POST:
-#             return redirect('person_index')
-#
-#         form = SellTicketForm(request.POST)
-#         if form.is_valid():
-#             ticket = form.save(commit=False)
-#             ticket.seller = request.user.person
-#             ticket.save()
-#
-#             return redirect('home')
-#     else:
-#         form = SellTicketForm()
-#
-#     return render(request, 'sell_ticket/select_event.html', {'form': form})

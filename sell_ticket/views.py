@@ -1,24 +1,9 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
 
-from django.core.urlresolvers import reverse
-from jsonview.decorators import json_view
-from django.views.decorators.csrf import csrf_exempt
-
-from django.db.models import Q
 
 from ticket_exchange.models import Person, Event, Ticket
-from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicket, EventForm
-from django.contrib.admin.views.decorators import staff_member_required
-
-from TX.settings import BASE_DIR
-# Create your views here.
-
-from django.contrib import messages
-
-
-import datetime
-import calendar
-import scriptine
+from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, UserForm, PersonForm
 
 
 def select_event(request):
@@ -44,6 +29,28 @@ def set_price(request):
 
 def personal_details(request):
     return render(request, 'sell_ticket/personal_details.html', {})
+
+def confirm_details(request):
+    # user = get_object_or_404(User, pk=request.user.id)
+    # person = get_object_or_404(Person, pk=request.user.person.id)
+    #
+    # if request.method == "POST":
+    #     user_form = UserForm(request.POST, instance=user)
+    #     person_form = PersonForm(request.POST, instance=person)
+    #
+    #     if person_form.is_valid() and user_form.is_valid():
+    #         person_form.save()
+    #         user_form.save()
+    #         return redirect('home')
+    #
+    # else:
+    #     person_form = PersonForm(instance=person)
+    #     user_form = UserForm(instance=user)
+    #
+    # return render(request, 'sell_ticket/user_details.html', {'person_form': person_form, 'user_form': user_form})
+
+    return render(request, 'sell_ticket/user_details.html', {})
+
 
 
 def confirmation(request):
