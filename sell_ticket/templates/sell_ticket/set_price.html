@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    <form method="POST" >{% csrf_token %}
+        {{ form.as_p }}
+        <button name="return" class="save btn btn-primary">Upload different file</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+    </form>
 
 
 {% endblock %}

@@ -20,11 +20,11 @@ import views
 urlpatterns = (
 
     url(r'^select-event/$', views.select_event, name='select_event'),
-    url(r'^selected-event/(?P<event_id>[0-9]+)/$', views.selected_event, name='selected_event'),
-    url(r'^upload-ticket/$', views.upload_ticket, name='upload_ticket'),
-    url(r'^set-price/$', views.set_price, name='set_price'),
-    url(r'^personal-details/$', views.personal_details, name='personal_details'),
-    url(r'^confirmation/$', views.confirmation, name='confirmation'),
+    url(r'^event-selected/(?P<event_id>[0-9]+)/$', views.event_selected, name='event_selected'),
+    url(r'^upload-ticket/(?P<ticket_id>[0-9]+)/$', views.upload_ticket, name='upload_ticket'),
+    url(r'^set-price/(?P<ticket_id>[0-9]+)/$', views.set_price, name='set_price'),
+    url(r'^personal-details/(?P<ticket_id>[0-9]+)/$', views.personal_details, name='personal_details'),
+    url(r'^confirmation/(?P<ticket_id>[0-9]+)/$', views.confirmation, name='confirmation'),
 
 
 

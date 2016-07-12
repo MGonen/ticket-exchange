@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
+        {{ upload_form.as_p }}
+        <button name="return" class="save btn btn-primary">Change event</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+    </form>
 
 
 {% endblock %}

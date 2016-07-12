@@ -5,8 +5,6 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/event_selected.html" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/selected_event.html" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/my_info/urls.py" afterPath="$PROJECT_DIR$/my_info/urls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/my_info/views.py" afterPath="$PROJECT_DIR$/my_info/views.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/forms.py" afterPath="$PROJECT_DIR$/sell_ticket/forms.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/static/sell_ticket/js/select_event.js" afterPath="$PROJECT_DIR$/sell_ticket/static/sell_ticket/js/select_event.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/confirmation.html" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/confirmation.html" />
@@ -15,11 +13,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/upload_ticket.html" afterPath="$PROJECT_DIR$/sell_ticket/templates/sell_ticket/upload_ticket.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/urls.py" afterPath="$PROJECT_DIR$/sell_ticket/urls.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sell_ticket/views.py" afterPath="$PROJECT_DIR$/sell_ticket/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticket_exchange/forms.py" afterPath="$PROJECT_DIR$/ticket_exchange/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticket_exchange/models.py" afterPath="$PROJECT_DIR$/ticket_exchange/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/base.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/event_tickets.html" afterPath="$PROJECT_DIR$/ticket_exchange/templates/ticket_exchange/event_tickets.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ticket_exchange/views.py" afterPath="$PROJECT_DIR$/ticket_exchange/views.py" />
     </list>
     <ignored path="TS.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -740,7 +733,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468329626453</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="minor changes">
+      <created>1468356168582</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1468356168583</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -793,7 +793,8 @@
     <MESSAGE value="After logout, login dialog is forced. also logs out facebook." />
     <MESSAGE value="Facebook login popup" />
     <MESSAGE value="clean-up" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean-up" />
+    <MESSAGE value="minor changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="minor changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

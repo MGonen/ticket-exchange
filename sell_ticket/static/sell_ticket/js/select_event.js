@@ -57,7 +57,7 @@ function create_event_select_item(event){
 
     var event_item = document.createElement('a');
 
-    var event_link = "/sell-ticket/selected-event/" + event.id + '/';
+    var event_link = "/sell-ticket/event-selected/" + event.id + '/';
     event_item.setAttribute("href", event_link);
     event_item.className = 'list-group-item';
 

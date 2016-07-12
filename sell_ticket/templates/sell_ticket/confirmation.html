@@ -2,7 +2,14 @@
 
 {% block content %}
 
+    {{ ticket.event.name }}
+    {{ ticket.price }}
 
+
+    <form method="POST" >{% csrf_token %}
+        <button name="return" class="save btn btn-primary">Change Personal Details</button>
+        <button name="continue" class="save btn btn-primary">Put up for Sale</button>
+    </form>
 
 {% endblock %}
 

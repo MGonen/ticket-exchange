@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    <form method="POST" >{% csrf_token %}
+        {{ user_form.as_p }}
+        {{ person_form.as_p }}
+        <button name="return" class="save btn btn-primary">Change price</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+    </form>
 
 
 {% endblock %}

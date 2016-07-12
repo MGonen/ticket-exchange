@@ -10,4 +10,9 @@
     {{ event.start_date }}
     {{ event.end_date }}
 
+    <form method="POST" class="post-form">{% csrf_token %}
+        <button name="return" class="save btn btn-primary">Change event</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+    </form>
+
 {% endblock %}
