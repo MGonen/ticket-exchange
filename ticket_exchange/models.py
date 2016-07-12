@@ -35,13 +35,13 @@ class Ticket(models.Model):
     buyer = models.ForeignKey('Person', null=True, blank=True, related_name='buyer')
     holder = models.ForeignKey('Person', related_name='holder')
     bought = models.BooleanField(default=False)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     link = models.TextField(null=True, blank=True)
     complete = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.festival.name
-
+        # return self.event.name
+        return str(self.id)
 
     def save(self, *args, **kwargs):
         if not self.bought:

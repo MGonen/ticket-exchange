@@ -8,27 +8,28 @@ from django.contrib import messages
 from ticket_exchange.models import Person, Ticket
 from my_info.forms import PersonForm, UserForm
 
-facebook_login_url = '/login/facebook'
+from ticket_exchange.views import FACEBOOK_LOGIN_URL
 
-@login_required(login_url=facebook_login_url)
-def my_tickets_for_sale(request):
+
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def tickets_for_sale(request):
     tickets = Ticket.objects.filter(seller__user_id=request.user.id)
     return render(request, 'my_info/tickets_for_sale.html', {'tickets': tickets})
 
 
-@login_required(login_url=facebook_login_url)
-def my_tickets_bought(request):
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def tickets_bought(request):
     tickets = Ticket.objects.filter(buyer__user_id=request.user.id)
     return render(request, 'my_info/bought_tickets.html', {'tickets': tickets})
 
 
-@login_required(login_url=facebook_login_url)
-def my_payouts(request):
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def payouts(request):
     return render(request, 'my_info/payouts.html', {})
 
 
-@login_required(login_url=facebook_login_url)
-def my_profile(request):
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def profile(request):
     user = get_object_or_404(User, pk=request.user.id)
     person = get_object_or_404(Person, pk=request.user.person.id)
 

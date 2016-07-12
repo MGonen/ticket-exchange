@@ -23,6 +23,8 @@ import calendar
 import scriptine
 
 
+FACEBOOK_LOGIN_URL = '/login/facebook'
+
 def home(request):
     if request.method == "POST":
         form = NameLocationSearchForm(request.POST)
@@ -35,9 +37,68 @@ def home(request):
     return render(request, 'ticket_exchange/home.html', {'form':form})
 
 
-def facebook_login_handler(request):
-    print 'arrived in facebook_login_handler'
+def advanced_search(request, search_query):
+#     # name_location_form = NameLocationSearchForm(request.POST)
+#     # if request.method == "POST":
+#     #     name_location_form = NameLocationSearchForm(request.POST)
+#     #     date_form = DateSearchForm(request.POST)
+#     #     if name_location_form.is_valid and "search_button" in request.POST:
+#     #         return redirect('advanced_search', search_query=request.POST.get('search_query'))
+#     #
+#     # else:
+#     #     name_location_form = NameLocationSearchForm()
+#     #
+#     # return render(request, 'ticket_exchange/home.html', {'name_location_form': name_location_form})
+#
+#
+#
+    events = _get_search_results(search_query)
+    return render(request, 'ticket_exchange/advanced_search.html', {'events':events})
 
+
+
+@staff_member_required
+def create_event(request):
+    if request.method == 'POST':
+        event_form = EventForm(request.POST)
+        upload_form = UploadBaseTicket(request.POST, request.FILES)
+
+        if upload_form.is_valid() and event_form.is_valid():
+            file = request.FILES['file']
+            event = request.POST.get('name')
+            date = get_date(request.POST.get('start_date'))
+
+            if not pdf_is_safe(file):
+                messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
+                return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
+
+            save_base_ticket_pdf(file, event, date)
+
+            event = event_form.save()
+            messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
+            return redirect('event_tickets', event.id)
+
+        else:
+            messages.add_message(request, messages.ERROR, 'The creation of the event failed. Please try again.')
+            return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
+
+    else:
+        event_form = EventForm()
+        upload_form = UploadBaseTicket()
+        return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
+
+
+
+def event_tickets(request, event_pk):
+    event = Event.objects.get(pk=event_pk)
+    tickets = Ticket.objects.filter(event_id=event.id).filter(bought=False)
+    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
+    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+
+    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets':tickets, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+
+
+def facebook_login_handler(request):
     return HttpResponse('<script type="text/javascript">window.opener.location.href = window.opener.location.href;window.close();</script>')
 
 
@@ -108,77 +169,33 @@ def create_event_dicts(event_objects):
     return event_dicts
 
 
-def advanced_search(request, search_query):
-#     # name_location_form = NameLocationSearchForm(request.POST)
-#     # if request.method == "POST":
-#     #     name_location_form = NameLocationSearchForm(request.POST)
-#     #     date_form = DateSearchForm(request.POST)
-#     #     if name_location_form.is_valid and "search_button" in request.POST:
-#     #         return redirect('advanced_search', search_query=request.POST.get('search_query'))
-#     #
-#     # else:
-#     #     name_location_form = NameLocationSearchForm()
-#     #
-#     # return render(request, 'ticket_exchange/home.html', {'name_location_form': name_location_form})
-#
-#
-#
-    events = _get_search_results(search_query)
-    return render(request, 'ticket_exchange/advanced_search.html', {'events':events})
 
-
-@staff_member_required
-def create_event(request):
-    if request.method == 'POST':
-        event_form = EventForm(request.POST)
-        upload_form = UploadBaseTicket(request.POST, request.FILES)
-
-        if upload_form.is_valid() and event_form.is_valid():
-            file = request.FILES['file']
-            event = request.POST.get('name')
-            date = get_date(request.POST.get('start_date'))
-
-            if not pdf_is_safe(file):
-                messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
-                return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
-
-            save_pdf(file, event, date)
-
-            event = event_form.save()
-            messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
-            return redirect('event_tickets', event.id)
-
-        else:
-            messages.add_message(request, messages.ERROR, 'The creation of the event failed. Please try again.')
-            return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
-
-    else:
-        event_form = EventForm()
-        upload_form = UploadBaseTicket()
-        return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
 
 
 def handle_uploaded_file(file, event, date):
     if not pdf_is_safe(file):
         return True
 
-    save_pdf(file, event, date)
+    save_base_ticket_pdf(file, event, date)
     return True
 
 def pdf_is_safe(file):
     return True
 
 
-def save_pdf(file, event, date):
+def save_base_ticket_pdf(file, event, date):
     file_location = create_ticket_file_location(event, date)
+    save_pdf(file, file_location)
 
+
+def save_pdf(file, file_location):
     with open(file_location, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
 
 
 def create_ticket_file_location(event, date):
-    filename = date + event
+    filename = "%s-%s" % (date, event)
     directory = scriptine.path(BASE_DIR).joinpath('tickets')
     file_location = directory.joinpath(filename)
     file_location += '.pdf'
@@ -188,8 +205,3 @@ def create_ticket_file_location(event, date):
 def get_date(date):
     return datetime.datetime.strptime(date, '%d-%m-%Y').strftime('%Y%m%d')
 
-
-def event_tickets(request, event_pk):
-    event = Event.objects.get(pk=event_pk)
-    tickets = Ticket.objects.filter(event_id=event.id)
-    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets':tickets})

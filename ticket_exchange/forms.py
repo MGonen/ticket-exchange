@@ -16,8 +16,7 @@ class EventForm(forms.ModelForm):
         }
 
 class UploadBaseTicket(forms.Form):
-    # file = forms.FileField()
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False, 'class': 'btn btn-save'}))
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}))
 
 
 class TicketForm(forms.ModelForm):

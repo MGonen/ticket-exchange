@@ -60,11 +60,11 @@
                         <li class="dropdown">
                             <button type="button" data-toggle="dropdown" class="image-button"><img src="{{ user.person.photo }}?width=50&height=50" class="facebook-image"><span class="caret"></span></button>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'my_info:my_tickets_for_sale' %}">My tickets for sale</a></li>
-                                <li><a href="{% url 'my_info:my_tickets_bought' %}">My bought tickets</a></li>
-                                <li><a href="{% url 'my_info:my_payouts' %}">My payouts</a></li>
+                                <li><a href="{% url 'my_info:tickets_for_sale' %}">My tickets for sale</a></li>
+                                <li><a href="{% url 'my_info:tickets_bought' %}">My bought tickets</a></li>
+                                <li><a href="{% url 'my_info:payouts' %}">My payouts</a></li>
                                 <li class="divider"></li>
-                                <li><a href="{% url 'my_info:my_profile' %}">Profile</a></li>
+                                <li><a href="{% url 'my_info:profile' %}">Profile</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{% url 'fb_logout' %}" class="top-menu">Log out</a>
                             </ul>

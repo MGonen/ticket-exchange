@@ -8,12 +8,28 @@
     </div>
 
     <div>
-        <h4>{{ event.name }}</h4>
+        <p>Tickets Available: {{ tickets_available }}</p>
+        <p>Tickets Sold: {{ tickets_sold }}</p>
+    </div>
+
+
+    <div class="event-details">
+            <h4 style="color: #0081db" class="event-details-heading">{{ event.name }}</h4>
+            <p class="event-details-location"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }}</p>
+            <p class="event-details-date"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}</p>
+
+    </div>
+
+    <div class="list-group">
         {% for ticket in tickets %}
-            <p>{{ ticket.seller.fullname }} - {{ ticket.price }}</p>
+            <a href="{% url 'sell_ticket:event_selected' event.id  %}" class="list-group-item">
+                <h4 style="color: #0081db" class="list-group-item-heading">{{ ticket.seller.fullname }}</h4>
+                <p class="list-group-item-text">{{ ticket.price }}</p>
+            </a>
         {% endfor %}
 
     </div>
+
 
 
 {% endblock %}

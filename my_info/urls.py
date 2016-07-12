@@ -20,10 +20,10 @@ import views
 
 urlpatterns = (
 
-    url(r'tickets/for-sale/$', views.my_tickets_for_sale, name='my_tickets_for_sale'),
-    url(r'tickets/bought/$', views.my_tickets_bought, name='my_tickets_bought'),
+    url(r'tickets/for-sale/$', views.tickets_for_sale, name='tickets_for_sale'),
+    url(r'tickets/bought/$', views.tickets_bought, name='tickets_bought'),
     # url(r'my-wanted_listings/$', views.my_wanted_listings, name='my_wanted_listings'),
-    url(r'payouts/$', views.my_payouts, name='my_payouts'),
-    url(r'profile/$', views.my_profile, name='my_profile'),
+    url(r'payouts/$', views.payouts, name='payouts'),
+    url(r'profile/$', views.profile, name='profile'),
 
 )
