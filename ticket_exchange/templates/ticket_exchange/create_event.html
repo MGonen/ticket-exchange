@@ -8,6 +8,7 @@
 
     <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
         {{ event_form.as_p }}
+        {{ base_ticket_price_form.as_p }}
         {{ upload_form.as_p }}
         <button name="Submit" class="btn btn-default">Submit</button>
     </form>

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from django.conf import settings
 
 # Create your models here.
@@ -42,20 +43,29 @@ class Ticket(models.Model):
     complete = models.BooleanField(default=False)
 
     def __str__(self):
-        # return self.event.name
         return str(self.id)
 
     def save(self, *args, **kwargs):
         if not self.bought:
             self.holder = self.seller
-
         else:
             self.holder = self.buyer
 
         super(Ticket, self).save(*args, **kwargs)
 
 
+    def clean(self):
+        max_price = float(self.event.baseticket.price) * 1.25
+        if self.price and (float(self.price) > max_price):
+            validation_error_text = 'The price of the ticket can only be 25%% more than the original ticket price, in this case %s %.2f' % (u"\u20AC", float(self.event.baseticket.price)*1.25)
+            raise ValidationError(validation_error_text)
+
+
 class BaseTicket(models.Model):
-    event = models.ForeignKey('Event')
+    event = models.OneToOneField('Event')
     details = models.TextField()
+    link = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return str(self.id)

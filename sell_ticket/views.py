@@ -9,7 +9,7 @@ from ticket_exchange.models import Person, Event, Ticket
 from ticket_exchange.utils import ticket_complete_check
 from ticket_exchange.views import FACEBOOK_LOGIN_URL, pdf_is_safe, save_pdf
 from my_info.forms import UserForm
-from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, PriceForm
+from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, TicketPriceForm
 from TX.settings import BASE_DIR
 
 
@@ -108,7 +108,7 @@ def set_price(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
     if request.method == "POST":
-        form = PriceForm(request.POST)
+        form = TicketPriceForm(request.POST, instance=ticket)
 
         if form.is_valid():
             ticket.price = request.POST.get('price')
@@ -120,11 +120,7 @@ def set_price(request, ticket_id):
                 return redirect('sell_ticket:upload_pdf', ticket_id)
 
     else:
-        print 'ticket price', ticket.price
-        if ticket.price:
-            form = PriceForm(initial={'price':ticket.price})
-        else:
-            form = PriceForm()
+        form = TicketPriceForm(instance=ticket)
 
     return render(request, 'sell_ticket/set_price.html', {'form': form, 'ticket': ticket})
 

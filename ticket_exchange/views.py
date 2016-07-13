@@ -7,8 +7,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
-from ticket_exchange.models import Person, Event, Ticket
-from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicket, EventForm
+from ticket_exchange.models import Person, Event, Ticket, BaseTicket
+from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicket, EventForm, BaseTicketPriceForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.views import logout as auth_logout
 
@@ -61,31 +61,31 @@ def advanced_search(request, search_query):
 def create_event(request):
     if request.method == 'POST':
         event_form = EventForm(request.POST)
+        base_ticket_price_form = BaseTicketPriceForm(request.POST)
         upload_form = UploadBaseTicket(request.POST, request.FILES)
 
-        if upload_form.is_valid() and event_form.is_valid():
+        if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
             file = request.FILES['file']
-            event = request.POST.get('name')
-            date = get_date(request.POST.get('start_date'))
+            price = request.POST.get('price')
 
             if not pdf_is_safe(file):
                 messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
-                return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
-
-            save_base_ticket_pdf(file, event, date)
+                return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
             event = event_form.save()
+            create_base_ticket_object(file, event, price)
+
             messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
             return redirect('event_tickets', event.id)
 
         else:
-            messages.add_message(request, messages.ERROR, 'The creation of the event failed. Please try again.')
-            return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
+            return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
     else:
         event_form = EventForm()
         upload_form = UploadBaseTicket()
-        return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form})
+        base_ticket_price_form = BaseTicketPriceForm()
+        return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
 
 
@@ -179,23 +179,15 @@ def create_event_dicts(event_objects):
     return event_dicts
 
 
-
-
-
-def handle_uploaded_file(file, event, date):
-    if not pdf_is_safe(file):
-        return True
-
-    save_base_ticket_pdf(file, event, date)
-    return True
-
 def pdf_is_safe(file):
     return True
 
 
-def save_base_ticket_pdf(file, event, date):
-    file_location = create_ticket_file_location(event, date)
+def create_base_ticket_object(file, event, price):
+    file_location = create_ticket_file_location(event.id)
     save_pdf(file, file_location)
+    base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
+    base_ticket.save()
 
 
 def save_pdf(file, file_location):
@@ -204,8 +196,8 @@ def save_pdf(file, file_location):
             destination.write(chunk)
 
 
-def create_ticket_file_location(event, date):
-    filename = "%s-%s" % (date, event)
+def create_ticket_file_location(event_id):
+    filename = str(event_id)
     directory = scriptine.path(BASE_DIR).joinpath('tickets')
     file_location = directory.joinpath(filename)
     file_location += '.pdf'

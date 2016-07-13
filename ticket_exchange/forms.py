@@ -40,3 +40,7 @@ class NameLocationSearchForm(forms.Form):
 
 class DateSearchForm(forms.Form):
     date = forms.CharField(widget=forms.DateInput(attrs={'class': 'date_form_input'}))
+
+
+class BaseTicketPriceForm(forms.Form):
+    price = forms.DecimalField(required=True, min_value=0.01)

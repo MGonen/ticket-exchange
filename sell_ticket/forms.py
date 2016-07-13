@@ -1,6 +1,6 @@
 from django import forms
 
-from ticket_exchange.models import Person
+from ticket_exchange.models import Person, Ticket
 
 
 class NameLocationSearchForm(forms.Form):
@@ -15,12 +15,15 @@ class UploadTicket(forms.Form):
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
 
 
-class PriceForm(forms.Form):
-    price = forms.DecimalField(max_digits=10, decimal_places=2)
+class TicketPriceForm(forms.ModelForm):
+    price = forms.DecimalField(required=True, min_value=0.01)
+    class Meta:
+        model = Ticket
+        fields = ('price',)
 
 
 class PersonForm4SellTicket(forms.ModelForm):
-    bank_account =  forms.CharField(required=True,)
+    bank_account =  forms.CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(PersonForm4SellTicket, self).__init__(*args, **kwargs)
