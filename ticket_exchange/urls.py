@@ -27,6 +27,8 @@ urlpatterns = (
     url(r'^create_event/$', views.create_event, name='create_event'),
     url(r'^event/(?P<event_pk>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
 
+    url(r'^buy-ticket/(?P<ticket_id>[0-9]+)/$', views.buy_ticket, name='buy_ticket'),
+
     url(r'^facebook-login-handler/$', views.facebook_login_handler, name='facebook_login_handler'),
 
     url(r'^fb_logout/$', views.fb_logout, name='fb_logout'),

@@ -1,0 +1,17 @@
+{% extends "ticket_exchange/base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <p>Buy Ticket</p>
+
+    <p>{{ ticket.seller.fullname }}</p>
+    <p>{{ ticket.event.name }}</p>
+    <p>{{ ticket.price }}</p>
+
+
+
+
+
+{% endblock %}

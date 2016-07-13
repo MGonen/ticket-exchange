@@ -51,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/sell_ticket/views.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1010">
-              <caret line="220" column="45" selection-start-line="220" selection-start-column="45" selection-end-line="220" selection-end-column="45" />
+              <caret line="219" column="45" selection-start-line="219" selection-start-column="45" selection-end-line="219" selection-end-column="45" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -724,7 +724,14 @@
       <option name="project" value="LOCAL" />
       <updated>1468371613068</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="validator: Cannot sell ticket before all fields are complete">
+      <created>1468375511929</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1468375511929</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -780,7 +787,8 @@
     <MESSAGE value="minor changes" />
     <MESSAGE value="sell ticket roughly finished" />
     <MESSAGE value="sell_ticket: when started but not completed sell_ticket process. Now have the option to continue with previous input, or start anew (which also automatically deletes unfinished ones)." />
-    <option name="LAST_COMMIT_MESSAGE" value="sell_ticket: when started but not completed sell_ticket process. Now have the option to continue with previous input, or start anew (which also automatically deletes unfinished ones)." />
+    <MESSAGE value="validator: Cannot sell ticket before all fields are complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="validator: Cannot sell ticket before all fields are complete" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1183,7 +1191,7 @@
     <entry file="file://$PROJECT_DIR$/sell_ticket/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1010">
-          <caret line="220" column="45" selection-start-line="220" selection-start-column="45" selection-end-line="220" selection-end-column="45" />
+          <caret line="219" column="45" selection-start-line="219" selection-start-column="45" selection-end-line="219" selection-end-column="45" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>

@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import RegexValidator
 from django.conf import settings
 
 # Create your models here.
+ALPHANUMERIC = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters (numbers and letters) are allowed.')
 
 class Person(models.Model):
     user = models.OneToOneField(User, related_name='person', on_delete=models.CASCADE)
     photo = models.TextField(null=True, blank=True)
     tickets = models.ManyToManyField('Event', through='Ticket', related_name='tickets', through_fields=('holder', 'event'))
-    bank_account = models.CharField(max_length=30, null=True, blank=True)
+    bank_account = models.CharField(max_length=30, null=True, blank=True, validators=[ALPHANUMERIC])
     fullname = models.CharField(max_length=100, null=True, blank=True)
-
 
     def __str__(self):
         return self.user.username
