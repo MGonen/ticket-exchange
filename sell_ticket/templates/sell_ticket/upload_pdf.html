@@ -12,14 +12,14 @@
                 1. Event
             </a></li>
 
-            <li><a href="{% url 'sell_ticket:upload_pdf' ticket.id %}">
+            <li class="active"><a href="{% url 'sell_ticket:upload_pdf' ticket.id %}">
                 {% if ticket.link %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
                 2. PDF
             </a></li>
 
-            <li class="active"><a href="{% url 'sell_ticket:set_price' ticket.id %}">
+            <li><a href="{% url 'sell_ticket:set_price' ticket.id %}">
                 {% if ticket.price %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
@@ -37,9 +37,15 @@
         </ul>
     </div>
 
-    <form method="POST" >{% csrf_token %}
-        {{ form.as_p }}
-        <button name="return" class="save btn btn-primary">Upload different file</button>
+
+    {% if ticket.original_filename %}
+        <p>Your uploaded ticket-file: {{ ticket.original_filename }}</p>
+        <p>Select a new one if you want to replace the one you already uploaded</p>
+
+    {% endif %}
+    <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
+        {{ upload_form.as_p }}
+        <button name="return" class="save btn btn-primary">Change event</button>
         <button name="continue" class="save btn btn-primary">Continue</button>
     </form>
 

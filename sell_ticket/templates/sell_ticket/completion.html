@@ -9,6 +9,41 @@
     <p>{{ ticket.seller.email }}</p>
     <p>{{ ticket.seller.bank_account }}</p>
 
+    <div class="text-center">
+        <ul class="pagination">
+            <li><a href="{% url 'sell_ticket:select_event' %}"><i class="fa fa-search" aria-hidden="true"></i> &nbsp;Select Event</a></li>
+            <li><a href="{% url 'sell_ticket:event_selected' ticket.id %}">
+                {% if ticket.event %}
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+                1. Event
+            </a></li>
+
+            <li><a href="{% url 'sell_ticket:upload_pdf' ticket.id %}">
+                {% if ticket.link %}
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+                2. PDF
+            </a></li>
+
+            <li><a href="{% url 'sell_ticket:set_price' ticket.id %}">
+                {% if ticket.price %}
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+                3. Price
+            </a></li>
+
+            <li><a href="{% url 'sell_ticket:personal_details' ticket.id %}">
+                {% if ticket.seller.user.first_name and ticket.seller.user.last_name and ticket.seller.user.email and ticket.seller.bank_account %}
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+                4. Personal Details
+            </a></li>
+
+            <li class="active"><a href="{% url 'sell_ticket:completion' ticket.id %}">5. Complete</a></li>
+        </ul>
+    </div>
+
 
     <form method="POST" >{% csrf_token %}
         <button name="return" class="save btn btn-primary">Change Personal Details</button>

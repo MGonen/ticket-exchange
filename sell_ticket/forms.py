@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.models import User
 
-from ticket_exchange.models import Person, Event, Ticket
+from ticket_exchange.models import Person
 
 
 class NameLocationSearchForm(forms.Form):
@@ -16,18 +15,13 @@ class UploadTicket(forms.Form):
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
 
 
+class PriceForm(forms.Form):
+    price = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
+
+
 class PersonForm(forms.ModelForm):
+    bank_account =  forms.CharField(required=True,)
 
     class Meta:
         model = Person
         fields = ('bank_account',)
-
-class UserForm(forms.ModelForm):
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email')
-
-
-class PriceForm(forms.Form):
-    price = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
