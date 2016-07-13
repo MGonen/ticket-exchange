@@ -3,23 +3,21 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from ticket_exchange.models import Person, Event, Ticket
-from my_info.forms import UserForm
-from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, PriceForm
-
-from ticket_exchange.utils import ticket_complete_check
-
-from ticket_exchange.views import FACEBOOK_LOGIN_URL, pdf_is_safe, save_pdf
 import scriptine
 
+from ticket_exchange.models import Person, Event, Ticket
+from ticket_exchange.utils import ticket_complete_check
+from ticket_exchange.views import FACEBOOK_LOGIN_URL, pdf_is_safe, save_pdf
+from my_info.forms import UserForm
+from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, PriceForm
 from TX.settings import BASE_DIR
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def select_event(request):
-    form = NameLocationSearchForm()
+    search_form = NameLocationSearchForm()
 
-    return render(request, 'sell_ticket/select_event.html', {'form': form})
+    return render(request, 'sell_ticket/select_event.html', {'form': search_form})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -47,25 +45,8 @@ def incomplete_ticket_check(request, event_id):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-def incomplete_ticket_exists(person, event_id):
-    incomplete_ticket_queryset = Ticket.objects.filter(seller=person).filter(event_id=event_id).filter(complete=False)
-
-    if not incomplete_ticket_queryset.exists():
-        return False
-
-    else:
-        incomplete_ticket = incomplete_ticket_queryset[0]
-
-        if (not incomplete_ticket.link) and (not incomplete_ticket.price):
-            return False
-
-    return True
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
 def event_selected(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    event = Event.objects.get(id=ticket.event.id)
 
     if request.method == "POST":
         if 'continue' in request.POST:
@@ -87,9 +68,6 @@ def upload_pdf(request, ticket_id):
     if request.method == "POST":
         upload_form = UploadTicket(request.POST, request.FILES)
 
-        if 'return' in request.POST:
-            redirect('sell_ticket:event_selected', ticket_id)
-
         if upload_form.is_valid():
 
             if not ticket.link and not 'file' in request.FILES:
@@ -98,7 +76,6 @@ def upload_pdf(request, ticket_id):
 
             if 'file' in request.FILES:
                 file = request.FILES['file']
-
 
                 if not pdf_is_safe(file):
                     messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
@@ -113,7 +90,11 @@ def upload_pdf(request, ticket_id):
                 ticket.link = file_location
                 ticket.original_filename = file
                 ticket.save()
-            return redirect('sell_ticket:set_price', ticket_id)
+
+            if 'continue' in request.POST:
+                return redirect('sell_ticket:set_price', ticket_id)
+            elif 'return' in request.POST:
+                return redirect('sell_ticket:event_selected', ticket_id)
 
     else:
         upload_form = UploadTicket()
@@ -130,14 +111,15 @@ def set_price(request, ticket_id):
         form = PriceForm(request.POST)
 
         if form.is_valid():
+
+            ticket.price = request.POST.get('price')
+            if not ticket.price:
+                messages.add_message(request, messages.ERROR, 'You need to set a price for the ticket to continue')
+                return redirect('sell_ticket:set_price', ticket_id)
+
+            ticket.save()
+
             if 'continue' in request.POST:
-                ticket.price = request.POST.get('price')
-                if not ticket.price:
-                    messages.add_message(request, messages.ERROR, 'You need to set a price for the ticket to continue')
-                    return redirect('sell_ticket:set_price', ticket_id)
-
-                ticket.save()
-
                 return redirect('sell_ticket:personal_details', ticket_id)
             elif 'return' in request.POST:
                 return redirect('sell_ticket:upload_pdf', ticket_id)
@@ -223,6 +205,7 @@ def process_pdf(request, file):
 def ticket_is_valid(file, event_id):
     return True
 
+
 def ticket_complete(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     missing_ticket_info = ""
@@ -238,3 +221,17 @@ def ticket_complete(request, ticket_id):
 
     return missing_ticket_info
 
+
+def incomplete_ticket_exists(person, event_id):
+    incomplete_ticket_queryset = Ticket.objects.filter(seller=person).filter(event_id=event_id).filter(complete=False)
+
+    if not incomplete_ticket_queryset.exists():
+        return False
+
+    else:
+        incomplete_ticket = incomplete_ticket_queryset[0]
+
+        if (not incomplete_ticket.link) and (not incomplete_ticket.price):
+            return False
+
+    return True
