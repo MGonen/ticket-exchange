@@ -4,11 +4,16 @@ from django.contrib.auth.models import User
 from ticket_exchange.models import Person
 
 
-class PersonForm(forms.ModelForm):
+class PersonForm4MyInfo(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonForm4MyInfo, self).__init__(*args, **kwargs)
+        self.fields['bank_account'].widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = Person
         fields = ('bank_account',)
+
 
 class UserForm(forms.ModelForm):
     first_name = forms.CharField(required=True)

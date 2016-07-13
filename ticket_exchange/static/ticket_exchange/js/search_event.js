@@ -68,7 +68,7 @@ function create_event_search_item(event){
 
     var event_item_text = document.createElement('p');
     event_item_text.className = 'list-group-item-text';
-    event_item_text.innerText = event.start_date + ', ' + event.location;
+    event_item_text.innerText = event_item_text_inner_text(event);
     event_item.appendChild(event_item_heading);
     event_item.appendChild(event_item_text);
 
@@ -76,15 +76,21 @@ function create_event_search_item(event){
 }
 
 
-// function supersede_link(){
-//     $('body').on("click", 'a.list-group-item', function(){
-//
-//         // alert('clicked on link');
-//         console.log('hover on link');
-//
-//         return false;
-//     })
-// }
+function event_item_text_inner_text(event){
+    text = event.start_date + ', ' + event.location;
+    if (event.city != '') {
+        text = text + ', ' + event.city
+    }
+    if (event.country != '') {
+        text = text + ', ' + event.country
+    }
+
+    return text
+
+}
+
+
+
 
 /**************************************************************/
 /* Shows the link when hovering on it                         */

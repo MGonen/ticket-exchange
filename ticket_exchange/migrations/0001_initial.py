@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from django.conf import settings
+import django.core.validators
 import django.utils.timezone
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -18,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('details', models.TextField()),
-                ('price', models.DecimalField(max_digits=10, decimal_places=2)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
             ],
         ),
         migrations.CreateModel(
@@ -37,9 +38,9 @@ class Migration(migrations.Migration):
             name='Person',
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
-                ('photo', models.TextField(blank=True, null=True)),
-                ('bank_account', models.CharField(blank=True, max_length=30, null=True)),
-                ('fullname', models.CharField(blank=True, max_length=100, null=True)),
+                ('photo', models.TextField(null=True, blank=True)),
+                ('bank_account', models.CharField(max_length=30, null=True, blank=True, validators=[django.core.validators.RegexValidator(b'^[0-9a-zA-Z]*$', b'Only alphanumeric characters (numbers and letters) are allowed.')])),
+                ('fullname', models.CharField(max_length=100, null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
@@ -47,10 +48,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
                 ('bought', models.BooleanField(default=False)),
-                ('price', models.DecimalField(max_digits=10, decimal_places=2)),
-                ('link', models.TextField(blank=True, null=True)),
+                ('price', models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)),
+                ('link', models.TextField(null=True, blank=True)),
+                ('original_filename', models.CharField(max_length=200, null=True, blank=True)),
                 ('complete', models.BooleanField(default=False)),
-                ('buyer', models.ForeignKey(blank=True, to='ticket_exchange.Person', null=True, related_name='buyer')),
+                ('buyer', models.ForeignKey(null=True, related_name='buyer', blank=True, to='ticket_exchange.Person')),
                 ('event', models.ForeignKey(related_name='event', to='ticket_exchange.Event')),
                 ('holder', models.ForeignKey(related_name='holder', to='ticket_exchange.Person')),
                 ('seller', models.ForeignKey(related_name='seller', to='ticket_exchange.Person')),
@@ -59,12 +61,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='person',
             name='tickets',
-            field=models.ManyToManyField(related_name='tickets', to='ticket_exchange.Event', through='ticket_exchange.Ticket'),
+            field=models.ManyToManyField(related_name='tickets', through='ticket_exchange.Ticket', to='ticket_exchange.Event'),
         ),
         migrations.AddField(
             model_name='person',
             name='user',
-            field=models.OneToOneField(to=settings.AUTH_USER_MODEL, related_name='person'),
+            field=models.OneToOneField(related_name='person', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='baseticket',

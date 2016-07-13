@@ -1,7 +1,7 @@
 
 $(function() {
 
-    $(".date").datepicker ({
+    $(".date_form_input").datepicker ({
         startDate: '-1d',
         format: "dd-mm-yyyy"
         });

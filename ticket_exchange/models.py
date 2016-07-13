@@ -21,8 +21,8 @@ class Person(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
 

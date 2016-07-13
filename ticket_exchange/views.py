@@ -168,6 +168,8 @@ def create_event_dicts(event_objects):
         event_dict['id'] = event_object.id
         event_dict['name'] = event_object.name
         event_dict['location'] = event_object.location
+        event_dict['city'] = event_object.city
+        event_dict['country'] = event_object.country
         date = event_object.start_date
         event_dict['start_date'] = '%s %i %s %i' % (calendar.day_name[date.weekday()], date.day, date.strftime('%B'), date.year)
         # event_dict['end_date'] = event_object.end_date

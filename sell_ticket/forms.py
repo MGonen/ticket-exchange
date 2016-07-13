@@ -8,7 +8,7 @@ class NameLocationSearchForm(forms.Form):
 
 
 class DateSearchForm(forms.Form):
-    date = forms.CharField(widget=forms.DateInput(attrs={'class': 'date'}))
+    date = forms.CharField(widget=forms.DateInput(attrs={'class': 'date_form_input'}))
 
 
 class UploadTicket(forms.Form):
@@ -19,8 +19,12 @@ class PriceForm(forms.Form):
     price = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
 
 
-class PersonForm(forms.ModelForm):
+class PersonForm4SellTicket(forms.ModelForm):
     bank_account =  forms.CharField(required=True,)
+
+    def __init__(self, *args, **kwargs):
+        super(PersonForm4SellTicket, self).__init__(*args, **kwargs)
+        self.fields['bank_account'].widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = Person

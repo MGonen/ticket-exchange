@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from ticket_exchange.models import Person, Event, Ticket
 from my_info.forms import UserForm
-from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm, UploadTicket, PriceForm
+from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, PriceForm
 
 from ticket_exchange.utils import ticket_complete_check
 
@@ -161,7 +161,7 @@ def personal_details(request, ticket_id):
 
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=user)
-        person_form = PersonForm(request.POST, instance=person)
+        person_form = PersonForm4SellTicket(request.POST, instance=person)
 
         if person_form.is_valid() and user_form.is_valid():
             if 'continue' in request.POST:
@@ -173,7 +173,7 @@ def personal_details(request, ticket_id):
 
 
     else:
-        person_form = PersonForm(instance=person)
+        person_form = PersonForm4SellTicket(instance=person)
         user_form = UserForm(instance=user)
 
     return render(request, 'sell_ticket/personal_details.html', {'person_form': person_form, 'user_form': user_form, 'ticket':ticket})

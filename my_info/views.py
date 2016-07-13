@@ -6,7 +6,7 @@ from django.contrib import messages
 
 
 from ticket_exchange.models import Person, Ticket
-from my_info.forms import PersonForm, UserForm
+from my_info.forms import PersonForm4MyInfo, UserForm
 
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
 
@@ -35,7 +35,7 @@ def profile(request):
 
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=user)
-        person_form = PersonForm(request.POST, instance=person)
+        person_form = PersonForm4MyInfo(request.POST, instance=person)
 
         if person_form.is_valid() and user_form.is_valid():
             person_form.save()
@@ -44,7 +44,7 @@ def profile(request):
             return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
 
     else:
-        person_form = PersonForm(instance=person)
+        person_form = PersonForm4MyInfo(instance=person)
         user_form = UserForm(instance=user)
 
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
