@@ -37,6 +37,7 @@ class Ticket(models.Model):
     bought = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     link = models.TextField(null=True, blank=True)
+    original_filename = models.CharField(max_length=200, null=True, blank=True)
     complete = models.BooleanField(default=False)
 
     def __str__(self):

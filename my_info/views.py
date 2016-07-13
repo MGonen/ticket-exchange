@@ -13,7 +13,7 @@ from ticket_exchange.views import FACEBOOK_LOGIN_URL
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def tickets_for_sale(request):
-    tickets = Ticket.objects.filter(seller__user_id=request.user.id)
+    tickets = Ticket.objects.filter(seller__user_id=request.user.id).filter(complete=True)
     return render(request, 'my_info/tickets_for_sale.html', {'tickets': tickets})
 
 

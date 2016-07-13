@@ -1,0 +1,18 @@
+{% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <p>Sell Ticket - Select Event</p>
+
+    {{ event.name }}
+    {{ event.location }}
+    {{ event.start_date }}
+    {{ event.end_date }}
+
+    <form method="POST" class="post-form">{% csrf_token %}
+        <button name="new" class="save btn btn-primary">Start again with new ticket</button>
+        <button name="continue" class="save btn btn-primary">Continue with ticket you already defined</button>
+    </form>
+
+{% endblock %}

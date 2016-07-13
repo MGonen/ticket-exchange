@@ -13,7 +13,7 @@ class DateSearchForm(forms.Form):
 
 
 class UploadTicket(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
 
 
 class PersonForm(forms.ModelForm):
@@ -30,4 +30,4 @@ class UserForm(forms.ModelForm):
 
 
 class PriceForm(forms.Form):
-    price = forms.DecimalField(max_digits=10, decimal_places=2)
+    price = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
