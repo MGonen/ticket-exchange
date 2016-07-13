@@ -1,6 +1,6 @@
 {% extends 'ticket_exchange/base.html' %}
 
-{% block content %}
+{% block pagination %}
 
     <div class="text-center">
         <ul class="pagination">
@@ -37,6 +37,10 @@
         </ul>
     </div>
 
+{% endblock %}
+
+
+{% block content %}
 
     {% if ticket.original_filename %}
         <p>Your uploaded ticket-file: {{ ticket.original_filename }}</p>

@@ -1,13 +1,8 @@
 {% extends 'ticket_exchange/base.html' %}
 
-{% block content %}
 
-    <p>{{ ticket.event.name }}</p>
-    <p>{{ ticket.price }}</p>
-    <p>{{ ticket.original_filename }}</p>
-    <p>{{ ticket.seller.fullname }}</p>
-    <p>{{ ticket.seller.email }}</p>
-    <p>{{ ticket.seller.bank_account }}</p>
+
+{% block pagination %}
 
     <div class="text-center">
         <ul class="pagination">
@@ -43,6 +38,18 @@
             <li class="active"><a href="{% url 'sell_ticket:completion' ticket.id %}">5. Complete</a></li>
         </ul>
     </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <p>{{ ticket.event.name }}</p>
+    <p>{{ ticket.price }}</p>
+    <p>{{ ticket.original_filename }}</p>
+    <p>{{ ticket.seller.fullname }}</p>
+    <p>{{ ticket.seller.email }}</p>
+    <p>{{ ticket.seller.bank_account }}</p>
 
 
     <form method="POST" >{% csrf_token %}

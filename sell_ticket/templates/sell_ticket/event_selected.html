@@ -2,14 +2,7 @@
 {% load static %}
 
 
-{% block content %}
-
-    <p>Sell Ticket - Event</p>
-
-    {{ ticket.event.name }}
-    {{ ticket.event.location }}
-    {{ ticket.event.start_date }}
-    {{ ticket.event.end_date }}
+{% block pagination %}
 
     <div class="text-center">
         <ul class="pagination">
@@ -45,6 +38,17 @@
             <li><a href="{% url 'sell_ticket:completion' ticket.id %}">5. Complete</a></li>
         </ul>
     </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <p>Sell Ticket - Event</p>
+    {{ ticket.event.name }}
+    {{ ticket.event.location }}
+    {{ ticket.event.start_date }}
+    {{ ticket.event.end_date }}
 
 
 

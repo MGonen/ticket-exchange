@@ -111,12 +111,7 @@ def set_price(request, ticket_id):
         form = PriceForm(request.POST)
 
         if form.is_valid():
-
             ticket.price = request.POST.get('price')
-            if not ticket.price:
-                messages.add_message(request, messages.ERROR, 'You need to set a price for the ticket to continue')
-                return redirect('sell_ticket:set_price', ticket_id)
-
             ticket.save()
 
             if 'continue' in request.POST:

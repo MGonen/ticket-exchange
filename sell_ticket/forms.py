@@ -16,7 +16,7 @@ class UploadTicket(forms.Form):
 
 
 class PriceForm(forms.Form):
-    price = forms.DecimalField(max_digits=10, decimal_places=2, required=False)
+    price = forms.DecimalField(max_digits=10, decimal_places=2)
 
 
 class PersonForm4SellTicket(forms.ModelForm):
