@@ -2,8 +2,12 @@
 
 {% block content %}
 
-    {{ ticket.event.name }}
-    {{ ticket.price }}
+    <p>{{ ticket.event.name }}</p>
+    <p>{{ ticket.price }}</p>
+    <p>{{ ticket.original_filename }}</p>
+    <p>{{ ticket.seller.fullname }}</p>
+    <p>{{ ticket.seller.email }}</p>
+    <p>{{ ticket.seller.bank_account }}</p>
 
 
     <form method="POST" >{% csrf_token %}

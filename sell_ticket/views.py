@@ -152,7 +152,7 @@ def personal_details(request, ticket_id):
             if 'continue' in request.POST:
                 person_form.save()
                 user_form.save()
-                return redirect('sell_ticket:confirmation', ticket_id)
+                return redirect('sell_ticket:completion', ticket_id)
             elif 'return' in request.POST:
                 return redirect('sell_ticket:set_price', ticket_id)
 
@@ -166,24 +166,24 @@ def personal_details(request, ticket_id):
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 @ticket_complete_check
-def confirmation(request, ticket_id):
+def completion(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
     if request.method == "POST":
 
 
         if 'continue' in request.POST:
+            missing_ticket_info = ticket_complete(request, ticket_id)
+            if missing_ticket_info:
+                messages.add_message(request, messages.ERROR, "Unfortunately you're missing some info to put this ticket up for sale. You are still missing: %s" % (missing_ticket_info,))
+                return render(request, 'sell_ticket/completion.html', {'ticket': ticket})
             ticket.complete = True
             ticket.save()
             return redirect('my_info:tickets_for_sale')
         elif 'return' in request.POST:
             return redirect('sell_ticket:personal_details', ticket_id)
 
-
-
-
-
-    return render(request, 'sell_ticket/confirmation.html', {'ticket': ticket})
+    return render(request, 'sell_ticket/completion.html', {'ticket': ticket})
 
 
 def save_ticket_pdf(file, ticket_id):
@@ -207,3 +207,17 @@ def process_pdf(request, file):
 
 def ticket_is_valid(file, event_id):
     return True
+
+def ticket_complete(request, ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+    missing_ticket_info = ""
+
+    if not ticket.event:
+        missing_ticket_info +="-Event "
+    if not ticket.original_filename:
+        missing_ticket_info += "-PDF "
+    if not ticket.price:
+        missing_ticket_info += "-Ticket Price "
+
+    return missing_ticket_info
+
