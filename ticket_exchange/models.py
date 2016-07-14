@@ -56,9 +56,9 @@ class Ticket(models.Model):
 
 
     def clean(self):
-        max_price = float(self.event.baseticket.price) * 1.25
+        max_price = float(self.event.baseticket.price) * 1.2
         if self.price and (float(self.price) > max_price):
-            validation_error_text = 'The price of the ticket can only be 25%% more than the original ticket price, in this case %s %.2f' % (u"\u20AC", float(self.event.baseticket.price)*1.25)
+            validation_error_text = 'The price of the ticket can only be 20%% more than the original ticket price, in this case %s %.2f' % (u"\u20AC", float(self.event.baseticket.price)*1.2)
             raise ValidationError(validation_error_text)
 
 
