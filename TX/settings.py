@@ -40,8 +40,9 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     # 'haystack',
     'ticket_exchange',
-    'sell_ticket',
     'my_info',
+    'sell_ticket',
+    'buy_ticket',
 
 )
 

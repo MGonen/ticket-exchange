@@ -41,6 +41,7 @@ class Ticket(models.Model):
     link = models.TextField(null=True, blank=True)
     original_filename = models.CharField(max_length=200, null=True, blank=True)
     complete = models.BooleanField(default=False)
+    potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
 
     def __str__(self):
         return str(self.id)
