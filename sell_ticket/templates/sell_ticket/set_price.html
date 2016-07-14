@@ -1,4 +1,11 @@
 {% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'sell_ticket/js/show_price.js' %}"></script>
+{% endblock %}
+
+
 
 {% block pagination %}
 
@@ -41,6 +48,15 @@
 
 
 {% block content %}
+
+    <table>
+        <tr>
+            <td>Your payout if the ticket is sold: </td>
+            <td>&nbsp;</td>
+            <td id="price_after_commission"></td>
+        </tr>
+    </table>
+
     <form method="POST" >{% csrf_token %}
         {{ form.as_p }}
         <button name="return" class="save btn btn-primary">Upload different file</button>

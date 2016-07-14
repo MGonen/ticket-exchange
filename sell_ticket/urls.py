@@ -25,6 +25,6 @@ urlpatterns = (
     url(r'^upload-pdf/(?P<ticket_id>[0-9]+)/$', views.upload_pdf, name='upload_pdf'),
     url(r'^set-price/(?P<ticket_id>[0-9]+)/$', views.set_price, name='set_price'),
     url(r'^personal-details/(?P<ticket_id>[0-9]+)/$', views.personal_details, name='personal_details'),
-    url(r'^complete/(?P<ticket_id>[0-9]+)/$', views.completion, name='completion'),
+    url(r'^completion/(?P<ticket_id>[0-9]+)/$', views.completion, name='completion'),
 
 )

@@ -13,7 +13,7 @@ def ticket_complete_check(func):
         ticket = Ticket.objects.get(id=ticket_id)
 
         if ticket.complete:
-            messages.add_message(request, messages.ERROR, "For safety reasons, it is not possible to edit completed tickets. If you want to change something, you will have to delete it, and put it up for sale again.")
+            messages.add_message(request, messages.ERROR, "For safety reasons, it is not possible to edit completed tickets. If you want to change something, you will have to delete the ticket, and put it up for sale again.")
             return redirect('my_info:tickets_for_sale')
 
 
