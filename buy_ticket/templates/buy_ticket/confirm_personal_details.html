@@ -1,0 +1,12 @@
+{% extends 'ticket_exchange/base.html' %}
+
+{% block content %}
+    Buy Ticket - Confirm Personal Details
+
+    <form method="POST" >{% csrf_token %}
+        {{ user_form.as_p }}
+        <button name="return" class="save btn btn-primary">Return to Ticket Details</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+    </form>
+
+{% endblock %}

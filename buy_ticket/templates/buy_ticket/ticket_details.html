@@ -2,4 +2,14 @@
 
 {% block content %}
     Buy Ticket - Ticket Details
+
+    <p>Seller: {{ ticket.seller.fullname }}</p>
+    <p>Event: {{ ticket.event.name }}</p>
+    <p>Ticket Price {{ ticket.price }}</p>
+    <p>Commission Price: {{ ticket.price }}</p>
+    <p>Banking Fee: 0.60</p>
+    <p>Total Price: {{ ticket.price }}</p>
+
+    <a class="btn btn-success" href="{% url 'buy_ticket:confirm_personal_details' ticket.id %}">Buy Ticket</a>
+
 {% endblock %}

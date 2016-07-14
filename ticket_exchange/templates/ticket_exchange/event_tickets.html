@@ -22,7 +22,7 @@
 
     <div class="list-group">
         {% for ticket in tickets %}
-            <a href="{% url 'buy_ticket' ticket.id %}" class="list-group-item">
+            <a href="{% url 'buy_ticket:ticket_details' ticket.id %}" class="list-group-item">
                 <h4 style="color: #0081db" class="list-group-item-heading">{{ ticket.seller.fullname }}</h4>
                 <p class="list-group-item-text">{{ ticket.price }}</p>
             </a>

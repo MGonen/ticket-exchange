@@ -91,7 +91,7 @@ def create_event(request):
 
 def event_tickets(request, event_pk):
     event = Event.objects.get(pk=event_pk)
-    tickets = Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True).order_by('price')
+    tickets = Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True).filter(potential_buyer__isnull=True).order_by('price')
     tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
     tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
 
@@ -150,12 +150,6 @@ def _get_search_results(search_query):
 
     return event_objects[:7]
 
-
-def buy_ticket(request, ticket_id):
-    print 'arrived at buy_ticket'
-    ticket = Ticket.objects.get(id=ticket_id)
-
-    return render(request, 'ticket_exchange/buy_ticket.html', {'ticket':ticket})
 
 
 
