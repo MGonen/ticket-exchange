@@ -5,7 +5,7 @@ function event_search_results() {
     search_query = $('#search_input').val();
     no_space_query = search_query.replace(/ /g, '');
 
-    if (no_space_query == '') {
+    if (no_space_query == '' || no_space_query.length <= 1) {
         $('.list-group').remove();
     }
         
