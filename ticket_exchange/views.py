@@ -91,11 +91,10 @@ def create_event(request):
 
 def event_tickets(request, event_pk):
     event = Event.objects.get(pk=event_pk)
-    tickets = Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True).filter(potential_buyer__isnull=True).order_by('price')
     tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
     tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
 
-    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets':tickets, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
 
 
 def facebook_login_handler(request):
@@ -222,4 +221,5 @@ def create_ticket_file_location(event_id):
 
 def get_date(date):
     return datetime.datetime.strptime(date, '%d-%m-%Y').strftime('%Y%m%d')
+
 
