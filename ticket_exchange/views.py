@@ -151,8 +151,6 @@ def _get_search_results(search_query):
     return event_objects[:7]
 
 
-
-
 def create_event_dicts(event_objects):
     event_dicts = []
 
@@ -171,6 +169,30 @@ def create_event_dicts(event_objects):
         event_dicts.append(event_dict)
 
     return event_dicts
+
+
+@json_view
+@csrf_exempt
+def get_event_tickets(request, event_id):
+    tickets = Ticket.objects.filter(event_id=event_id).filter(bought=False).filter(complete=True).filter(
+    potential_buyer__isnull=True).order_by('price')
+    ticket_dicts = create_ticket_dicts(tickets)
+
+    return {'tickets': ticket_dicts}
+
+
+def create_ticket_dicts(tickets):
+    ticket_dicts = []
+
+    for ticket_object in tickets:
+        ticket_dict = {}
+        ticket_dict['id'] = ticket_object.id
+        ticket_dict['seller'] = ticket_object.seller.fullname
+        ticket_dict['price'] = ticket_object.price
+
+        ticket_dicts.append(ticket_dict)
+
+    return ticket_dicts
 
 
 def pdf_is_safe(file):

@@ -1,10 +1,16 @@
 {% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'ticket_exchange/js/event_tickets.js' %}"></script>
+    <script>document.onload = start_get_event_tickets_js({{ event.id }})</script>
+{% endblock %}
+
 
 {% block content %}
 
     <div>
         <p>Event tickets</p>
-{#        <a class="btn btn-default" href="{% url 'ticket_new' %}"><span class="glyphicon glyphicon-plus"></span></a>#}
     </div>
 
     <div>
@@ -17,17 +23,6 @@
             <h4 style="color: #0081db" class="event-details-heading">{{ event.name }}</h4>
             <p class="event-details-location"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }}</p>
             <p class="event-details-date"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}</p>
-
-    </div>
-
-    <div class="list-group">
-        {% for ticket in tickets %}
-            <a href="{% url 'buy_ticket:ticket_details' ticket.id %}" class="list-group-item">
-                <h4 style="color: #0081db" class="list-group-item-heading">{{ ticket.seller.fullname }}</h4>
-                <p class="list-group-item-text">{{ ticket.price }}</p>
-            </a>
-        {% endfor %}
-
     </div>
 
 
