@@ -102,16 +102,11 @@ def event_tickets(request, event_pk):
             return redirect('event_tickets', event_pk)
 
     else:
-        ticket_id = 0
-        potential_buyer = False
-        if Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id).exists():
-            potential_buyer = True
-            ticket_id = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0].id
         event = Event.objects.get(pk=event_pk)
         tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
         tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
 
-        return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'ticket_id': ticket_id, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold, 'potential_buyer': potential_buyer})
+        return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
 
 
 def facebook_login_handler(request):
@@ -180,7 +175,6 @@ def create_event_dicts(event_objects):
         event_dict['country'] = event_object.country
         date = event_object.start_date
         event_dict['start_date'] = '%s %i %s %i' % (calendar.day_name[date.weekday()], date.day, date.strftime('%B'), date.year)
-        # event_dict['end_date'] = event_object.end_date
 
         event_dicts.append(event_dict)
 
@@ -195,7 +189,11 @@ def get_event_tickets(request, event_id):
     potential_buyer__isnull=True).order_by('price')
     ticket_dicts = create_ticket_dicts(tickets)
 
-    already_a_potential_buyer = user_already_potential_buyer_this_event(request.user.person, event_id)
+    try:
+        already_a_potential_buyer = user_already_potential_buyer_this_event(request.user.person, event_id)
+    except AttributeError:
+        print 'no person linked to user, i.e. anonymous, i.e. not a buyer'
+        already_a_potential_buyer = False
 
     return {'tickets': ticket_dicts, 'already_a_potential_buyer': already_a_potential_buyer}
 
