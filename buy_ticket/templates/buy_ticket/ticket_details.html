@@ -10,6 +10,7 @@
     <p>Banking Fee: 0.60</p>
     <p>Total Price: {{ ticket.price }}</p>
 
+    <a class="btn btn-primary" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel this ticket</a>
     <a class="btn btn-success" href="{% url 'buy_ticket:confirm_personal_details' ticket.id %}">Buy Ticket</a>
 
 {% endblock %}

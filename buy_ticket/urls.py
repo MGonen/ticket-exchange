@@ -18,10 +18,12 @@ from django.conf.urls import url
 import views
 
 urlpatterns = (
-
+    url(r'^potential_buyer_check/(?P<ticket_id>[0-9]+)/$', views.potential_buyer_check, name='potential_buyer_check'),
     url(r'^ticket-details/(?P<ticket_id>[0-9]+)/$', views.ticket_details, name='ticket_details'),
+    url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),
     url(r'^personal-details/(?P<ticket_id>[0-9]+)/$', views.confirm_personal_details, name='confirm_personal_details'),
     url(r'^payment-method/(?P<ticket_id>[0-9]+)/$', views.select_payment_method, name='select_payment_method'),
+    url(r'^confirm-purchase/(?P<ticket_id>[0-9]+)/$', views.confirm_purchase, name='confirm_purchase'),
     url(r'^payment-confirmation/(?P<ticket_id>[0-9]+)/$', views.payment_confirmation, name='payment_confirmation'),
     url(r'^payment-failed/(?P<ticket_id>[0-9]+)/$', views.payment_failed, name='payment_failed'),
 

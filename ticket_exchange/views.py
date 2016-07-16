@@ -17,10 +17,10 @@ from TX.settings import BASE_DIR
 
 from django.contrib import messages
 
-
 import datetime
 import calendar
 import scriptine
+import time
 
 
 FACEBOOK_LOGIN_URL = '/login/facebook'
@@ -90,11 +90,28 @@ def create_event(request):
 
 
 def event_tickets(request, event_pk):
-    event = Event.objects.get(pk=event_pk)
-    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
-    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+    if request.method == "POST":
+        if 'continue' in request.POST:
+            ticket = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0]
+            return redirect('buy_ticket:ticket_details', ticket.id)
+        elif 'new' in request.POST:
+            ticket = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0]
+            ticket.potential_buyer = None
+            ticket.potential_buyer_release_time = None
+            ticket.save()
+            return redirect('event_tickets', event_pk)
 
-    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+    else:
+        ticket_id = 0
+        potential_buyer = False
+        if Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id).exists():
+            potential_buyer = True
+            ticket_id = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0].id
+        event = Event.objects.get(pk=event_pk)
+        tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
+        tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+
+        return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'ticket_id': ticket_id, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold, 'potential_buyer': potential_buyer})
 
 
 def facebook_login_handler(request):
@@ -173,11 +190,21 @@ def create_event_dicts(event_objects):
 @json_view
 @csrf_exempt
 def get_event_tickets(request, event_id):
+    remove_overtime_potential_buyers()
     tickets = Ticket.objects.filter(event_id=event_id).filter(bought=False).filter(complete=True).filter(
     potential_buyer__isnull=True).order_by('price')
     ticket_dicts = create_ticket_dicts(tickets)
 
-    return {'tickets': ticket_dicts}
+    already_a_potential_buyer = user_already_potential_buyer_this_event(request.user.person, event_id)
+
+    return {'tickets': ticket_dicts, 'already_a_potential_buyer': already_a_potential_buyer}
+
+
+def user_already_potential_buyer_this_event(person, event_id):
+    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person.id).exists():
+        return True
+    return False
+
 
 
 def create_ticket_dicts(tickets):
@@ -192,6 +219,14 @@ def create_ticket_dicts(tickets):
         ticket_dicts.append(ticket_dict)
 
     return ticket_dicts
+
+
+def remove_overtime_potential_buyers():
+    current_time = time.time()
+    for ticket in Ticket.objects.filter(potential_buyer_release_time__lt=current_time):
+        ticket.potential_buyer = None
+        ticket.potential_buyer_release_time = None
+        ticket.save()
 
 
 def pdf_is_safe(file):

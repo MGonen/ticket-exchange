@@ -2,4 +2,12 @@
 
 {% block content %}
     Buy Ticket - Select Payment Method
+
+    <form method="POST" >{% csrf_token %}
+{#        {{ user_form.as_p }}#}
+        <button name="return" class="save btn btn-primary">Return to Personal details</button>
+        <button name="continue" class="save btn btn-primary">Continue</button>
+        <button name="cancel" class="save btn btn-primary">Cancel this ticket</button>
+    </form>
+
 {% endblock %}

@@ -25,7 +25,8 @@
             <p class="event-details-date"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}</p>
     </div>
 
-
+    <form method="POST" class="continue_ticket_purchase_form">{% csrf_token %}
+    </form>
 
 {% endblock %}
 

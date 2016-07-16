@@ -42,12 +42,13 @@ class Ticket(models.Model):
     original_filename = models.CharField(max_length=200, null=True, blank=True)
     complete = models.BooleanField(default=False)
     potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
+    potential_buyer_release_time = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
 
     def __str__(self):
         return str(self.id)
 
     def save(self, *args, **kwargs):
-        if not self.bought:
+        if not self.buyer:
             self.holder = self.seller
         else:
             self.holder = self.buyer
