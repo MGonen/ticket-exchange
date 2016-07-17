@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 import time
+from collections import namedtuple
 
 from ticket_exchange.models import Ticket
 from my_info.forms import UserForm
@@ -11,6 +12,8 @@ from ticket_exchange.views import FACEBOOK_LOGIN_URL
 from ticket_exchange.utils import potential_buyer_checks_decorator
 
 # Create your views here.
+TicketPriceObject = namedtuple("TicketPriceObject", ['commission', 'bank_costs', 'total_price'])
+COMMISSION_PERCENTAGE =0.06
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def potential_buyer_check(request, ticket_id):
@@ -35,11 +38,8 @@ def potential_buyer_check(request, ticket_id):
 @potential_buyer_checks_decorator
 def ticket_details(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    # Add filters to template to show the commission fee and total price
-
-
-    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket})
-
+    ticket_price_object = _get_ticket_price_object(ticket.price)
+    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -101,6 +101,8 @@ def confirm_purchase(request, ticket_id):
     ticket.potential_buyer_release_time = time.time() + 60
     ticket.save()
 
+    ticket_price_object = _get_ticket_price_object(ticket.price)
+
     if request.method == "POST":
         if 'confirm' in request.POST:
             ticket.buyer = ticket.potential_buyer
@@ -110,7 +112,7 @@ def confirm_purchase(request, ticket_id):
             ticket.save()
             return redirect('buy_ticket:payment_confirmation', ticket_id)
 
-    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket})
+    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
 
 
@@ -133,6 +135,18 @@ def cancel_ticket_view(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     event_id = ticket.event.id
     return redirect('event_tickets', event_id)
+
+
+def _get_ticket_price_object(ticket_price):
+    commission = COMMISSION_PERCENTAGE * float(ticket_price)
+    bank_costs = (0.019 * float(ticket_price)) + 0.6
+    total_price = float(ticket_price) + commission + bank_costs
+
+    commission_string = '%.2f' % (commission,)
+    bank_costs_string = '%.2f' % (bank_costs,)
+    total_price_string = '%.2f' % (total_price,)
+
+    return TicketPriceObject(commission=commission_string, bank_costs=bank_costs_string, total_price=total_price_string)
 
 
 def cancel_ticket(ticket_id):
