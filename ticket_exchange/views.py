@@ -89,27 +89,29 @@ def create_event(request):
 
 
 
-def event_tickets(request, event_pk):
-    if request.method == "POST":
+def event_tickets(request, event_id):
+    selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
+
+    if request.method == "POST" and selected_ticket_qs.exists():
         if 'continue' in request.POST:
-            ticket = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0]
+            ticket = selected_ticket_qs[0]
             return redirect('buy_ticket:ticket_details', ticket.id)
         elif 'new' in request.POST:
-            ticket = Ticket.objects.filter(event_id=event_pk).filter(potential_buyer_id=request.user.person.id)[0]
+            ticket = selected_ticket_qs[0]
             ticket.potential_buyer = None
             ticket.potential_buyer_release_time = None
             ticket.save()
-            return redirect('event_tickets', event_pk)
-
-    else:
-        event = Event.objects.get(pk=event_pk)
-        tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
-        tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
-
-        return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+            return redirect('event_tickets', event_id)
 
 
-def facebook_login_handler(request):
+    event = Event.objects.get(pk=event_id)
+    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
+    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+
+    return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+
+
+def facebook_post_login_handler(request):
     return HttpResponse('<script type="text/javascript">window.opener.location.href = window.opener.location.href;window.close();</script>')
 
 
@@ -190,19 +192,23 @@ def get_event_tickets(request, event_id):
     ticket_dicts = create_ticket_dicts(tickets)
 
     try:
-        already_a_potential_buyer = user_already_potential_buyer_this_event(request.user.person, event_id)
-    except AttributeError:
-        print 'no person linked to user, i.e. anonymous, i.e. not a buyer'
-        already_a_potential_buyer = False
-
-    return {'tickets': ticket_dicts, 'already_a_potential_buyer': already_a_potential_buyer}
+        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = get_selected_ticket_info(request.user.person.id, event_id)
+    except:
+        print 'no person linked to user, i.e. anonymous user, i.e. not a buyer'
+        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = False, False
 
 
-def user_already_potential_buyer_this_event(person, event_id):
-    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person.id).exists():
-        return True
-    return False
+    return {'tickets': ticket_dicts, 'already_a_potential_buyer': user_is_already_a_potential_buyer_in_this_event, 'selected_ticket': selected_ticket_info}
 
+
+def get_selected_ticket_info(person_id, event_id):
+    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id).exists():
+        ticket = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id)[0]
+        selected_ticket_info = {'price': float(ticket.price), 'seller': ticket.seller.fullname}
+        return True, selected_ticket_info
+
+    else:
+        return False, False
 
 
 def create_ticket_dicts(tickets):

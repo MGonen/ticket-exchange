@@ -138,7 +138,7 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,name,email',
 }
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/facebook-login-handler/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/facebook-post-login-handler/'
 
 DATE_FORMAT = 'd-m-Y'
 SHORT_DATE_FORMAT = 'd-m-Y'

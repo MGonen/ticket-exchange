@@ -18,7 +18,7 @@ function ajax_event_tickets_call(event_id) {
             $('.list-group').remove();
             $('.event_ticket_form_content').remove();
             if (results.already_a_potential_buyer){
-                create_form_content();
+                create_form_content(results.selected_ticket);
             }
             else {
                 ticket_removed_message();
@@ -33,11 +33,14 @@ function ajax_event_tickets_call(event_id) {
     });
 }
 
-function create_form_content() {
+function create_form_content(selected_ticket) {
     var info_text_element = document.createElement('p');
     info_text_element.className = 'event_ticket_form_content';
     info_text_element.innerText = 'You are already in the process of buying a ticket. Would you like to continue, or select a different ticket';
 
+    var ticket_info_element = document.createElement('p');
+    ticket_info_element.className = 'event_ticket_form_content';
+    ticket_info_element.innerText = selected_ticket.price + ' - ' + selected_ticket.seller;
 
     var continue_button = document.createElement('button');
     continue_button.name = 'continue';
@@ -50,6 +53,7 @@ function create_form_content() {
     different_ticket_button.innerText = 'Select a different ticket';
 
     $('.continue_ticket_purchase_form').append(info_text_element);
+    $('.continue_ticket_purchase_form').append(ticket_info_element);
     $('.continue_ticket_purchase_form').append(continue_button);
     $('.continue_ticket_purchase_form').append(different_ticket_button);
 

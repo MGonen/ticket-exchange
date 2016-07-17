@@ -8,7 +8,7 @@ import time
 from ticket_exchange.models import Ticket
 from my_info.forms import UserForm
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
-from ticket_exchange.utils import potential_buyer_overtime_check, user_is_potential_buyer_check
+from ticket_exchange.utils import potential_buyer_checks_decorator
 
 # Create your views here.
 
@@ -17,7 +17,7 @@ def potential_buyer_check(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
     if ticket.potential_buyer and (ticket.potential_buyer.id != request.user.person.id):
-        messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try to select a different ticket")
+        messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket")
         return redirect('event_tickets', ticket.event.id)
 
     elif ticket.potential_buyer and (ticket.potential_buyer.id == request.user.person.id):
@@ -32,8 +32,7 @@ def potential_buyer_check(request, ticket_id):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_overtime_check
-@user_is_potential_buyer_check
+@potential_buyer_checks_decorator
 def ticket_details(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     # Add filters to template to show the commission fee and total price
@@ -44,8 +43,7 @@ def ticket_details(request, ticket_id):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_overtime_check
-@user_is_potential_buyer_check
+@potential_buyer_checks_decorator
 def confirm_personal_details(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     user = get_object_or_404(User, pk=request.user.id)
@@ -71,8 +69,7 @@ def confirm_personal_details(request, ticket_id):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_overtime_check
-@user_is_potential_buyer_check
+@potential_buyer_checks_decorator
 def select_payment_method(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     event_id = ticket.event.id
@@ -98,8 +95,7 @@ def select_payment_method(request, ticket_id):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_overtime_check
-@user_is_potential_buyer_check
+@potential_buyer_checks_decorator
 def confirm_purchase(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     ticket.potential_buyer_release_time = time.time() + 60

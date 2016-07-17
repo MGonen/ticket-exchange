@@ -25,10 +25,10 @@ urlpatterns = (
     url(r'^advanced_search/(?P<search_query>.+)/$', views.advanced_search, name='advanced_search'),
 
     url(r'^create_event/$', views.create_event, name='create_event'),
-    url(r'^event/(?P<event_pk>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
+    url(r'^event/(?P<event_id>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
     url(r'^get_event_tickets/(?P<event_id>[0-9]+)/$', views.get_event_tickets, name='get_event_tickets'),
 
-    url(r'^facebook-login-handler/$', views.facebook_login_handler, name='facebook_login_handler'),
+    url(r'^facebook-post-login-handler/$', views.facebook_post_login_handler, name='facebook_post_login_handler'),
 
     url(r'^fb_logout/$', views.fb_logout, name='fb_logout'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
