@@ -90,7 +90,9 @@ def create_event(request):
 
 
 def event_tickets(request, event_id):
-    selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
+    selected_ticket_qs = Ticket.objects.filter(seller__isnull=True).filter(seller__isnull=False) # creating an empty queryset, so 'selected_ticket_qs.exists() is not an exception
+    if hasattr(request.user, 'person'):
+        selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
 
     if request.method == "POST" and selected_ticket_qs.exists():
         if 'continue' in request.POST:
