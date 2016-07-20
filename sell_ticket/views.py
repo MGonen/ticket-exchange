@@ -7,7 +7,9 @@ import scriptine
 
 from ticket_exchange.models import Person, Event, Ticket
 from ticket_exchange.utils import ticket_complete_check
-from ticket_exchange.views import FACEBOOK_LOGIN_URL, pdf_is_safe, save_pdf
+from ticket_exchange.views import FACEBOOK_LOGIN_URL
+from events.views import pdf_is_safe, save_pdf
+
 from my_info.forms import UserForm
 from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, TicketPriceForm
 from TX.settings import BASE_DIR

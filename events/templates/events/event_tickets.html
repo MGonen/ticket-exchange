@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'ticket_exchange/js/event_tickets.js' %}"></script>
+    <script src="{% static 'events/js/event_tickets.js' %}"></script>
     <script>document.onload = start_get_event_tickets_js({{ event.id }})</script>
 {% endblock %}
 
@@ -17,7 +17,7 @@
         <h1 class="event-tickets-heading-event">{{ event.name }}</h1>
 
         {% if user.is_staff %}
-            <a href="{% url 'edit_event' event.id %}">Edit Event</a>
+            <a href="{% url 'events:edit_event' event.id %}">Edit Event</a>
         {% endif %}
 
         <table class="table event-info-table">

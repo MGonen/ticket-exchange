@@ -19,6 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('ticket_exchange.urls')),
+    url(r'event/', include('events.urls', namespace='events')),
     url(r'my-info/', include('my_info.urls', namespace='my_info')),
     url(r'sell-ticket/', include('sell_ticket.urls', namespace='sell_ticket')),
     url(r'buy-ticket/', include('buy_ticket.urls', namespace='buy_ticket')),

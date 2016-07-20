@@ -21,7 +21,7 @@ def potential_buyer_check(request, ticket_id):
 
     if ticket.potential_buyer and (ticket.potential_buyer.id != request.user.person.id):
         messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket")
-        return redirect('event_tickets', ticket.event.id)
+        return redirect('events:event_tickets', ticket.event.id)
 
     elif ticket.potential_buyer and (ticket.potential_buyer.id == request.user.person.id):
         return redirect('buy_ticket:ticket_details', ticket_id)
@@ -60,7 +60,7 @@ def confirm_personal_details(request, ticket_id):
                 return redirect('buy_ticket:ticket_details', ticket_id)
             elif 'cancel' in request.POST:
                 cancel_ticket(ticket.id)
-                return redirect('event_tickets', event_id)
+                return redirect('events:event_tickets', event_id)
 
     else:
         user_form = UserForm(instance=user)
@@ -85,7 +85,7 @@ def select_payment_method(request, ticket_id):
                 return redirect('buy_ticket:confirm_personal_details', ticket_id)
             elif 'cancel' in request.POST:
                 cancel_ticket(ticket.id)
-                return redirect('event_tickets', event_id)
+                return redirect('events:event_tickets', event_id)
 
     else:
         # user_form = UserForm(instance=user)
@@ -134,7 +134,7 @@ def cancel_ticket_view(request, ticket_id):
     cancel_ticket(ticket_id)
     ticket = Ticket.objects.get(id=ticket_id)
     event_id = ticket.event.id
-    return redirect('event_tickets', event_id)
+    return redirect('events:event_tickets', event_id)
 
 
 def _get_ticket_price_object(ticket_price):

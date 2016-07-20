@@ -9,7 +9,7 @@
     {% endif %}
 
     {% if user.is_staff %}
-        <li><a href="{% url 'create_event' %}" class="top-menu pagetools-item">Create Event</a></li>
+        <li><a href="{% url 'events:create_event' %}" class="top-menu pagetools-item">Create Event</a></li>
     {% endif %}
 
     {% if user.is_authenticated %}

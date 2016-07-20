@@ -8,7 +8,7 @@ function start_get_event_tickets_js(event_id){
 }
 
 function ajax_event_tickets_call(event_id) {
-    url = '/get_event_tickets/' + event_id + '/';
+    url = '/event/' + event_id + '/get_event_tickets/';
 
     $.ajax({
         url: url,
@@ -91,7 +91,6 @@ function append_event_ticket_header(ticket_list, tickets) {
     ticket_list_header.style.textAlign = "center";
     ticket_list_header.style.padding = '10px';
 
-    console.log(tickets, tickets.length);
     if (tickets.length == 0) {
         ticket_list_header.innerText = 'No tickets available at the moment'
     }

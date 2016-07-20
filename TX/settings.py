@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'my_info',
     'sell_ticket',
     'buy_ticket',
+    'events',
 
 )
 
