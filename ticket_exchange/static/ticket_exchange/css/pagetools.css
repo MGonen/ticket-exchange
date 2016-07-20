@@ -1,0 +1,100 @@
+
+.pagetools {
+    float: right ;
+    padding-top: 3%;
+}
+
+.pagetools > li {
+    display: inline;
+    margin: 5px;
+}
+
+.pagetools > li > ul {
+    margin-top: 28px;
+}
+
+.pagetools-item {
+    display: inline-block;
+    color: lightgrey;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.pagetools-item:hover {
+    color: white;
+    text-decoration: none;
+}
+
+#sell-ticket-button {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.dropdown-menu::after {
+  position: absolute;
+  top: -6px;
+  left: 25px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  border-left: 6px solid transparent;
+  content: '';
+}
+
+.image-button {
+    background-color: transparent !important;
+    border: none;
+}
+
+.image-button:focus {
+    outline: none;
+}
+
+.facebook-image {
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.facebook-image:hover {
+    opacity: 0.8;
+}
+
+
+
+
+/* Home */
+
+.homepage > h1 {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+
+.homepage {
+    text-align: center;
+}
+
+
+
+.search_bar {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+.search_button{
+    font: sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: 20%;
+    margin-left: -4px;
+    box-shadow: 0 1px 2px #444444;
+    border: 0;
+}
+

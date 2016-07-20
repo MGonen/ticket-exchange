@@ -21,7 +21,7 @@ function ajax_event_tickets_call(event_id) {
                 create_form_content(results.selected_ticket);
             }
             else {
-                ticket_removed_message();
+                // ticket_removed_message();
                 var ticket_list = create_event_ticket_list(results.tickets);
                 $('.continue_ticket_purchase_form').after(ticket_list);
             }
@@ -75,11 +75,31 @@ function create_event_ticket_list(tickets) {
     var ticket_list = document.createElement('div');
     ticket_list.className = 'list-group';
 
+    ticket_list = append_event_ticket_header(ticket_list, tickets);
     ticket_list = append_event_ticket_items(ticket_list, tickets);
 
     return ticket_list
 }
 
+function append_event_ticket_header(ticket_list, tickets) {
+    var ticket_list_header = document.createElement('h2');
+    ticket_list_header.className = 'list-group-item';
+    ticket_list_header.innerText = 'Available Tickets';
+    ticket_list_header.style.color = 'white';
+    ticket_list_header.style.backgroundColor = '#333333';
+    ticket_list_header.style.opacity = 0.8;
+    ticket_list_header.style.textAlign = "center";
+    ticket_list_header.style.padding = '10px';
+
+    console.log(tickets, tickets.length);
+    if (tickets.length == 0) {
+        ticket_list_header.innerText = 'No tickets available at the moment'
+    }
+
+    ticket_list.appendChild(ticket_list_header);
+
+    return ticket_list
+}
 
 function append_event_ticket_items(ticket_list, tickets) {
 
@@ -100,15 +120,20 @@ function create_event_ticket_item(ticket){
     var ticket_link = "/buy-ticket/potential_buyer_check/" + ticket.id + '/';
     ticket_item.setAttribute('href', ticket_link);
     ticket_item.className = 'list-group-item';
+    ticket_item.style.opacity = 0.9;
 
-    var ticket_item_heading = document.createElement('h4');
+    var ticket_item_heading = document.createElement('h3');
     ticket_item_heading.className = 'list-group-item-heading';
     ticket_item_heading.innerHTML = '&euro; ' + ticket.price;
     ticket_item_heading.style.color = '#0081db';
+    ticket_item_heading.style.padding = '3px';
+    ticket_item_heading.style.paddingLeft = '10px';
 
     var ticket_item_text = document.createElement('p');
     ticket_item_text.className = 'list-group-item-text';
     ticket_item_text.innerText = ticket.seller;
+    ticket_item_text.style.padding = '3px';
+    ticket_item_text.style.paddingLeft = '10px';
     ticket_item.appendChild(ticket_item_heading);
     ticket_item.appendChild(ticket_item_text);
 

@@ -1,6 +1,10 @@
 {% extends 'ticket_exchange/base.html' %}
 {% load static %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'ticket_exchange/css/event_tickets.css' %}">
+{% endblock %}
+
 {% block scripts %}
     <script src="{% static 'ticket_exchange/js/event_tickets.js' %}"></script>
     <script>document.onload = start_get_event_tickets_js({{ event.id }})</script>
@@ -9,20 +13,40 @@
 
 {% block content %}
 
-    <div>
-        <p>Event tickets</p>
-    </div>
+    <div class="event-tickets-info info-container">
+        <h1 class="event-tickets-heading-event">{{ event.name }}</h1>
+{#        {% if user.is_staff %}#}
+{#            <a href="{% url 'edit_event' event.id %}">Edit Event</a>#}
+{#        {% endif %}#}
 
-    <div>
-        <p>Tickets Available: {{ tickets_available }}</p>
-        <p>Tickets Sold: {{ tickets_sold }}</p>
-    </div>
+        <table class="table event-info-table">
+            <tbody>
+                <tr>
+                    <td class="event-info-table-date">
+                        <i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }}
+                        {% if event.start_date != event.end_date %}
+                            - {{ event.end_date }}
+                        {% endif %}
+                    </td>
+                    <td class="event-info-table-location">
+                        <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
+        <div>
+            <div class="tickets-available">
+                <p>Tickets Available</p>
+                <div class="tickets-number">{{ tickets_available }}</div>
+            </div>
 
-    <div class="event-details">
-            <h4 style="color: #0081db" class="event-details-heading">{{ event.name }}</h4>
-            <p class="event-details-location"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }}</p>
-            <p class="event-details-date"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}</p>
+            <div class="tickets-sold">
+                <p>Tickets Sold</p>
+                <div class="tickets-number">{{ tickets_sold }}</div>
+            </div>
+        </div>
+
     </div>
 
     <form method="POST" class="continue_ticket_purchase_form">{% csrf_token %}

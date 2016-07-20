@@ -1,0 +1,56 @@
+
+/* Event tickets */
+
+.event-tickets-info {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+
+.event-tickets-heading-event {
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.event-info-table > tbody > tr > td {
+    padding-top: 20px !important;
+    width: 50%;
+}
+
+.event-info-table-date {
+    text-align: right;
+    vertical-align: center;
+    padding-right: 24px !important;
+
+}
+
+.event-info-table-location {
+    vertical-align: center;
+    padding-left: 24px !important;
+}
+
+
+.tickets-available {
+    float: left;
+    margin-left: 220px;
+}
+
+.tickets-sold {
+    float: right;
+    margin-right: 220px;
+}
+
+.tickets-available, .tickets-sold {
+    text-align: center;
+    width: 150px;
+    border: solid;
+    border-color: white;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.tickets-number {
+    font-size: 24px;
+    font-weight: bold;
+}

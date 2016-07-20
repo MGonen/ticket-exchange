@@ -28,7 +28,7 @@ def potential_buyer_checks_decorator(func):
         ticket_id = kwargs['ticket_id']
         ticket = Ticket.objects.get(id=ticket_id)
 
-        if ticket_already_other_potential_buyer(request, ticket) or overtime_check(request, ticket):
+        if ticket_already_bought(request, ticket) or ticket_already_other_potential_buyer(request, ticket) or overtime_check(request, ticket):
             return redirect('event_tickets', ticket.event.id)
 
         return func(*args, **kwargs)
@@ -50,4 +50,8 @@ def overtime_check(request, ticket):
         ticket.save()
         return True
 
-
+def ticket_already_bought(request, ticket):
+    if ticket.bought or ticket.buyer:
+        messages.add_message(request, messages.ERROR,
+                             "Sorry, this ticket has already been bought. Please try another ticket.")
+        return True

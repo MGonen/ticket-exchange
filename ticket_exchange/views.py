@@ -113,6 +113,10 @@ def event_tickets(request, event_id):
     return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
 
 
+def edit_event(request, event_id):
+    return render(request, 'ticket_exchange/edit_event.html', {})
+
+
 def facebook_post_login_handler(request):
     return HttpResponse('<script type="text/javascript">window.opener.location.href = window.opener.location.href;window.close();</script>')
 

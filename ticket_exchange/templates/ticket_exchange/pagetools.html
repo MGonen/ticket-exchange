@@ -1,0 +1,36 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'ticket_exchange/css/pagetools.css' %}">
+
+
+<ul class="pagetools">
+
+    {% if user.is_authenticated %}
+        <li><a href="{% url 'home' %}" class="top-menu pagetools-item">Search</a></li>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <li><a href="{% url 'create_event' %}" class="top-menu pagetools-item">Create Event</a></li>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+
+        <li class="dropdown">
+            <button type="button" data-toggle="dropdown" class="image-button"><img src="{{ user.person.photo }}?width=50&height=50" class="facebook-image"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'my_info:tickets_for_sale' %}">My tickets for sale</a></li>
+                <li><a href="{% url 'my_info:tickets_bought' %}">My bought tickets</a></li>
+                <li><a href="{% url 'my_info:payouts' %}">My payouts</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'my_info:profile' %}">Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url 'fb_logout' %}" class="top-menu">Log out</a>
+            </ul>
+        </li>
+
+        <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-success" id="sell-ticket-button">Sell your e-ticket</a></li>
+
+    {% else %}
+        <li><a class="btn btn-social btn-facebook" id="login-button" onclick="open_login_popup('{% url 'social:begin' 'facebook' %}')"><span class="fa fa-facebook"></span> Sign in with facebook</a></li>
+    {% endif %}
+
+    </ul>
