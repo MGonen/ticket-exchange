@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 
 from ticket_exchange.models import Person, Event, Ticket, BaseTicket
-from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicket, EventForm, BaseTicketPriceForm
+from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm, UploadBaseTicketNew, UploadBaseTicketEdit, EventForm, BaseTicketPriceForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.views import logout as auth_logout
 
@@ -62,7 +62,7 @@ def create_event(request):
     if request.method == 'POST':
         event_form = EventForm(request.POST)
         base_ticket_price_form = BaseTicketPriceForm(request.POST)
-        upload_form = UploadBaseTicket(request.POST, request.FILES)
+        upload_form = UploadBaseTicketNew(request.POST, request.FILES)
 
         if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
             file = request.FILES['file']
@@ -70,7 +70,7 @@ def create_event(request):
 
             if not pdf_is_safe(file):
                 messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
-                return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
+                return render(request, 'ticket_exchange/event_details.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
             event = event_form.save()
             create_base_ticket_object(file, event, price)
@@ -79,14 +79,56 @@ def create_event(request):
             return redirect('event_tickets', event.id)
 
         else:
-            return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
+            return render(request, 'ticket_exchange/event_details.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
     else:
         event_form = EventForm()
-        upload_form = UploadBaseTicket()
+        upload_form = UploadBaseTicketNew()
         base_ticket_price_form = BaseTicketPriceForm()
-        return render(request, 'ticket_exchange/create_event.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
+        return render(request, 'ticket_exchange/event_details.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})
 
+
+def edit_event(request, event_id):
+    event = Event.objects.get(id=event_id)
+    base_ticket = BaseTicket.objects.get(event_id=event_id)
+
+    if request.method == 'POST':
+        event_form = EventForm(request.POST, instance=event)
+        base_ticket_price_form = BaseTicketPriceForm(request.POST, instance=base_ticket)
+        upload_form = UploadBaseTicketEdit(request.POST, request.FILES)
+
+        if not base_ticket.link and not 'file' in request.FILES:
+            messages.add_message(request, messages.ERROR, 'You need to upload a PDF ticket')
+            return redirect('edit_event', event_id)
+
+        if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
+            base_ticket.price = request.POST.get('price')
+
+            if 'file' in request.FILES and not pdf_is_safe(file):
+                messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
+                return redirect('edit_event', event_id)
+
+            elif 'file' in request.FILES and pdf_is_safe(file):
+                base_ticket.file = file
+
+            base_ticket.save()
+            event = event_form.save()
+
+            messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
+            return redirect('event_tickets', event.id)
+
+        else:
+            return render(request, 'ticket_exchange/event_details.html',
+                          {'upload_form': upload_form, 'event_form': event_form,
+                           'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket})
+
+    else:
+        event_form = EventForm(instance=event)
+        upload_form = UploadBaseTicketEdit()
+        base_ticket_price_form = BaseTicketPriceForm(instance=base_ticket)
+        return render(request, 'ticket_exchange/event_details.html',
+                      {'upload_form': upload_form, 'event_form': event_form,
+                       'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket})
 
 
 def event_tickets(request, event_id):
@@ -111,10 +153,6 @@ def event_tickets(request, event_id):
     tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
 
     return render(request, 'ticket_exchange/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
-
-
-def edit_event(request, event_id):
-    return render(request, 'ticket_exchange/edit_event.html', {})
 
 
 def facebook_post_login_handler(request):

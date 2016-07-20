@@ -4,11 +4,15 @@
 
 {% block content %}
 
-    <p>Create event</p>
+    <p>Event Details</p>
 
     <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
         {{ event_form.as_p }}
         {{ base_ticket_price_form.as_p }}
+
+        {% if base_ticket.link %}
+            <p>Ticket already uploaded. To replace the uploaded ticket, click on 'Choose File'</p>
+        {% endif %}
         {{ upload_form.as_p }}
         <button name="Submit" class="btn btn-default">Submit</button>
     </form>

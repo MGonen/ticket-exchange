@@ -18,10 +18,6 @@ class UploadTicket(forms.Form):
 class TicketPriceForm(forms.ModelForm):
     price = forms.DecimalField(required=True, min_value=0.01)
 
-    def __init__(self, *args, **kwargs):
-        super(TicketPriceForm, self).__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs.update({'id': 'price_form_input'})
-
     class Meta:
         model = Ticket
         fields = ('price',)

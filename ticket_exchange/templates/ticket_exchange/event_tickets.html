@@ -15,9 +15,10 @@
 
     <div class="event-tickets-info info-container">
         <h1 class="event-tickets-heading-event">{{ event.name }}</h1>
-{#        {% if user.is_staff %}#}
-{#            <a href="{% url 'edit_event' event.id %}">Edit Event</a>#}
-{#        {% endif %}#}
+
+        {% if user.is_staff %}
+            <a href="{% url 'edit_event' event.id %}">Edit Event</a>
+        {% endif %}
 
         <table class="table event-info-table">
             <tbody>
