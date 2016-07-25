@@ -24,6 +24,7 @@ def select_event(request):
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def incomplete_ticket_check(request, event_id):
+    event = Event.objects.get(id=event_id)
     if request.method == "POST":
         ticket = Ticket.objects.filter(seller=request.user.person).filter(event_id=event_id).filter(complete=False)[0]
         if 'continue' in request.POST:
@@ -43,7 +44,7 @@ def incomplete_ticket_check(request, event_id):
             return redirect('sell_ticket:event_selected', ticket.id)
 
         else:
-            return render(request, 'sell_ticket/incomplete_ticket.html', {})
+            return render(request, 'sell_ticket/incomplete_ticket.html', {'event': event})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -70,8 +71,10 @@ def upload_pdf(request, ticket_id):
     if request.method == "POST":
         upload_form = UploadTicket(request.POST, request.FILES)
 
-        if upload_form.is_valid():
+        if 'return' in request.POST:
+            return redirect('sell_ticket:event_selected', ticket_id)
 
+        if upload_form.is_valid():
             if not ticket.link and not 'file' in request.FILES:
                 messages.add_message(request, messages.ERROR, 'You need to upload a PDF ticket')
                 return render(request, 'sell_ticket/upload_pdf.html', {'upload_form': upload_form, 'ticket': ticket})
@@ -95,8 +98,7 @@ def upload_pdf(request, ticket_id):
 
             if 'continue' in request.POST:
                 return redirect('sell_ticket:set_price', ticket_id)
-            elif 'return' in request.POST:
-                return redirect('sell_ticket:event_selected', ticket_id)
+
 
     else:
         upload_form = UploadTicket()

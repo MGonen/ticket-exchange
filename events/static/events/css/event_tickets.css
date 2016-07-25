@@ -1,6 +1,7 @@
 
 /* Event tickets */
 
+
 .event-tickets-info {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -8,6 +9,7 @@
 
 
 .event-tickets-heading-event {
+    margin-top: 0;
     text-align: center;
     font-size: 50px;
     font-weight: bold;
@@ -33,12 +35,12 @@
 
 .tickets-available {
     float: left;
-    margin-left: 220px;
+    margin-left: 200px;
 }
 
 .tickets-sold {
     float: right;
-    margin-right: 220px;
+    margin-right: 200px;
 }
 
 .tickets-available, .tickets-sold {

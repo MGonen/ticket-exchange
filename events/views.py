@@ -109,7 +109,7 @@ def event_tickets(request, event_id):
 
 
     event = Event.objects.get(pk=event_id)
-    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False))
+    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True))
     tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
 
     return render(request, 'events/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})

@@ -1,6 +1,12 @@
 {% extends 'ticket_exchange/base.html' %}
 
 
+{% block title %}
+    <div class="tx-title">
+        <h1>Sell Ticket</h1>
+    </div>
+{% endblock %}
+
 
 {% block pagination %}
 
@@ -44,18 +50,20 @@
 
 {% block content %}
 
-    <p>{{ ticket.event.name }}</p>
-    <p>{{ ticket.price }}</p>
-    <p>{{ ticket.original_filename }}</p>
-    <p>{{ ticket.seller.fullname }}</p>
-    <p>{{ ticket.seller.email }}</p>
-    <p>{{ ticket.seller.bank_account }}</p>
+    <div class="info-container">
+        <p>{{ ticket.event.name }}</p>
+        <p>{{ ticket.price }}</p>
+        <p>{{ ticket.original_filename }}</p>
+        <p>{{ ticket.seller.fullname }}</p>
+        <p>{{ ticket.seller.email }}</p>
+        <p>{{ ticket.seller.bank_account }}</p>
 
 
-    <form method="POST" >{% csrf_token %}
-        <button name="return" class="save btn btn-primary">Change Personal Details</button>
-        <button name="continue" class="save btn btn-primary">Put up for Sale</button>
-    </form>
+        <form method="POST" >{% csrf_token %}
+            <button name="return" class="save btn btn-primary">Change Personal Details</button>
+            <button name="continue" class="save btn btn-primary">Put up for Sale</button>
+        </form>
+    </div>
 
 {% endblock %}
 

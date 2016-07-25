@@ -2,18 +2,25 @@
 {% load static %}
 
 
+{% block title %}
+    <div class="tx-title">
+        <h1>Sell Ticket</h1>
+    </div>
+{% endblock %}
+
+
 {% block pagination %}
 
     <div class="text-center">
         <ul class="pagination">
             <li><a href="{% url 'sell_ticket:select_event' %}"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; Select Event</a></li>
-            <li class="active"><a href="#">Continue or New ticket</a></li>
-            <li class="disabled"><a href="#">1. Event</a></li>
-            <li class="disabled"><a href="#">2. PDF Upload</a></li>
+            <li class="active"><a href="#">Continue or New</a></li>
+            <li class="disabled"><a href="#">Event</a></li>
+            <li class="disabled"><a href="#">PDF Upload</a></li>
 
-            <li class="disabled"><a href="#">3. Price</a></li>
-            <li class="disabled"><a href="#">4. Personal Details</a></li>
-            <li class="disabled"><a href="#">5. Complete</a></li>
+            <li class="disabled"><a href="#">Price</a></li>
+            <li class="disabled"><a href="#">Personal Details</a></li>
+            <li class="disabled"><a href="#">Complete</a></li>
         </ul>
     </div>
 
@@ -22,15 +29,17 @@
 
 {% block content %}
 
-    <p>Sell Ticket - Select Event</p>
-    {{ event.name }}
-    {{ event.location }}
-    {{ event.start_date }}
-    {{ event.end_date }}
+    <div class="info-container">
+        <p>Sell Ticket - Select Event</p>
+        <p>{{ event.name }}</p>
+        {{ event.location }}
+        {{ event.start_date }}
+        {{ event.end_date }}
 
-    <form method="POST" class="post-form">{% csrf_token %}
-        <button name="new" class="save btn btn-primary">Start again with new ticket</button>
-        <button name="continue" class="save btn btn-primary">Continue with ticket you already defined</button>
-    </form>
+        <form method="POST" class="post-form">{% csrf_token %}
+            <button name="new" class="save btn btn-block btn-primary" style="float: right"><b>Start again with new ticket</b></button>
+            <button name="continue" class="save btn btn-block btn-success" style="float: right"><b>Continue with ticket you already defined</b></button>
+        </form>
+    </div>
 
 {% endblock %}

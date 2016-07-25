@@ -1,5 +1,13 @@
 {% extends 'ticket_exchange/base.html' %}
 
+
+{% block title %}
+    <div class="tx-title">
+        <h1>Sell Ticket</h1>
+    </div>
+{% endblock %}
+
+
 {% block pagination %}
 
     <div class="text-center">
@@ -9,31 +17,31 @@
                 {% if ticket.event %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
-                1. Event
+                Event
             </a></li>
 
             <li><a href="{% url 'sell_ticket:upload_pdf' ticket.id %}">
                 {% if ticket.link %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
-                2. PDF
+                PDF
             </a></li>
 
             <li><a href="{% url 'sell_ticket:set_price' ticket.id %}">
                 {% if ticket.price %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
-                3. Price
+                Price
             </a></li>
 
             <li class="active"><a href="{% url 'sell_ticket:personal_details' ticket.id %}">
                 {% if ticket.seller.user.first_name and ticket.seller.user.last_name and ticket.seller.user.email and ticket.seller.bank_account %}
                     <i class="fa fa-check" aria-hidden="true"></i>
                 {% endif %}
-                4. Personal Details
+                Personal Details
             </a></li>
 
-            <li><a href="{% url 'sell_ticket:completion' ticket.id %}">5. Complete</a></li>
+            <li><a href="{% url 'sell_ticket:completion' ticket.id %}">Complete</a></li>
         </ul>
     </div>
 
@@ -42,12 +50,14 @@
 
 {% block content %}
 
-    <form method="POST" >{% csrf_token %}
-        {{ user_form.as_p }}
-        {{ person_form.as_p }}
-        <button name="return" class="save btn btn-primary">Change price</button>
-        <button name="continue" class="save btn btn-primary">Continue</button>
-    </form>
+    <div class="info-container">
+        <form method="POST" >{% csrf_token %}
+            {{ user_form.as_p }}
+            {{ person_form.as_p }}
+            <button name="return" class="save btn btn-primary">Change price</button>
+            <button name="continue" class="save btn btn-primary">Continue</button>
+        </form>
+    </div>
 
 
 {% endblock %}

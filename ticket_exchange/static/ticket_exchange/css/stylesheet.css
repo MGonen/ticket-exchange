@@ -77,8 +77,9 @@ background-size: cover;
 
 /* Information container */
 .info-container {
-    padding: 5px;
-    background-color: #333333;
+    padding: 25px;
+    /*background-color: #22485d;*/
+    background-color: #3e83a8;
     margin-bottom: -30px;
     padding-bottom: 100px;
     opacity: 0.8;
@@ -89,6 +90,44 @@ background-size: cover;
     border-color: white;
 }
 
+
+
 .info-container > * {
-    color: white;
+    /*color: white;*/
+}
+
+
+
+.info-container > h1, h2, h3, h4, h5 {
+    /*text-align: center;*/
+    margin-top: 0;
+}
+
+.info-table {
+    width: 100%;
+}
+
+.info-table > td {
+    /*padding: 5px;*/
+}
+
+.info-label {
+    text-align: right;
+    padding: 5px;
+    padding-right: 10px;
+    width: 50%;
+}
+
+/*.info-table > td {*/
+    /*width: 50%;*/
+/*}*/
+
+.info-value {
+
+}
+
+.tx-title {
+    /*color: white;*/
+    text-decoration: underline;
+    text-align: center;
 }

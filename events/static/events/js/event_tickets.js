@@ -86,7 +86,7 @@ function append_event_ticket_header(ticket_list, tickets) {
     ticket_list_header.className = 'list-group-item';
     ticket_list_header.innerText = 'Available Tickets';
     ticket_list_header.style.color = 'white';
-    ticket_list_header.style.backgroundColor = '#333333';
+    ticket_list_header.style.backgroundColor = '#295670';
     ticket_list_header.style.opacity = 0.8;
     ticket_list_header.style.textAlign = "center";
     ticket_list_header.style.padding = '10px';
