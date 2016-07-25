@@ -17,7 +17,7 @@
 
 
     {% for event in events %}
-        <p><a href="{% url 'events:event_tickets' event.id %}">{{ event.name }}</a></p>
+        <p><a href="{% url 'buy_ticket:event_tickets' event.id %}">{{ event.name }}</a></p>
     {% endfor %}
 
 {% endblock %}

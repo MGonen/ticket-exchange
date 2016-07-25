@@ -12,12 +12,12 @@
     </div>
 
 
-    <div class="text-center">
-        <form method="POST" >{% csrf_token %}
-
-            <button name="sell" class="btn btn-primary homepage-button">I want to sell my Ticket</button>
-            <button name="buy" class="btn btn-success homepage-button">I want to buy a Ticket</button>
-
-        </form>
-    </div>
+    {% include 'ticket_exchange/search.html' %}
+{#    <div class="search_bar">#}
+{#        <form method="POST" >{% csrf_token %}#}
+{##}
+{#            {{ form }}#}
+{#            <button name="search_button" class="btn btn-primary search_button">Search</button>#}
+{#        </form>#}
+{#    </div>#}
 {% endblock %}

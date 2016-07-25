@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 
 from ticket_exchange.models import Event
-from ticket_exchange.forms import NameLocationSearchForm, DateSearchForm
+from ticket_exchange.forms import DateSearchForm
 from django.contrib.auth.views import logout as auth_logout
 
 import datetime
@@ -17,16 +17,19 @@ import calendar
 
 FACEBOOK_LOGIN_URL = '/login/facebook'
 
+
 def home(request):
     if request.method == "POST":
-        form = NameLocationSearchForm(request.POST)
-        if form.is_valid and "search_button" in request.POST:
-            return redirect('advanced_search', search_query=request.POST.get('search_query'))
+        if 'sell' in request.POST:
+            print 'sell ticket'
+            return redirect('sell_ticket:select_event')
+        elif 'buy' in request.POST:
+            print 'buy ticket'
+            return redirect('buy_ticket:select_event')
 
-    else:
-        form = NameLocationSearchForm()
+    return render(request, 'ticket_exchange/home.html')
 
-    return render(request, 'ticket_exchange/home.html', {'form':form})
+
 
 
 def advanced_search(request, search_query):
@@ -40,7 +43,7 @@ def advanced_search(request, search_query):
 #     # else:
 #     #     name_location_form = NameLocationSearchForm()
 #     #
-#     # return render(request, 'ticket_exchange/home.html', {'name_location_form': name_location_form})
+#     # return render(request, 'ticket_exchange/select_event.html', {'name_location_form': name_location_form})
 #
 #
 #

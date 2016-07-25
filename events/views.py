@@ -91,62 +91,6 @@ def edit_event(request, event_id):
                        'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket})
 
 
-def event_tickets(request, event_id):
-    selected_ticket_qs = Ticket.objects.filter(seller__isnull=True).filter(seller__isnull=False) # creating an empty queryset, so 'selected_ticket_qs.exists() is not an exception
-    if hasattr(request.user, 'person'):
-        selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
-
-    if request.method == "POST" and selected_ticket_qs.exists():
-        if 'continue' in request.POST:
-            ticket = selected_ticket_qs[0]
-            return redirect('buy_ticket:ticket_details', ticket.id)
-        elif 'new' in request.POST:
-            ticket = selected_ticket_qs[0]
-            ticket.potential_buyer = None
-            ticket.potential_buyer_release_time = None
-            ticket.save()
-            return redirect('events:event_tickets', event_id)
-
-
-    event = Event.objects.get(pk=event_id)
-    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True))
-    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
-
-    return render(request, 'events/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
-
-
-@json_view
-@csrf_exempt
-def get_event_tickets(request, event_id):
-    remove_overtime_potential_buyers()
-    tickets = Ticket.objects.filter(event_id=event_id).filter(bought=False).filter(complete=True).filter(
-    potential_buyer__isnull=True).order_by('price')
-    ticket_dicts = create_ticket_dicts(tickets)
-
-    try:
-        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = get_selected_ticket_info(request.user.person.id, event_id)
-    except:
-        print 'no person linked to user, i.e. anonymous user, i.e. not a buyer'
-        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = False, False
-
-
-    return {'tickets': ticket_dicts, 'already_a_potential_buyer': user_is_already_a_potential_buyer_in_this_event, 'selected_ticket': selected_ticket_info}
-
-
-def create_ticket_dicts(tickets):
-    ticket_dicts = []
-
-    for ticket_object in tickets:
-        ticket_dict = {}
-        ticket_dict['id'] = ticket_object.id
-        ticket_dict['seller'] = ticket_object.seller.fullname
-        ticket_dict['price'] = ticket_object.price
-
-        ticket_dicts.append(ticket_dict)
-
-    return ticket_dicts
-
-
 def pdf_is_safe(file):
     return True
 
@@ -173,20 +117,4 @@ def create_ticket_file_location(event_id):
     return file_location
 
 
-def remove_overtime_potential_buyers():
-    current_time = time.time()
-    for ticket in Ticket.objects.filter(potential_buyer_release_time__lt=current_time):
-        ticket.potential_buyer = None
-        ticket.potential_buyer_release_time = None
-        ticket.save()
-
-
-def get_selected_ticket_info(person_id, event_id):
-    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id).exists():
-        ticket = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id)[0]
-        selected_ticket_info = {'price': float(ticket.price), 'seller': ticket.seller.fullname}
-        return True, selected_ticket_info
-
-    else:
-        return False, False
 

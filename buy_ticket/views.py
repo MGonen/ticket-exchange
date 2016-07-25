@@ -6,14 +6,89 @@ from django.contrib import messages
 import time
 from collections import namedtuple
 
-from ticket_exchange.models import Ticket
+from ticket_exchange.models import Ticket, Event
 from my_info.forms import UserForm
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
 from ticket_exchange.utils import potential_buyer_checks_decorator
 
+from jsonview.decorators import json_view
+from django.views.decorators.csrf import csrf_exempt
+
+from buy_ticket.forms import NameLocationSearchForm
+
 # Create your views here.
 TicketPriceObject = namedtuple("TicketPriceObject", ['commission', 'bank_costs', 'total_price'])
 COMMISSION_PERCENTAGE =0.06
+
+
+def select_event(request):
+    if request.method == "POST":
+        form = NameLocationSearchForm(request.POST)
+        if form.is_valid and "search_button" in request.POST:
+            return redirect('advanced_search', search_query=request.POST.get('search_query'))
+
+    else:
+        form = NameLocationSearchForm()
+
+    return render(request, 'buy_ticket/select_event.html', {'form':form})
+
+def event_tickets(request, event_id):
+    selected_ticket_qs = Ticket.objects.filter(seller__isnull=True).filter(seller__isnull=False) # creating an empty queryset, so 'selected_ticket_qs.exists() is not an exception
+    if hasattr(request.user, 'person'):
+        selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
+
+    if request.method == "POST" and selected_ticket_qs.exists():
+        if 'continue' in request.POST:
+            ticket = selected_ticket_qs[0]
+            return redirect('buy_ticket:ticket_details', ticket.id)
+        elif 'new' in request.POST:
+            ticket = selected_ticket_qs[0]
+            ticket.potential_buyer = None
+            ticket.potential_buyer_release_time = None
+            ticket.save()
+            return redirect('buy_ticket:event_tickets', event_id)
+
+
+    event = Event.objects.get(pk=event_id)
+    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True))
+    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+
+    print 'arrived at render'
+    return render(request, 'buy_ticket/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
+
+
+@json_view
+@csrf_exempt
+def get_event_tickets(request, event_id):
+    remove_overtime_potential_buyers()
+    tickets = Ticket.objects.filter(event_id=event_id).filter(bought=False).filter(complete=True).filter(
+    potential_buyer__isnull=True).order_by('price')
+    ticket_dicts = create_ticket_dicts(tickets)
+
+    try:
+        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = get_selected_ticket_info(request.user.person.id, event_id)
+    except:
+        print 'no person linked to user, i.e. anonymous user, i.e. not a buyer'
+        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = False, False
+
+
+    return {'tickets': ticket_dicts, 'already_a_potential_buyer': user_is_already_a_potential_buyer_in_this_event, 'selected_ticket': selected_ticket_info}
+
+
+def create_ticket_dicts(tickets):
+    ticket_dicts = []
+
+    for ticket_object in tickets:
+        ticket_dict = {}
+        ticket_dict['id'] = ticket_object.id
+        ticket_dict['seller'] = ticket_object.seller.fullname
+        ticket_dict['price'] = ticket_object.price
+
+        ticket_dicts.append(ticket_dict)
+
+    return ticket_dicts
+
+
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def potential_buyer_check(request, ticket_id):
@@ -21,7 +96,7 @@ def potential_buyer_check(request, ticket_id):
 
     if ticket.potential_buyer and (ticket.potential_buyer.id != request.user.person.id):
         messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket")
-        return redirect('events:event_tickets', ticket.event.id)
+        return redirect('buy_ticket:event_tickets', ticket.event.id)
 
     elif ticket.potential_buyer and (ticket.potential_buyer.id == request.user.person.id):
         return redirect('buy_ticket:ticket_details', ticket_id)
@@ -60,7 +135,7 @@ def confirm_personal_details(request, ticket_id):
                 return redirect('buy_ticket:ticket_details', ticket_id)
             elif 'cancel' in request.POST:
                 cancel_ticket(ticket.id)
-                return redirect('events:event_tickets', event_id)
+                return redirect('buy_ticket:event_tickets', event_id)
 
     else:
         user_form = UserForm(instance=user)
@@ -85,7 +160,7 @@ def select_payment_method(request, ticket_id):
                 return redirect('buy_ticket:confirm_personal_details', ticket_id)
             elif 'cancel' in request.POST:
                 cancel_ticket(ticket.id)
-                return redirect('events:event_tickets', event_id)
+                return redirect('buy_ticket:event_tickets', event_id)
 
     else:
         # user_form = UserForm(instance=user)
@@ -134,7 +209,7 @@ def cancel_ticket_view(request, ticket_id):
     cancel_ticket(ticket_id)
     ticket = Ticket.objects.get(id=ticket_id)
     event_id = ticket.event.id
-    return redirect('events:event_tickets', event_id)
+    return redirect('buy_ticket:event_tickets', event_id)
 
 
 def _get_ticket_price_object(ticket_price):
@@ -154,3 +229,23 @@ def cancel_ticket(ticket_id):
     ticket.potential_buyer = None
     ticket.potential_buyer_release_time = None
     ticket.save()
+
+
+
+def remove_overtime_potential_buyers():
+    current_time = time.time()
+    for ticket in Ticket.objects.filter(potential_buyer_release_time__lt=current_time):
+        ticket.potential_buyer = None
+        ticket.potential_buyer_release_time = None
+        ticket.save()
+
+
+def get_selected_ticket_info(person_id, event_id):
+    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id).exists():
+        ticket = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id)[0]
+        selected_ticket_info = {'price': float(ticket.price), 'seller': ticket.seller.fullname}
+        return True, selected_ticket_info
+
+    else:
+        return False, False
+

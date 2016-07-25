@@ -57,7 +57,7 @@ function create_event_search_item(event){
 
     var event_item = document.createElement('a');
 
-    var event_link = "event/" + event.id + '/tickets/';
+    var event_link = "/buy-ticket/" + event.id + '/tickets/';
     event_item.setAttribute('href', event_link);
     event_item.className = 'list-group-item';
 

@@ -63,6 +63,13 @@ background-size: cover;
     margin-top: -10px;
 }
 
+.homepage-button {
+    width: 45%;
+    height: 45%;
+    opacity: 0.8;
+    text-align: center;
+}
+
 
 /* Forms */
 .post-form textarea, .post-form input {

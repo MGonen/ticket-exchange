@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'events/css/event_tickets.css' %}">
+    <link rel="stylesheet" href="{% static 'buy_ticket/css/event_tickets.css' %}">
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'events/js/event_tickets.js' %}"></script>
+    <script src="{% static 'buy_ticket/js/event_tickets.js' %}"></script>
     <script>document.onload = start_get_event_tickets_js({{ event.id }})</script>
 {% endblock %}
 

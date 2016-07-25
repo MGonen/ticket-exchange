@@ -8,7 +8,7 @@ function start_get_event_tickets_js(event_id){
 }
 
 function ajax_event_tickets_call(event_id) {
-    url = '/event/' + event_id + '/get_event_tickets/';
+    url = '/buy-ticket/' + event_id + '/get_event_tickets/';
 
     $.ajax({
         url: url,

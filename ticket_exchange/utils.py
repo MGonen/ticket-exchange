@@ -29,7 +29,7 @@ def potential_buyer_checks_decorator(func):
         ticket = Ticket.objects.get(id=ticket_id)
 
         if ticket_already_bought(request, ticket) or ticket_already_other_potential_buyer(request, ticket) or overtime_check(request, ticket):
-            return redirect('events:event_tickets', ticket.event.id)
+            return redirect('buy_ticket:event_tickets', ticket.event.id)
 
         return func(*args, **kwargs)
     return inner
