@@ -104,7 +104,7 @@ def potential_buyer_check(request, ticket_id):
     else:
         messages.add_message(request, messages.INFO, "You have 10 minutes to purchase this ticket, otherwise other people will be able to buy it")
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_release_time = time.time() +  30
+        ticket.potential_buyer_release_time = time.time() +  20
         ticket.save()
         return redirect('buy_ticket:ticket_details', ticket_id)
 
@@ -114,7 +114,8 @@ def potential_buyer_check(request, ticket_id):
 def ticket_details(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     ticket_price_object = _get_ticket_price_object(ticket.price)
-    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object})
+
+    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -140,7 +141,7 @@ def confirm_personal_details(request, ticket_id):
     else:
         user_form = UserForm(instance=user)
 
-    return render(request, 'buy_ticket/confirm_personal_details.html', {'user_form': user_form, 'ticket':ticket})
+    return render(request, 'buy_ticket/confirm_personal_details.html', {'user_form': user_form, 'ticket':ticket, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -166,14 +167,14 @@ def select_payment_method(request, ticket_id):
         # user_form = UserForm(instance=user)
         pass
 
-    return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket})
+    return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 @potential_buyer_checks_decorator
 def confirm_purchase(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    ticket.potential_buyer_release_time = time.time() + 60
+    # ticket.potential_buyer_release_time = time.time() + 60
     ticket.save()
 
     ticket_price_object = _get_ticket_price_object(ticket.price)
@@ -187,7 +188,7 @@ def confirm_purchase(request, ticket_id):
             ticket.save()
             return redirect('buy_ticket:payment_confirmation', ticket_id)
 
-    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object})
+    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
 
 
 
@@ -249,3 +250,11 @@ def get_selected_ticket_info(person_id, event_id):
     else:
         return False, False
 
+
+def get_time_left(potential_buyer_release_time):
+    time_left = float(potential_buyer_release_time) - float(time.time())
+    return round(time_left)
+
+
+# def get_available_event_tickets(event_id):
+#     return Ticket.objects.filter(event_id=event_id)

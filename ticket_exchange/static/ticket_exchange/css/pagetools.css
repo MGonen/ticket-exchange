@@ -25,7 +25,7 @@
     text-decoration: none;
 }
 
-#sell-ticket-button {
+.ticket-button {
     color: white;
     font-weight: bold;
     font-size: 16px;

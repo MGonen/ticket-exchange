@@ -1,10 +1,6 @@
 {% extends "ticket_exchange/base.html" %}
 {% load static %}
 
-{% block scripts %}
-    <script src="{% static 'ticket_exchange/js/search_event.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 
     <div class="homepage">
@@ -15,8 +11,8 @@
     <div class="text-center">
         <form method="POST" >{% csrf_token %}
 
-            <button name="sell" class="btn btn-primary homepage-button">I want to sell my Ticket</button>
             <button name="buy" class="btn btn-success homepage-button">I want to buy a Ticket</button>
+            <button name="sell" class="btn btn-primary homepage-button">I want to sell my Ticket</button>
 
         </form>
     </div>

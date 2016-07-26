@@ -4,10 +4,6 @@
 
 <ul class="pagetools">
 
-    {% if user.is_authenticated %}
-        <li><a href="{% url 'home' %}" class="top-menu pagetools-item">Search</a></li>
-    {% endif %}
-
     {% if user.is_staff %}
         <li><a href="{% url 'events:create_event' %}" class="top-menu pagetools-item">Create Event</a></li>
     {% endif %}
@@ -27,7 +23,8 @@
             </ul>
         </li>
 
-        <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-success" id="sell-ticket-button">Sell your e-ticket</a></li>
+        <li><a href="{% url 'buy_ticket:select_event' %}" class="btn btn-success ticket-button">Buy an e-ticket</a></li>
+        <li><a href="{% url 'sell_ticket:select_event' %}" class="btn btn-primary ticket-button">Sell your e-ticket</a></li>
 
     {% else %}
         <li><a class="btn btn-social btn-facebook" id="login-button" onclick="open_login_popup('{% url 'social:begin' 'facebook' %}')"><span class="fa fa-facebook"></span> Sign in with facebook</a></li>

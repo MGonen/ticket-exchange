@@ -1,6 +1,22 @@
 {% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'buy_ticket/js/count_down_timer.js' %}"></script>
+    <script>document.onload = start_count_down_timer({{ time_left }}, {{ ticket.event.id }})</script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'buy_ticket/css/stylesheet.css' %}">
+{% endblock %}
+
 
 {% block content %}
+
+    <div id="count-down-timer">
+        <p>Time left:</p>
+    </div>
+
     Buy Ticket - Confirm Personal Details
 
     <form method="POST" >{% csrf_token %}
