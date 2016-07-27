@@ -20,7 +20,7 @@ import views
 urlpatterns = (
     url(r'^select_event/$', views.select_event, name='select_event'),
     url(r'^(?P<event_id>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
-    url(r'^(?P<event_id>[0-9]+)/get_event_tickets/$', views.get_event_tickets, name='get_event_tickets'),
+    url(r'^(?P<event_id>[0-9]+)/get_event_tickets/$', views.get_event_tickets_ajax, name='get_event_tickets'),
     url(r'^potential_buyer_check/(?P<ticket_id>[0-9]+)/$', views.potential_buyer_check, name='potential_buyer_check'),
     url(r'^ticket-details/(?P<ticket_id>[0-9]+)/$', views.ticket_details, name='ticket_details'),
     url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),

@@ -35,7 +35,7 @@ def create_event(request):
             create_base_ticket_object(file, event, price)
 
             messages.add_message(request, messages.SUCCESS, 'The event has been succesfully created')
-            return redirect('events:event_tickets', event.id)
+            return redirect('buy_ticket:event_tickets', event.id)
 
         else:
             return render(request, 'events/event_details.html', {'upload_form': upload_form, 'event_form': event_form, 'base_ticket_price_form': base_ticket_price_form})

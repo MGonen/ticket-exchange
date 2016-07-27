@@ -33,25 +33,20 @@ def select_event(request):
     return render(request, 'buy_ticket/select_event.html', {'form':form})
 
 def event_tickets(request, event_id):
-    selected_ticket_qs = Ticket.objects.filter(seller__isnull=True).filter(seller__isnull=False) # creating an empty queryset, so 'selected_ticket_qs.exists() is not an exception
-    if hasattr(request.user, 'person'):
-        selected_ticket_qs = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=request.user.person.id)
+    selected_ticket = get_selected_ticket(request, event_id)
 
-    if request.method == "POST" and selected_ticket_qs.exists():
+    if request.method == "POST" and selected_ticket:
         if 'continue' in request.POST:
-            ticket = selected_ticket_qs[0]
-            return redirect('buy_ticket:ticket_details', ticket.id)
+            return redirect('buy_ticket:ticket_details', selected_ticket.id)
         elif 'new' in request.POST:
-            ticket = selected_ticket_qs[0]
-            ticket.potential_buyer = None
-            ticket.potential_buyer_release_time = None
-            ticket.save()
+            selected_ticket.potential_buyer_expiration_moment = 0
+            selected_ticket.save()
             return redirect('buy_ticket:event_tickets', event_id)
 
 
     event = Event.objects.get(pk=event_id)
-    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(bought=False).filter(complete=True))
-    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(bought=True))
+    tickets_available = len(Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=True).filter(complete=True).filter(potential_buyer_expiration_moment__lte=time.time()))
+    tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=False))
 
     print 'arrived at render'
     return render(request, 'buy_ticket/event_tickets.html', {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
@@ -59,18 +54,19 @@ def event_tickets(request, event_id):
 
 @json_view
 @csrf_exempt
-def get_event_tickets(request, event_id):
-    remove_overtime_potential_buyers()
-    tickets = Ticket.objects.filter(event_id=event_id).filter(bought=False).filter(complete=True).filter(
-    potential_buyer__isnull=True).order_by('price')
+def get_event_tickets_ajax(request, event_id):
+    tickets = get_event_tickets(event_id)
     ticket_dicts = create_ticket_dicts(tickets)
 
-    try:
-        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = get_selected_ticket_info(request.user.person.id, event_id)
-    except:
-        print 'no person linked to user, i.e. anonymous user, i.e. not a buyer'
-        user_is_already_a_potential_buyer_in_this_event, selected_ticket_info = False, False
+    selected_ticket = get_selected_ticket(request, event_id)
 
+    if selected_ticket:
+        user_is_already_a_potential_buyer_in_this_event = True
+        selected_ticket_info = { 'price': float(selected_ticket.price), 'seller': selected_ticket.seller.fullname }
+
+    else:
+        user_is_already_a_potential_buyer_in_this_event = False
+        selected_ticket_info = None
 
     return {'tickets': ticket_dicts, 'already_a_potential_buyer': user_is_already_a_potential_buyer_in_this_event, 'selected_ticket': selected_ticket_info}
 
@@ -94,17 +90,24 @@ def create_ticket_dicts(tickets):
 def potential_buyer_check(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
-    if ticket.potential_buyer and (ticket.potential_buyer.id != request.user.person.id):
+    if ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id != request.user.person.id): # User is not the potential buyer
         messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket")
         return redirect('buy_ticket:event_tickets', ticket.event.id)
 
-    elif ticket.potential_buyer and (ticket.potential_buyer.id == request.user.person.id):
+    elif ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id == request.user.person.id): # User is already the potential buyer
         return redirect('buy_ticket:ticket_details', ticket_id)
 
-    else:
-        messages.add_message(request, messages.INFO, "You have 10 minutes to purchase this ticket, otherwise other people will be able to buy it")
+    elif Ticket.objects.filter(potential_buyer=request.user.person).filter(potential_buyer_expiration_moment__gte=time.time()): # User is already buying another ticket for this event
+        ticket.potential_buyer_expiration_moment = 0
+        ticket.save()
+        messages.add_message(request, messages.ERROR,
+                             "Sorry, you are already buying a ticket for this event. You can only buy one ticket per event at a time.")
+        return redirect('buy_ticket:event_tickets', ticket.event.id)
+
+    else: # User becomes the potential buyer
+        messages.add_message(request, messages.INFO, "You have 10 minutes to purchase this ticket")
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_release_time = time.time() +  20
+        ticket.potential_buyer_expiration_moment = time.time() +  20
         ticket.save()
         return redirect('buy_ticket:ticket_details', ticket_id)
 
@@ -115,7 +118,7 @@ def ticket_details(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     ticket_price_object = _get_ticket_price_object(ticket.price)
 
-    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
+    return render(request, 'buy_ticket/ticket_details.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -141,7 +144,7 @@ def confirm_personal_details(request, ticket_id):
     else:
         user_form = UserForm(instance=user)
 
-    return render(request, 'buy_ticket/confirm_personal_details.html', {'user_form': user_form, 'ticket':ticket, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
+    return render(request, 'buy_ticket/confirm_personal_details.html', {'user_form': user_form, 'ticket':ticket, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -151,9 +154,7 @@ def select_payment_method(request, ticket_id):
     event_id = ticket.event.id
 
     if request.method == "POST":
-        # user_form = UserForm(request.POST, instance=user)
 
-        # if user_form.is_valid():
         if True:
             if 'continue' in request.POST:
                 return redirect('buy_ticket:confirm_purchase', ticket_id)
@@ -164,31 +165,26 @@ def select_payment_method(request, ticket_id):
                 return redirect('buy_ticket:event_tickets', event_id)
 
     else:
-        # user_form = UserForm(instance=user)
         pass
 
-    return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
+    return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 @potential_buyer_checks_decorator
 def confirm_purchase(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    # ticket.potential_buyer_release_time = time.time() + 60
     ticket.save()
 
     ticket_price_object = _get_ticket_price_object(ticket.price)
 
     if request.method == "POST":
         if 'confirm' in request.POST:
-            ticket.buyer = ticket.potential_buyer
-            ticket.potential_buyer = None
-            ticket.potential_buyer_release_time = None
-            ticket.bought = True
+            ticket.buyer = request.user.person
             ticket.save()
             return redirect('buy_ticket:payment_confirmation', ticket_id)
 
-    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_release_time)})
+    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
 
 
@@ -227,34 +223,29 @@ def _get_ticket_price_object(ticket_price):
 
 def cancel_ticket(ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    ticket.potential_buyer = None
-    ticket.potential_buyer_release_time = None
+    ticket.potential_buyer_expiration_moment = 0
     ticket.save()
-
 
 
 def remove_overtime_potential_buyers():
     current_time = time.time()
-    for ticket in Ticket.objects.filter(potential_buyer_release_time__lt=current_time):
+    for ticket in Ticket.objects.filter(potential_buyer_expiration_moment__lt=current_time):
         ticket.potential_buyer = None
-        ticket.potential_buyer_release_time = None
+        ticket.potential_buyer_expiration_moment = 0
         ticket.save()
 
 
-def get_selected_ticket_info(person_id, event_id):
-    if Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id).exists():
-        ticket = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_id=person_id)[0]
-        selected_ticket_info = {'price': float(ticket.price), 'seller': ticket.seller.fullname}
-        return True, selected_ticket_info
-
-    else:
-        return False, False
-
-
-def get_time_left(potential_buyer_release_time):
-    time_left = float(potential_buyer_release_time) - float(time.time())
+def get_time_left(potential_buyer_expiration_moment):
+    time_left = float(potential_buyer_expiration_moment) - float(time.time())
     return round(time_left)
 
 
-# def get_available_event_tickets(event_id):
-#     return Ticket.objects.filter(event_id=event_id)
+def get_event_tickets(event_id):
+    return Ticket.objects.filter(event_id=event_id).filter(buyer__isnull=True).filter(complete=True).filter(potential_buyer_expiration_moment__lte=time.time()).order_by('price')
+
+
+def get_selected_ticket(request, event_id):
+    if hasattr(request.user, 'person'): # user not anonymous
+        selected_ticket = Ticket.objects.filter(event_id=event_id).filter(potential_buyer_expiration_moment__gte=time.time()).filter(potential_buyer=request.user.person)
+        if len(selected_ticket) == 1:
+            return selected_ticket[0]

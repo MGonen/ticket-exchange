@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+import time
 from django.conf import settings
 
 # Create your models here.
@@ -36,13 +37,12 @@ class Ticket(models.Model):
     seller = models.ForeignKey('Person', related_name='seller')
     buyer = models.ForeignKey('Person', null=True, blank=True, related_name='buyer')
     holder = models.ForeignKey('Person', related_name='holder')
-    bought = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     link = models.TextField(null=True, blank=True)
     original_filename = models.CharField(max_length=200, null=True, blank=True)
     complete = models.BooleanField(default=False)
     potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
-    potential_buyer_release_time = models.DecimalField(max_digits=20, decimal_places=10, null=True, blank=True)
+    potential_buyer_expiration_moment = models.FloatField(default=time.time)
 
     def __str__(self):
         return str(self.id)
