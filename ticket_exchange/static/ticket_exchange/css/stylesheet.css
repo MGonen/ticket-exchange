@@ -136,7 +136,22 @@ background-size: cover;
 }
 
 .tx-title {
-    /*color: white;*/
-    text-decoration: underline;
     text-align: center;
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+    padding-bottom: 20px;
 }
+
+
+.tx-title > * {
+    color: white;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+
+/*.homepage {*/
+    /*text-align: center;*/
+/*}*/
+
