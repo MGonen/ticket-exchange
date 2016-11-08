@@ -7,7 +7,7 @@ from ticket_exchange.models import Person, Event, Ticket, BaseTicket
 from events.forms import UploadBaseTicketNew, UploadBaseTicketEdit, EventForm, BaseTicketPriceForm
 from django.contrib.admin.views.decorators import staff_member_required
 
-from TX.settings import BASE_DIR
+from TX.settings import BASE_DIR, STATIC_ROOT
 
 from django.contrib import messages
 
@@ -96,7 +96,7 @@ def pdf_is_safe(file):
 
 
 def create_base_ticket_object(file, event, price):
-    file_location = create_ticket_file_location(event.id)
+    file_location = create_base_ticket_file_location(event.id)
     save_pdf(file, file_location)
     base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
     base_ticket.save()
@@ -108,12 +108,18 @@ def save_pdf(file, file_location):
             destination.write(chunk)
 
 
-def create_ticket_file_location(event_id):
+def create_base_ticket_file_location(event_id):
     filename = str(event_id)
-    directory = scriptine.path(BASE_DIR).joinpath('tickets')
-    file_location = directory.joinpath(filename)
-    file_location += '.pdf'
+    tickets_directory = scriptine.path(STATIC_ROOT).joinpath('tickets')
+    if not tickets_directory.exists():
+        tickets_directory.mkdir()
 
+    base_tickets_directory = tickets_directory.joinpath('base_tickets')
+    if not base_tickets_directory.exists():
+        base_tickets_directory.mkdir()
+
+    file_location = base_tickets_directory.joinpath(filename)
+    file_location += '.pdf'
     return file_location
 
 

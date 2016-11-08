@@ -12,7 +12,7 @@ from events.views import pdf_is_safe, save_pdf
 
 from my_info.forms import UserForm
 from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, TicketPriceForm
-from TX.settings import BASE_DIR
+from TX.settings import BASE_DIR, STATIC_ROOT
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -186,10 +186,16 @@ def save_ticket_pdf(file, ticket_id):
 
 def create_ticket_file_location(ticket_id):
     filename = str(ticket_id)
-    directory = scriptine.path(BASE_DIR).joinpath('tickets')
-    file_location = directory.joinpath(filename)
-    file_location += '.pdf'
+    tickets_directory = scriptine.path(STATIC_ROOT).joinpath('tickets')
+    if not tickets_directory.exists():
+        tickets_directory.mkdir()
 
+    festival_tickets_directory = tickets_directory.joinpath('festival_tickets')
+    if not festival_tickets_directory.exists():
+        festival_tickets_directory.mkdir()
+
+    file_location = festival_tickets_directory.joinpath(filename)
+    file_location += '.pdf'
     return file_location
 
 
