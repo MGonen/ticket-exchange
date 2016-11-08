@@ -16,6 +16,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from buy_ticket.forms import NameLocationSearchForm
 
+# import braintree
+# from TX import settings
+#
+# braintree.Configuration.configure(braintree.Environment.Sandbox,
+#     merchant_id=settings.BRAINTREE_MERCHANT_ID,
+#     public_key=settings.BRAINTREE_PUBLIC_KEY,
+#     private_key=settings.BRAINTREE_PRIVATE_KEY)
+
 # Create your views here.
 TicketPriceObject = namedtuple("TicketPriceObject", ['commission', 'bank_costs', 'total_price'])
 COMMISSION_PERCENTAGE =0.06

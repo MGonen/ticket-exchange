@@ -45,12 +45,12 @@
 {% block content %}
 
     <div class="info-container">
-        <p>{{ ticket.event.name }}</p>
-        <p>{{ ticket.price }}</p>
-        <p>{{ ticket.original_filename }}</p>
-        <p>{{ ticket.seller.fullname }}</p>
-        <p>{{ ticket.seller.email }}</p>
-        <p>{{ ticket.seller.bank_account }}</p>
+        <p>Event: {{ ticket.event.name }}</p>
+        <p>Price: {{ ticket.price }}</p>
+        <p>Uploaded Ticket:{{ ticket.original_filename }}</p>
+        <p>Your name: {{ ticket.seller.fullname }}</p>
+        <p>Your email: {{ ticket.seller.email }}</p>
+        <p>Your bank account: {{ ticket.seller.bank_account }}</p>
 
 
         <form method="POST" >{% csrf_token %}

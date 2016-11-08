@@ -89,57 +89,7 @@ DATABASES = {
     }
 }
 
-# TEMPLATE_CONTEXT_PROCESSORS = (
-#    'django.contrib.auth.context_processors.auth',
-#    'django.core.context_processors.debug',
-#    'django.core.context_processors.i18n',
-#    'django.core.context_processors.media',
-#    'django.core.context_processors.static',
-#    'django.core.context_processors.tz',
-#    'django.contrib.messages.context_processors.messages',
-#    'social.apps.django_app.context_processors.backends',
-#    'social.apps.django_app.context_processors.login_redirect',
-# )
 
-from django.contrib.messages import constants as messages
-MESSAGE_TAGS = {
-    messages.ERROR: 'danger'
-}
-
-AUTHENTICATION_BACKENDS = (
-   'social.backends.facebook.FacebookOAuth2',
-   'social.backends.google.GoogleOAuth2',
-   'social.backends.twitter.TwitterOAuth',
-   'django.contrib.auth.backends.ModelBackend',
-)
-
-LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_FACEBOOK_KEY = '1677099975876619'
-SOCIAL_AUTH_FACEBOOK_SECRET = '492021a2face02ca6b1e13498de0b6ad'
-
-AUTH_PROFILE_MODULE = 'ticket_exchange.Person'
-
-SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.user.get_username',
-    'social.pipeline.user.create_user',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details',
-    'ticket_exchange.pipeline.create_profile'  #Custom pipeline
-)
-
-
-
-SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = ['first_name', 'last_name']
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id,name,email',
-}
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/facebook-post-login-handler/'
 
 DATE_FORMAT = 'd-m-Y'
 SHORT_DATE_FORMAT = 'd-m-Y'
@@ -164,3 +114,57 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
+
+# Python Social Auth
+
+AUTHENTICATION_BACKENDS = (
+   'social.backends.facebook.FacebookOAuth2',
+   'social.backends.google.GoogleOAuth2',
+   'social.backends.twitter.TwitterOAuth',
+   'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_FACEBOOK_KEY = '1677099975876619'
+SOCIAL_AUTH_FACEBOOK_SECRET = '492021a2face02ca6b1e13498de0b6ad'
+
+AUTH_PROFILE_MODULE = 'ticket_exchange.Person'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'ticket_exchange.pipeline.create_profile'  # Custom pipeline
+)
+
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = ['first_name', 'last_name']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/facebook-post-login-handler/'
+
+
+
+# Bootstrap
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+
+
+
+# Braintree
+#
+# BRAINTREE_MERCHANT_ID = 'b49t8dr2b4w5ds4x'
+# BRAINTREE_PUBLIC_KEY = 'q997x3db4nfkvcxs'
+# BRAINTREE_PRIVATE_KEY = '6b4285950b81c6852115a7be224a6f67'
