@@ -16,17 +16,17 @@ from django.views.decorators.csrf import csrf_exempt
 
 from buy_ticket.forms import NameLocationSearchForm
 
-# import braintree
-# from TX import settings
-#
-# braintree.Configuration.configure(braintree.Environment.Sandbox,
-#     merchant_id=settings.BRAINTREE_MERCHANT_ID,
-#     public_key=settings.BRAINTREE_PUBLIC_KEY,
-#     private_key=settings.BRAINTREE_PRIVATE_KEY)
+import braintree
+from django.conf import settings
+
+braintree.Configuration.configure(braintree.Environment.Sandbox,
+    merchant_id=settings.BRAINTREE_MERCHANT_ID,
+    public_key=settings.BRAINTREE_PUBLIC_KEY,
+    private_key=settings.BRAINTREE_PRIVATE_KEY)
 
 # Create your views here.
 TicketPriceObject = namedtuple("TicketPriceObject", ['commission', 'bank_costs', 'total_price'])
-COMMISSION_PERCENTAGE =0.06
+COMMISSION_PERCENTAGE = 0.06
 
 
 def select_event(request):
@@ -115,7 +115,7 @@ def potential_buyer_check(request, ticket_id):
     else: # User becomes the potential buyer
         messages.add_message(request, messages.INFO, "You have 10 minutes to purchase this ticket")
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_expiration_moment = time.time() +  20
+        ticket.potential_buyer_expiration_moment = time.time() +  50
         ticket.save()
         return redirect('buy_ticket:ticket_details', ticket_id)
 
@@ -142,7 +142,7 @@ def confirm_personal_details(request, ticket_id):
         if user_form.is_valid():
             if 'continue' in request.POST:
                 user_form.save()
-                return redirect('buy_ticket:select_payment_method', ticket_id)
+                return redirect('buy_ticket:payment_view', ticket_id)
             elif 'return' in request.POST:
                 return redirect('buy_ticket:ticket_details', ticket_id)
             elif 'cancel' in request.POST:
@@ -155,51 +155,78 @@ def confirm_personal_details(request, ticket_id):
     return render(request, 'buy_ticket/confirm_personal_details.html', {'user_form': user_form, 'ticket':ticket, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
 
+# @login_required(login_url=FACEBOOK_LOGIN_URL)
+# @potential_buyer_checks_decorator
+# def select_payment_method(request, ticket_id):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     event_id = ticket.event.id
+#
+#     if request.method == "POST":
+#
+#         if True:
+#             if 'continue' in request.POST:
+#                 return redirect('buy_ticket:confirm_purchase', ticket_id)
+#             elif 'return' in request.POST:
+#                 return redirect('buy_ticket:confirm_personal_details', ticket_id)
+#             elif 'cancel' in request.POST:
+#                 cancel_ticket(ticket.id)
+#                 return redirect('buy_ticket:event_tickets', event_id)
+#
+#     else:
+#         pass
+#
+#     return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+
+
+# @login_required(login_url=FACEBOOK_LOGIN_URL)
+# @potential_buyer_checks_decorator
+# def confirm_purchase(request, ticket_id):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     ticket.save()
+#
+#     ticket_price_object = _get_ticket_price_object(ticket.price)
+#
+#     if request.method == "POST":
+#         if 'confirm' in request.POST:
+#             ticket.buyer = request.user.person
+#             ticket.save()
+#             return redirect('buy_ticket:payment_confirmation', ticket_id)
+#
+#     return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+
+
+
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_checks_decorator
-def select_payment_method(request, ticket_id):
+def payment_view(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
-    event_id = ticket.event.id
+    ticket.potential_buyer_expiration_moment += 100
+    if request.method == 'GET':
+        token = braintree.ClientToken.generate()
+        return render(request, 'buy_ticket/select_payment_method.html', {'token': token, 'ticket': ticket,'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
-    if request.method == "POST":
+    elif request.method == 'POST':
+        nonce_from_the_client = request.POST["payment_method_nonce"]
+        result = braintree.Transaction.sale({
+            "amount": str(ticket.price),
+            "payment_method_nonce": nonce_from_the_client,
+            "options": {
+                "submit_for_settlement": True
+            }
+        })
 
-        if True:
-            if 'continue' in request.POST:
-                return redirect('buy_ticket:confirm_purchase', ticket_id)
-            elif 'return' in request.POST:
-                return redirect('buy_ticket:confirm_personal_details', ticket_id)
-            elif 'cancel' in request.POST:
-                cancel_ticket(ticket.id)
-                return redirect('buy_ticket:event_tickets', event_id)
-
-    else:
-        pass
-
-    return render(request, 'buy_ticket/select_payment_method.html', {'ticket': ticket, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+        if result.is_success:
+            return redirect('buy_ticket:payment_successful', ticket_id)
+        else:
+            return redirect('buy_ticket:payment_failed', ticket_id)
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-@potential_buyer_checks_decorator
-def confirm_purchase(request, ticket_id):
+def payment_successful(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
+    ticket.buyer = request.user.person
+    ticket.potential_buyer = None
     ticket.save()
-
-    ticket_price_object = _get_ticket_price_object(ticket.price)
-
-    if request.method == "POST":
-        if 'confirm' in request.POST:
-            ticket.buyer = request.user.person
-            ticket.save()
-            return redirect('buy_ticket:payment_confirmation', ticket_id)
-
-    return render(request, 'buy_ticket/confirm_purchase.html', {'ticket': ticket, 'ticket_price_object': ticket_price_object, 'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
-
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def payment_confirmation(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    return render(request, 'buy_ticket/payment_confirmation.html', {'ticket': ticket})
+    return render(request, 'buy_ticket/payment_successful.html', {'ticket': ticket})
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
