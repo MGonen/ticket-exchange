@@ -14,7 +14,14 @@
             <p>Ticket already uploaded. To replace the uploaded ticket, click on 'Choose File'</p>
         {% endif %}
         {{ upload_form.as_p }}
-        <button name="Submit" class="btn btn-default">Submit</button>
+
+        {% if event_id %}
+            <a href="{% url 'buy_ticket:available_tickets' event_id %}" class="btn btn-default">Cancel</a>
+        {% else %}
+            <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
+        {% endif %}
+
+        <button name="Submit" class="btn btn-default">Save</button>
     </form>
 
 

@@ -32,13 +32,15 @@ class EventForm(forms.ModelForm):
         return name
 
     def clean_end_date(self):
-        end_date = self.cleaned_data['end_date']
-        start_date = self.cleaned_data['start_date']
+        try:
+            if self.cleaned_data['start_date'] > self.cleaned_data['end_date']:
+                raise ValidationError(
+                    'Ensure that the end date of the event is on the same day, or after the start date.')
 
-        if start_date > end_date:
-            raise ValidationError('Ensure that the end date of the event is on the same day, or after the start date.')
+        except KeyError:
+            pass
 
-        return end_date
+        return self.cleaned_data['end_date']
 
 
 class UploadBaseTicketNew(forms.Form):

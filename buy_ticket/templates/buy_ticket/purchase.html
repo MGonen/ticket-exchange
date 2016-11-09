@@ -46,8 +46,8 @@
 
     <form method="POST">{% csrf_token %}
         <div id="dropin-container"></div>
-        <button type="submit">Purchase</button>
-        <a class="button" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel</a>
-      </form>
+        <a class="btn btn-default" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel</a>
+        <button class="btn btn-primary" type="submit">Purchase</button>
+    </form>
 
 {% endblock %}

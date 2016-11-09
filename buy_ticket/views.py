@@ -13,6 +13,7 @@ from ticket_exchange.models import Ticket, Event
 from my_info.forms import UserForm
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
 from ticket_exchange.utils import potential_buyer_checks_decorator
+from ticket_exchange import messages as message_text
 
 from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
@@ -113,7 +114,7 @@ def potential_buyer_check(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
     if ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id != request.user.person.id): # User is not the potential buyer
-        messages.add_message(request, messages.ERROR,"Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket")
+        messages.add_message(request, messages.ERROR, message_text.other_potential_buyer)
         return redirect('buy_ticket:available_tickets', ticket.event.id)
 
     elif ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id == request.user.person.id): # User is already the potential buyer
@@ -122,8 +123,7 @@ def potential_buyer_check(request, ticket_id):
     elif Ticket.objects.filter(potential_buyer=request.user.person).filter(potential_buyer_expiration_moment__gte=time.time()): # User is already buying another ticket for this event
         ticket.potential_buyer_expiration_moment = 0
         ticket.save()
-        messages.add_message(request, messages.ERROR,
-                             "Sorry, you are already buying a ticket for this event. You can only buy one ticket per event at a time.")
+        messages.add_message(request, messages.ERROR, message_text.user_already_potential_buyer_other_ticket)
         return redirect('buy_ticket:available_tickets', ticket.event.id)
 
     else: # User becomes the potential buyer

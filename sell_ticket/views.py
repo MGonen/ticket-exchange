@@ -12,7 +12,7 @@ from events.views import pdf_is_safe, save_pdf
 
 from my_info.forms import UserForm
 from sell_ticket.forms import NameLocationSearchForm, DateSearchForm, PersonForm4SellTicket, UploadTicket, TicketPriceForm
-from TX.settings import BASE_DIR, STATIC_ROOT
+from django.conf import settings
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -186,7 +186,7 @@ def save_ticket_pdf(file, ticket_id):
 
 def create_ticket_file_location(ticket_id):
     filename = str(ticket_id)
-    tickets_directory = scriptine.path(STATIC_ROOT).joinpath('tickets')
+    tickets_directory = scriptine.path(settings.STATIC_ROOT).joinpath('tickets')
     if not tickets_directory.exists():
         tickets_directory.mkdir()
 
