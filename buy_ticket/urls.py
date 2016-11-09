@@ -18,17 +18,15 @@ from django.conf.urls import url
 import views
 
 urlpatterns = (
-    url(r'^select_event/$', views.select_event, name='select_event'),
-    url(r'^(?P<event_id>[0-9]+)/tickets/$', views.event_tickets, name='event_tickets'),
-    url(r'^(?P<event_id>[0-9]+)/get_event_tickets/$', views.get_event_tickets_ajax, name='get_event_tickets'),
+    # url(r'^select_event/$', views.select_event, name='select_event'),
+    url(r'^select_event/$', views.SelectEvent.as_view(), name='select_event'),
+    # url(r'^(?P<event_id>[0-9]+)/tickets/$', views.available_tickets, name='available_tickets'),
+    url(r'^(?P<event_id>[0-9]+)/tickets/$', views.AvailableTickets.as_view(), name='available_tickets'),
+    url(r'^(?P<event_id>[0-9]+)/get_available_tickets/$', views.get_available_tickets_ajax, name='get_available_tickets'),
     url(r'^potential_buyer_check/(?P<ticket_id>[0-9]+)/$', views.potential_buyer_check, name='potential_buyer_check'),
-    url(r'^ticket-details/(?P<ticket_id>[0-9]+)/$', views.ticket_details, name='ticket_details'),
+    url(r'^purchase/(?P<ticket_id>[0-9]+)/$', views.Purchase.as_view(), name='purchase'),
+    url(r'^payment-successful/(?P<ticket_id>[0-9]+)/$', views.purchase_successful, name='purchase_successful'),
+    url(r'^payment-failed/(?P<ticket_id>[0-9]+)/$', views.purchase_failed, name='purchase_failed'),
     url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),
-    url(r'^personal-details/(?P<ticket_id>[0-9]+)/$', views.confirm_personal_details, name='confirm_personal_details'),
-    # url(r'^payment-method/(?P<ticket_id>[0-9]+)/$', views.select_payment_method, name='select_payment_method'),
-    url(r'^payment-view/(?P<ticket_id>[0-9]+)/$', views.payment_view, name='payment_view'),
-    # url(r'^confirm-purchase/(?P<ticket_id>[0-9]+)/$', views.confirm_purchase, name='confirm_purchase'),
-    url(r'^payment-successful/(?P<ticket_id>[0-9]+)/$', views.payment_successful, name='payment_successful'),
-    url(r'^payment-failed/(?P<ticket_id>[0-9]+)/$', views.payment_failed, name='payment_failed'),
-    # url(r'^payment/token/$', views.get_braintree_client_token, name='braintree_token')
+
 )

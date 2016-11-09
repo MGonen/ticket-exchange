@@ -2,13 +2,13 @@
 /* Event tickets */
 
 
-.event-tickets-info {
+.available-tickets-info {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
 
-.event-tickets-heading-event {
+.available-tickets-heading-event {
     margin-top: 0;
     text-align: center;
     font-size: 50px;

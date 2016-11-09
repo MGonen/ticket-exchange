@@ -1,14 +1,14 @@
 
-function start_get_event_tickets_js(event_id){
+function start_get_available_tickets_js(event_id){
 
-    ajax_event_tickets_call(event_id);
+    ajax_available_tickets_call(event_id);
     setInterval(function() {
-        ajax_event_tickets_call(event_id)
+        ajax_available_tickets_call(event_id)
     }, 5000);
 }
 
-function ajax_event_tickets_call(event_id) {
-    url = '/buy-ticket/' + event_id + '/get_event_tickets/';
+function ajax_available_tickets_call(event_id) {
+    url = '/buy-ticket/' + event_id + '/get_available_tickets/';
 
     $.ajax({
         url: url,
@@ -16,13 +16,13 @@ function ajax_event_tickets_call(event_id) {
         cache: false,
         success: function(results) {
             $('.list-group').remove();
-            $('.event_ticket_form_content').remove();
+            $('.available_ticket_form_content').remove();
             if (results.already_a_potential_buyer){
                 create_form_content(results.selected_ticket);
             }
             else {
                 // ticket_removed_message();
-                var ticket_list = create_event_ticket_list(results.tickets);
+                var ticket_list = create_available_ticket_list(results.tickets);
                 $('.continue_ticket_purchase_form').after(ticket_list);
             }
 
@@ -35,21 +35,21 @@ function ajax_event_tickets_call(event_id) {
 
 function create_form_content(selected_ticket) {
     var info_text_element = document.createElement('p');
-    info_text_element.className = 'event_ticket_form_content';
+    info_text_element.className = 'available_ticket_form_content';
     info_text_element.innerText = 'You are already in the process of buying a ticket. Would you like to continue, or select a different ticket';
 
     var ticket_info_element = document.createElement('p');
-    ticket_info_element.className = 'event_ticket_form_content';
+    ticket_info_element.className = 'available_ticket_form_content';
     ticket_info_element.innerText = selected_ticket.price + ' - ' + selected_ticket.seller;
 
     var continue_button = document.createElement('button');
     continue_button.name = 'continue';
-    continue_button.className = 'btn btn-primary event_ticket_form_content';
+    continue_button.className = 'btn btn-primary available_ticket_form_content';
     continue_button.innerText = 'Continue with selected ticket';
 
     var different_ticket_button = document.createElement('button');
     different_ticket_button.name = 'new';
-    different_ticket_button.className = 'btn btn-primary event_ticket_form_content';
+    different_ticket_button.className = 'btn btn-primary available_ticket_form_content';
     different_ticket_button.innerText = 'Select a different ticket';
 
     $('.continue_ticket_purchase_form').append(info_text_element);
@@ -71,17 +71,17 @@ function ticket_removed_message() {
 }
 
 
-function create_event_ticket_list(tickets) {
+function create_available_ticket_list(tickets) {
     var ticket_list = document.createElement('div');
     ticket_list.className = 'list-group';
 
-    ticket_list = append_event_ticket_header(ticket_list, tickets);
-    ticket_list = append_event_ticket_items(ticket_list, tickets);
+    ticket_list = append_available_ticket_header(ticket_list, tickets);
+    ticket_list = append_available_ticket_items(ticket_list, tickets);
 
     return ticket_list
 }
 
-function append_event_ticket_header(ticket_list, tickets) {
+function append_available_ticket_header(ticket_list, tickets) {
     var ticket_list_header = document.createElement('h2');
     ticket_list_header.className = 'list-group-item available-tickets-heading';
     ticket_list_header.innerText = 'Available Tickets';
@@ -95,10 +95,10 @@ function append_event_ticket_header(ticket_list, tickets) {
     return ticket_list
 }
 
-function append_event_ticket_items(ticket_list, tickets) {
+function append_available_ticket_items(ticket_list, tickets) {
 
     for (var i=0; i < tickets.length; i++ ) {
-        var ticket_item = create_event_ticket_item(tickets[i]);
+        var ticket_item = create_available_ticket_item(tickets[i]);
 
         ticket_list.appendChild(ticket_item);
     }
@@ -107,7 +107,7 @@ function append_event_ticket_items(ticket_list, tickets) {
 
 }
 
-function create_event_ticket_item(ticket){
+function create_available_ticket_item(ticket){
 
     var ticket_item = document.createElement('a');
 
@@ -142,6 +142,6 @@ function reload_page() {
 /* Functions to execute on loading the document               */
 /**************************************************************/
 $(document).ready( function() {
-    // ajax_event_tickets_call();
+    // ajax_available_tickets_call();
     // reload_page();
 });

@@ -2,20 +2,20 @@
 {% load static %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'buy_ticket/css/event_tickets.css' %}">
+    <link rel="stylesheet" href="{% static 'buy_ticket/css/available_tickets.css' %}">
     <link rel="stylesheet" href="{% static 'buy_ticket/css/stylesheet.css' %}">
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'buy_ticket/js/event_tickets.js' %}"></script>
-    <script>document.onload = start_get_event_tickets_js({{ event.id }})</script>
+    <script src="{% static 'buy_ticket/js/available_tickets.js' %}"></script>
+    <script>document.onload = start_get_available_tickets_js({{ event.id }})</script>
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="event-tickets-info info-container">
-        <h1 class="event-tickets-heading-event">{{ event.name }}</h1>
+    <div class="available-tickets-info info-container">
+        <h1 class="available-tickets-heading-event">{{ event.name }}</h1>
 
         {% if user.is_staff %}
             <a href="{% url 'events:edit_event' event.id %}">Edit Event</a>
