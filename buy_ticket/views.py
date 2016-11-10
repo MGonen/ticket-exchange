@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import View
 from django.utils.decorators import method_decorator
-from django.http import Http404
+from django.http import Http404, JsonResponse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 import time
 from collections import namedtuple
@@ -128,13 +130,18 @@ def potential_buyer_check(request, ticket_id):
 
     else: # User becomes the potential buyer
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_expiration_moment = time.time() +  100
+        ticket.potential_buyer_expiration_moment = time.time() + 100
         ticket.save()
         return redirect('buy_ticket:purchase', ticket_id)
 
 
 class Purchase(View):
     template_name = 'buy_ticket/purchase.html'
+
+    @method_decorator(login_required(login_url=FACEBOOK_LOGIN_URL))
+    @method_decorator(potential_buyer_checks_decorator)
+    def dispatch(self, *args, **kwargs):
+        return super(Purchase, self).dispatch(*args, **kwargs)
 
     def get_ticket(self, ticket_id):
         try:
@@ -154,18 +161,14 @@ class Purchase(View):
         return TicketPriceObject(commission=commission_string, bank_costs=bank_costs_string,
                                  total_price=total_price_string)
 
-    @method_decorator(login_required(login_url=FACEBOOK_LOGIN_URL))
-    @method_decorator(potential_buyer_checks_decorator)
     def get(self, request, ticket_id):
         ticket = self.get_ticket(ticket_id)
         ticket_price_object = self.get_ticket_price_object(ticket.price)
         token = braintree.ClientToken.generate()
         return render(request, self.template_name,
-                      {'token': token, 'ticket': ticket, 'ticket_price_object': ticket_price_object,
+                      {'ticket': ticket, 'ticket_price_object': ticket_price_object,
                        'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
-    @method_decorator(login_required(login_url=FACEBOOK_LOGIN_URL))
-    @method_decorator(potential_buyer_checks_decorator)
     def post(self, request, ticket_id):
         ticket = self.get_ticket(ticket_id)
         ticket_price_object = self.get_ticket_price_object(ticket.price)
@@ -207,6 +210,52 @@ def cancel_ticket_view(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
     event_id = ticket.event.id
     return redirect('buy_ticket:available_tickets', event_id)
+
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def get_braintree_token(request):
+    token = braintree.ClientToken.generate()
+    return JsonResponse({'token': token})
+
+
+@csrf_exempt
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def personal_info_ajax(request):
+    if request.method == 'POST' and request.is_ajax():
+        fullname = request.POST['fullname']
+        email = request.POST['email']
+
+        if form_errors(fullname, email):
+            return JsonResponse(data={}, status=500)
+
+        else:
+            new_name, new_email = save_user_info_return_updated_info(request.user.id, fullname, email)
+            return JsonResponse({'new_name': new_name, 'new_email':new_email})
+
+
+def form_errors(fullname, email):
+    errors = []
+
+    if not fullname:
+        errors.append('name_error')
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        errors.append('email_error')
+
+    return errors
+
+def save_user_info_return_updated_info(user_id, fullname, email):
+    user = User.objects.get(id=user_id)
+
+    user.person.fullname = fullname
+    user.email = email
+    user.save()
+    user.person.save()
+
+    user = User.objects.get(id=user_id)
+    return user.person.fullname, user.email
+
 
 def cancel_ticket(ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)

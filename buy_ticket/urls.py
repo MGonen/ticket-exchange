@@ -18,9 +18,7 @@ from django.conf.urls import url
 import views
 
 urlpatterns = (
-    # url(r'^select_event/$', views.select_event, name='select_event'),
     url(r'^select_event/$', views.SelectEvent.as_view(), name='select_event'),
-    # url(r'^(?P<event_id>[0-9]+)/tickets/$', views.available_tickets, name='available_tickets'),
     url(r'^(?P<event_id>[0-9]+)/tickets/$', views.AvailableTickets.as_view(), name='available_tickets'),
     url(r'^(?P<event_id>[0-9]+)/get_available_tickets/$', views.get_available_tickets_ajax, name='get_available_tickets'),
     url(r'^potential_buyer_check/(?P<ticket_id>[0-9]+)/$', views.potential_buyer_check, name='potential_buyer_check'),
@@ -28,5 +26,7 @@ urlpatterns = (
     url(r'^payment-successful/(?P<ticket_id>[0-9]+)/$', views.purchase_successful, name='purchase_successful'),
     url(r'^payment-failed/(?P<ticket_id>[0-9]+)/$', views.purchase_failed, name='purchase_failed'),
     url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),
+    url(r'^payment/token/$', views.get_braintree_token, name='get_braintree_token'),
+    url(r'^personal-info-ajax/$', views.personal_info_ajax, name='personal_info_ajax'),
 
 )

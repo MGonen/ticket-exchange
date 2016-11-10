@@ -3,11 +3,9 @@
 
 {% block scripts %}
     <script src="https://js.braintreegateway.com/js/braintree-2.20.0.js"></script>
-    <script src="{% static 'buy_ticket/js/count_down_timer.js' %}"></script>
-    <script src="{% static 'buy_ticket/js/braintree.js' %}"></script>
+    <script src="{% static 'buy_ticket/js/purchase.js' %}"></script>
     <script>document.onload = start_count_down_timer({{ time_left }}, {{ ticket.event.id }})</script>
-{#    <script>document.onload = setupBraintreeAjax()</script>#}
-    <script>document.onload = setupBraintree('{{ token }}')</script>
+    <script>document.onload = setupBraintreeAjax()</script>
 {% endblock %}
 
 
@@ -27,8 +25,25 @@
 
     <div>
         <h2>Personal Details</h2>
-        <p>Name: {{ user.person.fullname }}</p>
-        <p>Email: {{ user.email }}</p>
+        <div id="purchase-personal-details-info">
+            <p id="nameLabelInfo">Name: </p><p id="nameInfo">{{ user.person.fullname }}</p>
+            <p id="emailLableInfo">Email: </p><p id="emailInfo">{{ user.email }}</p>
+            <button id="purchase-personal-details-button" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+        </div>
+
+        <div id="purchase-personal-details-form">
+            <form class="form-signin" method="POST">{% csrf_token %}
+                <label for="inputName">Name</label>
+                <input type="text" id="inputName" class="form-control" value="{{ user.person.fullname }}" required autofocus>
+                <label for="inputEmail">Email address</label>
+                <input type="email" id="inputEmail" class="form-control" value="{{ user.email }}" required>
+            </form>
+
+            <button id="purchase-personal-details-cancel" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
+            <button id="purchase-personal-details-save" class="btn btn-primary" type="submit" onclick="savePersonalInfo()">Save Personal Info</button>
+        </div>
+
+
     </div>
 
 
@@ -47,7 +62,7 @@
     <form method="POST">{% csrf_token %}
         <div id="dropin-container"></div>
         <a class="btn btn-default" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel</a>
-        <button class="btn btn-primary" type="submit">Purchase</button>
+        <button id="purchaseButton" class="btn btn-primary" type="submit">Purchase</button>
     </form>
 
 {% endblock %}
