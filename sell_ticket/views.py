@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.http import Http404, JsonResponse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 import scriptine
 
 from ticket_exchange.models import Person, Event, Ticket
+from ticket_exchange import messages as messages_text
 from ticket_exchange.utils import ticket_complete_check
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
 from events.views import pdf_is_safe, save_pdf
@@ -23,159 +28,92 @@ def select_event(request):
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-def incomplete_ticket_check(request, event_id):
+def sell_ticket(request, event_id):
+    seller = User.objects.get(id=request.user.id).person
     event = Event.objects.get(id=event_id)
-    if request.method == "POST":
-        ticket = Ticket.objects.filter(seller=request.user.person).filter(event_id=event_id).filter(complete=False)[0]
-        if 'continue' in request.POST:
-            return redirect('sell_ticket:event_selected', ticket.id)
-
-        elif 'new' in request.POST:
-            Ticket.objects.filter(seller=request.user.person).filter(event_id=event_id).filter(complete=False).delete()
-            ticket = Ticket(seller=request.user.person, event_id=event_id)
-            ticket.save()
-            return redirect('sell_ticket:event_selected', ticket.id)
-
-    else:
-        if not incomplete_ticket_exists(request.user.person, event_id):
-            Ticket.objects.filter(seller=request.user.person).filter(event_id=event_id).filter(complete=False).delete()
-            ticket = Ticket(seller=request.user.person, event_id=event_id)
-            ticket.save()
-            return redirect('sell_ticket:event_selected', ticket.id)
-
-        else:
-            return render(request, 'sell_ticket/incomplete_ticket.html', {'event': event})
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def event_selected(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
+    ticket = Ticket(event=event, seller=seller)
+    ticket.save()
+    template_name = 'sell_ticket/sell_ticket.html'
 
     if request.method == "POST":
-        if 'continue' in request.POST:
-            return redirect('sell_ticket:upload_pdf', ticket.id)
-
-        elif 'return' in request.POST:
-            return redirect('sell_ticket:select_event')
-
-    else:
-        return render(request, 'sell_ticket/event_selected.html', {'ticket': ticket})
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-@ticket_complete_check
-def upload_pdf(request, ticket_id):
-    """pdf security analysis and content analysis: text and barcode"""
-    ticket = Ticket.objects.get(id=ticket_id)
-
-    if request.method == "POST":
+        print 'POST Request'
+        price_form = TicketPriceForm(request.POST, instance=ticket)
         upload_form = UploadTicket(request.POST, request.FILES)
-
-        if 'return' in request.POST:
-            return redirect('sell_ticket:event_selected', ticket_id)
-
-        if upload_form.is_valid():
-            if not ticket.link and not 'file' in request.FILES:
-                messages.add_message(request, messages.ERROR, 'You need to upload a PDF ticket')
-                return render(request, 'sell_ticket/upload_pdf.html', {'upload_form': upload_form, 'ticket': ticket})
-
+        if price_form.is_valid() and upload_form.is_valid():
+            print 'valid form'
             if 'file' in request.FILES:
+
                 file = request.FILES['file']
 
                 if not pdf_is_safe(file):
-                    messages.add_message(request, messages.ERROR, 'The PDF was unfortunately deemed unsafe. Please check to make sure it is the correct PDF')
-                    return render(request, 'sell_ticket/upload_pdf.html', {'upload_form': upload_form, 'ticket': ticket})
+                    print 'pdf not safe'
+                    messages.add_message(request, messages.ERROR, messages_text.unsafe_pdf)
+                    return render(request, template_name, {'upload_form': upload_form, 'price_form': price_form})
 
-                if not ticket_is_valid(file, ticket_id):
-                    messages.add_message(request, messages.ERROR, 'It seems this is not valid. Please make sure you uploaded a valid ticket')
-                    return render(request, 'sell_ticket/upload_pdf.html', {'upload_form': upload_form, 'ticket': ticket})
-
-                file_location = save_ticket_pdf(file, ticket_id)
-                ticket = Ticket.objects.get(id=ticket_id)
-                ticket.link = file_location
-                ticket.original_filename = file
-                ticket.save()
-
-            if 'continue' in request.POST:
-                return redirect('sell_ticket:set_price', ticket_id)
+                if not ticket_is_valid(file, ticket.id):
+                    messages.add_message(request, messages.ERROR, messages_text.pdf_invalid)
+                    return render(request, template_name, {'upload_form': upload_form, 'price_form': price_form})
 
 
-    else:
-        upload_form = UploadTicket()
-
-    return render(request, 'sell_ticket/upload_pdf.html', {'upload_form': upload_form, 'ticket':ticket})
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-@ticket_complete_check
-def set_price(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-
-    if request.method == "POST":
-        form = TicketPriceForm(request.POST, instance=ticket)
-
-        if form.is_valid():
-            ticket.price = request.POST.get('price')
-            ticket.save()
-
-            if 'continue' in request.POST:
-                return redirect('sell_ticket:personal_details', ticket_id)
-            elif 'return' in request.POST:
-                return redirect('sell_ticket:upload_pdf', ticket_id)
-
-    else:
-        form = TicketPriceForm(instance=ticket)
-
-    return render(request, 'sell_ticket/set_price.html', {'form': form, 'ticket': ticket})
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-@ticket_complete_check
-def personal_details(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    user = get_object_or_404(User, pk=request.user.id)
-    person = get_object_or_404(Person, pk=request.user.person.id)
-
-    if request.method == "POST":
-        user_form = UserForm(request.POST, instance=user)
-        person_form = PersonForm4SellTicket(request.POST, instance=person)
-
-        if person_form.is_valid() and user_form.is_valid():
-            if 'continue' in request.POST:
-                person_form.save()
-                user_form.save()
-                return redirect('sell_ticket:completion', ticket_id)
-            elif 'return' in request.POST:
-                return redirect('sell_ticket:set_price', ticket_id)
-
-
-    else:
-        person_form = PersonForm4SellTicket(instance=person)
-        user_form = UserForm(instance=user)
-
-    return render(request, 'sell_ticket/personal_details.html', {'person_form': person_form, 'user_form': user_form, 'ticket':ticket})
-
-
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-@ticket_complete_check
-def completion(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-
-    if request.method == "POST":
-
-
-        if 'continue' in request.POST:
-            missing_ticket_info = ticket_complete(request, ticket_id)
-            if missing_ticket_info:
-                messages.add_message(request, messages.ERROR, "Unfortunately you're missing some info to put this ticket up for sale. You are still missing: %s" % (missing_ticket_info,))
-                return render(request, 'sell_ticket/completion.html', {'ticket': ticket})
-            ticket.complete = True
-            ticket.save()
+            messages.add_message(request, messages.SUCCESS, 'Ticket successfully put up for sale')
             return redirect('my_info:tickets_for_sale')
-        elif 'return' in request.POST:
-            return redirect('sell_ticket:personal_details', ticket_id)
 
-    return render(request, 'sell_ticket/completion.html', {'ticket': ticket})
+        else:
+            return render(request, 'sell_ticket/sell_ticket.html',
+                          {'event': event, 'price_form': price_form, 'upload_form': upload_form})
+
+    else:
+        print 'GET Request'
+        price_form = TicketPriceForm()
+        upload_form = UploadTicket()
+        return render(request, 'sell_ticket/sell_ticket.html', {'event': event, 'price_form': price_form, 'upload_form': upload_form})
+
+
+@csrf_exempt
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def personal_info_ajax(request):
+    if request.method == 'POST' and request.is_ajax():
+        fullname = request.POST['fullname']
+        email = request.POST['email']
+        iban = request.POST['iban']
+
+        errors = form_errors(fullname, email, iban)
+        if errors:
+            return JsonResponse(data={'errors': errors}, status=500)
+
+        else:
+            new_name, new_email, new_iban = save_user_info_return_updated_info(request.user.id, fullname, email, iban)
+            return JsonResponse({'new_name': new_name, 'new_email': new_email, 'new_iban': new_iban})
+
+
+def form_errors(fullname, email, iban):
+    errors = []
+
+    if not fullname:
+        errors.append('Name')
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        errors.append('Email')
+
+    if not iban.isalnum():
+        errors.append('IBAN')
+
+    return errors
+
+
+def save_user_info_return_updated_info(user_id, fullname, email, iban):
+    user = User.objects.get(id=user_id)
+
+    user.person.fullname = fullname
+    user.person.bank_account = iban
+    user.email = email
+    user.save()
+    user.person.save()
+
+    user = User.objects.get(id=user_id)
+    return user.person.fullname, user.email, user.person.bank_account
 
 
 def save_ticket_pdf(file, ticket_id):

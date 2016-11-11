@@ -1,0 +1,107 @@
+{% extends 'ticket_exchange/base.html' %}
+{% load static %}
+
+
+{% block scripts %}
+    <script src="{% static 'ticket_exchange/js/personal_info_form.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="form-container">
+
+        <div>
+            <h2>Event: {{ event.name }}</h2>
+            <p>When: {{ event.start_date }} - {{ ticket.event.end_date }}</p>
+            <p>Where: {{ event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Personal Details</h2>
+
+            <form class="form-horizontal" method="POST">{% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="nameInput">Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" id="nameStatic">{{ user.person.fullname }}</p>
+                        <input type="text" class="form-control" id="nameInput" value="{{ user.person.fullname }}" placeholder="Full Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="emailInput">Email:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" id="emailStatic">{{ user.email }}</p>
+                        <input type="email" class="form-control" id="emailInput" value="{{ user.email }}" placeholder="Email address" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="ibanInput">IBAN:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" id="ibanStatic">{{ user.person.bank_account }}</p>
+                        <input type="text" class="form-control" id="ibanInput" value="{{ user.person.bank_account }}" placeholder="IBAN" required>
+                    </div>
+                </div>
+            </form>
+
+            <div id="personalInfoButtons" class="col-sm-offset-2 col-sm-10">
+                <button id="editPersonalInfo" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+                <button id="cancelPersonalInfo" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
+                <button id="savePersonalInfo" class="btn btn-primary" type="submit" onclick="savePersonalInfo('sell')">Save Personal Info</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div>
+            <form enctype="multipart/form-data" method="POST" class="form-horizontal">{% csrf_token %}
+                <h2>Price</h2>
+
+{#                {{ price_form.as_p }}#}
+
+                <div class="form-group">
+                    {% for field in price_form %}
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            <label class="control-label col-sm-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            <div class="col-sm-10">
+                                {{ field }}
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <hr>
+
+                <h2>PDF Upload</h2>
+                <div class="form-group">
+                    {% for field in upload_form %}
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            <label class="control-label col-sm-2" for="{{ field.auto_id }}">{{ field.label }}</label>
+                            <div class="col-sm-10">
+                                {{ field }}
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button id="putUpForSaleButton" class="btn btn-primary" type="submit">Put up for Sale</button>
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+
+

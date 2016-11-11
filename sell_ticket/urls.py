@@ -19,12 +19,8 @@ import views
 
 urlpatterns = (
 
+    url(r'^(?P<event_id>[0-9]+)/$', views.sell_ticket, name='sell_ticket'),
     url(r'^select-event/$', views.select_event, name='select_event'),
-    url(r'^incomplete-ticket-check/(?P<event_id>[0-9]+)/$', views.incomplete_ticket_check, name='incomplete_ticket_check'),
-    url(r'^event_selected/(?P<ticket_id>[0-9]+)/$', views.event_selected, name='event_selected'),
-    url(r'^upload-pdf/(?P<ticket_id>[0-9]+)/$', views.upload_pdf, name='upload_pdf'),
-    url(r'^set-price/(?P<ticket_id>[0-9]+)/$', views.set_price, name='set_price'),
-    url(r'^personal-details/(?P<ticket_id>[0-9]+)/$', views.personal_details, name='personal_details'),
-    url(r'^completion/(?P<ticket_id>[0-9]+)/$', views.completion, name='completion'),
+    url(r'^personal-info-ajax/$', views.personal_info_ajax, name='personal_info_ajax'),
 
 )

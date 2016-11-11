@@ -4,6 +4,7 @@
 {% block scripts %}
     <script src="https://js.braintreegateway.com/js/braintree-2.20.0.js"></script>
     <script src="{% static 'buy_ticket/js/purchase.js' %}"></script>
+    <script src="{% static 'ticket_exchange/js/personal_info_form.js' %}"></script>
     <script>document.onload = start_count_down_timer({{ time_left }}, {{ ticket.event.id }})</script>
     <script>document.onload = setupBraintreeAjax()</script>
 {% endblock %}
@@ -16,53 +17,67 @@
 
 {% block content %}
 
-    <div>
-        <h2>Event</h2>
-        <p>Event: {{ ticket.event.name }}</p>
-        <p>When: {{ ticket.event.start_date }} - {{ ticket.event.end_date }}</p>
-        <p>Where: {{ ticket.event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</p>
-    </div>
-
-    <div>
-        <h2>Personal Details</h2>
-        <div id="purchase-personal-details-info">
-            <p id="nameLabelInfo">Name: </p><p id="nameInfo">{{ user.person.fullname }}</p>
-            <p id="emailLableInfo">Email: </p><p id="emailInfo">{{ user.email }}</p>
-            <button id="purchase-personal-details-button" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+    <div class="form-container">
+        <div id="count-down-timer">
+            <p>Time left:</p>
         </div>
 
-        <div id="purchase-personal-details-form">
-            <form class="form-signin" method="POST">{% csrf_token %}
-                <label for="inputName">Name</label>
-                <input type="text" id="inputName" class="form-control" value="{{ user.person.fullname }}" required autofocus>
-                <label for="inputEmail">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" value="{{ user.email }}" required>
+        <div>
+            <h2>Event</h2>
+            <p>Event: {{ ticket.event.name }}</p>
+            <p>When: {{ ticket.event.start_date }} - {{ ticket.event.end_date }}</p>
+            <p>Where: {{ ticket.event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</p>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>Personal Details</h2>
+
+            <form class="form-horizontal" method="POST">{% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="nameInput">Name:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" id="nameStatic">{{ user.person.fullname }}</p>
+                        <input type="text" class="form-control" id="nameInput" value="{{ user.person.fullname }}" placeholder="Full Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="emailInput">Email:</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static" id="emailStatic">{{ user.email }}</p>
+                        <input type="email" class="form-control" id="emailInput" value="{{ user.email }}" placeholder="Email address" required>
+                    </div>
+                </div>
             </form>
 
-            <button id="purchase-personal-details-cancel" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
-            <button id="purchase-personal-details-save" class="btn btn-primary" type="submit" onclick="savePersonalInfo()">Save Personal Info</button>
+            <div id="personalInfoButtons" class="col-sm-offset-2 col-sm-10">
+                <button id="editPersonalInfo" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+                <button id="cancelPersonalInfo" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
+                <button id="savePersonalInfo" class="btn btn-primary" type="submit" onclick="savePersonalInfo('purchase')">Save Personal Info</button>
+            </div>
         </div>
 
+        <p>&nbsp;</p>
+        <hr>
+
+        <div>
+
+            <h2>Cost:</h2>
+            <p>Ticket Price {{ ticket.price }}</p>
+            <p>Commission: {{ ticket_price_object.commission }}</p>
+            <p>Bank costs: {{ ticket_price_object.bank_costs }}</p>
+            <p>Total Price: {{ ticket_price_object.total_price }}</p>
+        </div>
+
+        <hr>
+
+        <form method="POST">{% csrf_token %}
+            <div id="dropin-container"></div>
+            <a class="btn btn-default" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel</a>
+            <button id="purchaseButton" class="btn btn-primary" type="submit">Purchase</button>
+        </form>
 
     </div>
-
-
-    <div>
-        <h2>Cost:</h2>
-        <p>Ticket Price {{ ticket.price }}</p>
-        <p>Commission: {{ ticket_price_object.commission }}</p>
-        <p>Bank costs: {{ ticket_price_object.bank_costs }}</p>
-        <p>Total Price: {{ ticket_price_object.total_price }}</p>
-    </div>
-
-    <div id="count-down-timer">
-        <p>Time left:</p>
-    </div>
-
-    <form method="POST">{% csrf_token %}
-        <div id="dropin-container"></div>
-        <a class="btn btn-default" href="{% url 'buy_ticket:cancel_ticket_view' ticket.id %}">Cancel</a>
-        <button id="purchaseButton" class="btn btn-primary" type="submit">Purchase</button>
-    </form>
-
 {% endblock %}

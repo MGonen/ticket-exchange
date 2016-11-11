@@ -12,11 +12,15 @@ class DateSearchForm(forms.Form):
 
 
 class UploadTicket(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}))
 
 
 class TicketPriceForm(forms.ModelForm):
     price = forms.DecimalField(required=True, min_value=0.01)
+
+    def __init__(self, *args, **kwargs):
+        super(TicketPriceForm, self).__init__(*args, **kwargs)
+        self.fields['price'].widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Ticket

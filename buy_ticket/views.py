@@ -224,8 +224,9 @@ def personal_info_ajax(request):
         fullname = request.POST['fullname']
         email = request.POST['email']
 
-        if form_errors(fullname, email):
-            return JsonResponse(data={}, status=500)
+        errors = form_errors(fullname, email)
+        if errors:
+            return JsonResponse(data={'errors': errors}, status=500)
 
         else:
             new_name, new_email = save_user_info_return_updated_info(request.user.id, fullname, email)
@@ -236,12 +237,12 @@ def form_errors(fullname, email):
     errors = []
 
     if not fullname:
-        errors.append('name_error')
+        errors.append('Name')
 
     try:
         validate_email(email)
     except ValidationError:
-        errors.append('email_error')
+        errors.append('Email')
 
     return errors
 

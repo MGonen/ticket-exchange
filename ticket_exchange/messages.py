@@ -6,8 +6,9 @@ event_update_successful = """The event has been succesfully updated"""
 event_update_failed = """Something went wrong updating this event. Please try again"""
 
 #PDF
-unsafe_pdf = """The PDF was unfortunately deemed unsafe. Please make sure you attached the correct file"""
+unsafe_pdf = """The PDF was unfortunately deemed unsafe. Please make sure you attached the correct PDF file"""
 pdf_needed = """You need to upload a PDF ticket"""
+pdf_invalid = """It seems this is not a valid ticket. Please make sure you uploaded the correct PDF file"""
 
 # Tickets
 other_potential_buyer = """Sorry, someone else is currently trying to purchase this ticket :-(. Please try a different ticket"""
