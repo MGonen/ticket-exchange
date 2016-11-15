@@ -6,22 +6,19 @@ from ticket_exchange.models import Person, Event, Ticket, BaseTicket
 
 
 class EventForm(forms.ModelForm):
-    name = forms.CharField(min_length=2)
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'autocomplete': 'off'})
-        self.fields['location'].widget.attrs.update({'autocomplete': 'off'})
-        self.fields['city'].widget.attrs.update({'autocomplete': 'off'})
-        self.fields['country'].widget.attrs.update({'autocomplete': 'off'})
+        self.fields['name'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
+        self.fields['location'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
+        self.fields['city'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
+        self.fields['country'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
+        self.fields['start_date'].widget.attrs.update({'autocomplete': 'off', 'class': 'date_form_input form-control'})
+        self.fields['end_date'].widget.attrs.update({'autocomplete': 'off', 'class': 'date_form_input form-control'})
 
     class Meta:
         model = Event
         fields = ('name', 'location', 'city', 'country', 'start_date', 'end_date')
-        widgets = {
-            'start_date': forms.DateInput(attrs={'class': 'date_form_input'}),
-            'end_date': forms.DateInput(attrs={'class': 'date_form_input'}),
-        }
 
     def clean_name(self):
         name = self.cleaned_data['name']
@@ -53,6 +50,10 @@ class UploadBaseTicketEdit(forms.Form):
 
 class BaseTicketPriceForm(forms.ModelForm):
     price = forms.DecimalField(required=True, min_value=0.01)
+
+    def __init__(self, *args, **kwargs):
+        super(BaseTicketPriceForm, self).__init__(*args, **kwargs)
+        self.fields['price'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
 
     class Meta:
         model = BaseTicket

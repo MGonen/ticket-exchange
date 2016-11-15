@@ -45,9 +45,9 @@ class CreateEvent(View):
 
 
     def get(self, request):
-        event_form = EventForm()
-        upload_form = UploadBaseTicketNew()
-        base_ticket_price_form = BaseTicketPriceForm()
+        event_form = EventForm
+        upload_form = UploadBaseTicketNew
+        base_ticket_price_form = BaseTicketPriceForm
         return render(request, self.template_name, {'upload_form': upload_form, 'event_form': event_form,
                                                              'base_ticket_price_form': base_ticket_price_form})
 

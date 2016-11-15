@@ -23,8 +23,8 @@ class Person(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=100)
-    city = models.CharField(max_length=100, null=True, blank=True)
-    country = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
 
@@ -39,8 +39,6 @@ class Ticket(models.Model):
     holder = models.ForeignKey('Person', related_name='holder')
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     link = models.TextField(null=True, blank=True)
-    # original_filename = models.CharField(max_length=200, null=True, blank=True) # Can be removed
-    # complete = models.BooleanField(default=False) # Can be removed
     potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
     potential_buyer_expiration_moment = models.FloatField(default=time.time)
 
