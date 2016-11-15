@@ -44,11 +44,11 @@ class EventForm(forms.ModelForm):
 
 
 class UploadBaseTicketNew(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=True)
+    pdf_file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=True)
 
 
 class UploadBaseTicketEdit(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
+    pdf_file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}), required=False)
 
 
 class BaseTicketPriceForm(forms.ModelForm):

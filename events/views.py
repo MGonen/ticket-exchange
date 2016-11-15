@@ -23,6 +23,27 @@ class CreateEvent(View):
     def dispatch(self, *args, **kwargs):
         return super(CreateEvent, self).dispatch(*args, **kwargs)
 
+    def create_base_ticket_object(self, pdf_file, event, price):
+        file_location = self.create_base_ticket_file_location(event.id)
+        save_pdf(pdf_file, file_location)
+        base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
+        base_ticket.save()
+
+    def create_base_ticket_file_location(self, event_id):
+        filename = str(event_id)
+        tickets_directory = scriptine.path(settings.STATIC_ROOT).joinpath('tickets')
+        if not tickets_directory.exists():
+            tickets_directory.mkdir()
+
+        base_tickets_directory = tickets_directory.joinpath('base_tickets')
+        if not base_tickets_directory.exists():
+            base_tickets_directory.mkdir()
+
+        file_location = base_tickets_directory.joinpath(filename)
+        file_location += '.pdf'
+        return file_location
+
+
     def get(self, request):
         event_form = EventForm()
         upload_form = UploadBaseTicketNew()
@@ -34,27 +55,26 @@ class CreateEvent(View):
         event_form = EventForm(request.POST)
         base_ticket_price_form = BaseTicketPriceForm(request.POST)
         upload_form = UploadBaseTicketNew(request.POST, request.FILES)
-
-        if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
-            pdf_file = request.FILES['pdf_file']
-            price = request.POST.get('price')
-
-            if not pdf_is_safe(pdf_file):
-                messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
-                return render(request, self.template_name,
+        render_failed_post_template = render(request, self.template_name,
                               {'upload_form': upload_form, 'event_form': event_form,
                                'base_ticket_price_form': base_ticket_price_form})
 
-            event = event_form.save()
-            create_base_ticket_object(pdf_file, event, price)
+        if not(event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid()):
+            return render_failed_post_template
 
-            messages.add_message(request, messages.SUCCESS, message_text.event_creation_successful)
-            return redirect('buy_ticket:available_tickets', event.id)
+        # if the forms were valid
+        pdf_file = request.FILES['pdf_file']
+        price = request.POST.get('price')
 
-        else:
-            messages.add_message(request, messages.ERROR, message_text.event_creation_failed)
-            return render(request, self.template_name, {'upload_form': upload_form, 'event_form': event_form,
-                                                                 'base_ticket_price_form': base_ticket_price_form})
+        if not pdf_is_safe(pdf_file):
+            messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
+            return render_failed_post_template
+
+        event = event_form.save()
+        self.create_base_ticket_object(pdf_file, event, price)
+
+        messages.add_message(request, messages.SUCCESS, message_text.event_creation_successful)
+        return redirect('buy_ticket:available_tickets', event.id)
 
 
 class EditEvent(View):
@@ -76,6 +96,11 @@ class EditEvent(View):
         except BaseTicket.DoesNotExist:
             raise Http404
 
+    def get_pdf_file(self, files):
+        if 'pdf_file' in files:
+            return files['pdf_file']
+        return None
+
 
     def get(self, request, event_id):
         event = self.get_event(event_id)
@@ -88,7 +113,6 @@ class EditEvent(View):
                       {'upload_form': upload_form, 'event_form': event_form,
                        'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
 
-
     def post(self, request, event_id):
         event = self.get_event(event_id)
         base_ticket = self.get_base_ticket(event_id)
@@ -96,67 +120,39 @@ class EditEvent(View):
         event_form = EventForm(request.POST, instance=event)
         base_ticket_price_form = BaseTicketPriceForm(request.POST, instance=base_ticket)
         upload_form = UploadBaseTicketEdit(request.POST, request.FILES)
-        pdf_file = None
-
-        if 'pdf_file' in request.FILES:
-            pdf_file = request.FILES['pdf_file']
-
-        if not base_ticket.link and not pdf_file:
-            messages.add_message(request, messages.ERROR, message_text.pdf_needed)
-            return redirect('events:edit_event', event_id)
-
-        if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
-            base_ticket.price = request.POST.get('price')
-
-            if pdf_file and not pdf_is_safe(pdf_file):
-                messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
-                return redirect('events:edit_event', event_id)
-
-            elif pdf_file and pdf_is_safe(pdf_file):
-                base_ticket.pdf_file = pdf_file
-
-            base_ticket.save()
-            event = event_form.save()
-
-            messages.add_message(request, messages.SUCCESS, message_text.event_update_successful)
-            return redirect('buy_ticket:available_tickets', event.id)
-
-        else:
-            return render(request, self.template_name,
+        render_failed_post_template = render(request, self.template_name,
                           {'upload_form': upload_form, 'event_form': event_form,
                            'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
+
+        pdf_file = self.get_pdf_file(request.FILES)
+
+        if not(event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid()):
+            return render_failed_post_template
+
+        # if forms are valid:
+        if pdf_file and pdf_is_safe(pdf_file):
+            base_ticket.link = pdf_file
+
+        elif pdf_file and not pdf_is_safe(pdf_file):
+            messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
+            return render_failed_post_template
+
+        base_ticket.price = request.POST.get('price')
+        base_ticket.save()
+        event = event_form.save()
+
+        messages.add_message(request, messages.SUCCESS, message_text.event_update_successful)
+        return redirect('buy_ticket:available_tickets', event.id)
 
 
 def pdf_is_safe(pdf_file):
     return True
 
 
-def create_base_ticket_object(pdf_file, event, price):
-    file_location = create_base_ticket_file_location(event.id)
-    save_pdf(pdf_file, file_location)
-    base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
-    base_ticket.save()
-
-
 def save_pdf(pdf_file, file_location):
     with open(file_location, 'wb+') as destination:
         for chunk in pdf_file.chunks():
             destination.write(chunk)
-
-
-def create_base_ticket_file_location(event_id):
-    filename = str(event_id)
-    tickets_directory = scriptine.path(settings.STATIC_ROOT).joinpath('tickets')
-    if not tickets_directory.exists():
-        tickets_directory.mkdir()
-
-    base_tickets_directory = tickets_directory.joinpath('base_tickets')
-    if not base_tickets_directory.exists():
-        base_tickets_directory.mkdir()
-
-    file_location = base_tickets_directory.joinpath(filename)
-    file_location += '.pdf'
-    return file_location
 
 
 
