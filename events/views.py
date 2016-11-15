@@ -96,7 +96,7 @@ class EditEvent(View):
         except BaseTicket.DoesNotExist:
             raise Http404
 
-    def get_pdf_file(self, files):
+    def get_pdf_file_or_None(self, files):
         if 'pdf_file' in files:
             return files['pdf_file']
         return None
@@ -124,12 +124,11 @@ class EditEvent(View):
                           {'upload_form': upload_form, 'event_form': event_form,
                            'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
 
-        pdf_file = self.get_pdf_file(request.FILES)
-
         if not(event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid()):
             return render_failed_post_template
 
         # if forms are valid:
+        pdf_file = self.get_pdf_file_or_None(request.FILES)
         if pdf_file and pdf_is_safe(pdf_file):
             base_ticket.link = pdf_file
 

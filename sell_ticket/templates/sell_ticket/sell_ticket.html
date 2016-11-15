@@ -14,8 +14,22 @@
 
         <div>
             <h2>Event: {{ event.name }}</h2>
-            <p>When: {{ event.start_date }} - {{ ticket.event.end_date }}</p>
-            <p>Where: {{ event.location }}, {{ event.city }}, {{ event.country }}</p>
+
+{#            <table class="table event-info-table">#}
+{#                <tbody>#}
+{#                    <tr>#}
+{#                        <td class="event-info-table-date">#}
+{#                            <i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }} - {{ event.end_date }}#}
+{#                        </td>#}
+{#                        <td class="event-info-table-location">#}
+{#                            <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+
+            <p><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.start_date }} - {{ event.end_date }}</p>
+            <p><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.location }}, {{ event.city }}, {{ event.country }}</p>
         </div>
 
         <hr>

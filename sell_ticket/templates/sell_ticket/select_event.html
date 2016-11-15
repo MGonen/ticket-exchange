@@ -1,25 +1,11 @@
-{% extends 'sell_ticket/sell_ticket_base.html' %}
+{% extends 'ticket_exchange/base.html' %}
 {% load static %}
 
 {% block scripts %}
     <script src="{% static 'sell_ticket/js/select_event.js' %}"></script>
 {% endblock %}
 
-{% block pagination %}
-
-    <div class="text-center">
-        <ul class="pagination">
-            <li class="active"><a href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp;Select Event</a></li>
-            <li class="disabled"><a href="#">Event</a></li>
-            <li class="disabled"><a href="#">PDF Upload</a></li>
-
-            <li class="disabled"><a href="#">Price</a></li>
-            <li class="disabled"><a href="#">Personal Details</a></li>
-            <li class="disabled"><a href="#">Complete</a></li>
-        </ul>
-    </div>
-
-{% endblock %}
+{% block title %}Safely sell your e‑tickets{% endblock %}
 
 
 {% block content %}
