@@ -39,8 +39,8 @@ class Ticket(models.Model):
     holder = models.ForeignKey('Person', related_name='holder')
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     link = models.TextField(null=True, blank=True)
-    original_filename = models.CharField(max_length=200, null=True, blank=True)
-    complete = models.BooleanField(default=False)
+    original_filename = models.CharField(max_length=200, null=True, blank=True) # Can be removed
+    complete = models.BooleanField(default=False) # Can be removed
     potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
     potential_buyer_expiration_moment = models.FloatField(default=time.time)
 
@@ -54,13 +54,6 @@ class Ticket(models.Model):
             self.holder = self.buyer
 
         super(Ticket, self).save(*args, **kwargs)
-
-
-    def clean(self):
-        max_price = float(self.event.baseticket.price) * 1.2
-        if self.price and (float(self.price) > max_price):
-            validation_error_text = 'The price of the ticket can only be 20%% more than the original ticket price, in this case %s %.2f' % (u"\u20AC", float(self.event.baseticket.price)*1.2)
-            raise ValidationError(validation_error_text)
 
 
 class BaseTicket(models.Model):

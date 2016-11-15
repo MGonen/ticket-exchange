@@ -36,17 +36,17 @@ class CreateEvent(View):
         upload_form = UploadBaseTicketNew(request.POST, request.FILES)
 
         if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
-            file = request.FILES['file']
+            pdf_file = request.FILES['pdf_file']
             price = request.POST.get('price')
 
-            if not pdf_is_safe(file):
+            if not pdf_is_safe(pdf_file):
                 messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
                 return render(request, self.template_name,
                               {'upload_form': upload_form, 'event_form': event_form,
                                'base_ticket_price_form': base_ticket_price_form})
 
             event = event_form.save()
-            create_base_ticket_object(file, event, price)
+            create_base_ticket_object(pdf_file, event, price)
 
             messages.add_message(request, messages.SUCCESS, message_text.event_creation_successful)
             return redirect('buy_ticket:available_tickets', event.id)
@@ -96,21 +96,24 @@ class EditEvent(View):
         event_form = EventForm(request.POST, instance=event)
         base_ticket_price_form = BaseTicketPriceForm(request.POST, instance=base_ticket)
         upload_form = UploadBaseTicketEdit(request.POST, request.FILES)
+        pdf_file = None
 
-        if not base_ticket.link and not 'file' in request.FILES:
+        if 'pdf_file' in request.FILES:
+            pdf_file = request.FILES['pdf_file']
+
+        if not base_ticket.link and not pdf_file:
             messages.add_message(request, messages.ERROR, message_text.pdf_needed)
             return redirect('events:edit_event', event_id)
 
-        print 'arrived to just before form checks'
         if event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid():
             base_ticket.price = request.POST.get('price')
 
-            if 'file' in request.FILES and not pdf_is_safe(file):
+            if pdf_file and not pdf_is_safe(pdf_file):
                 messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
                 return redirect('events:edit_event', event_id)
 
-            elif 'file' in request.FILES and pdf_is_safe(file):
-                base_ticket.file = file
+            elif pdf_file and pdf_is_safe(pdf_file):
+                base_ticket.pdf_file = pdf_file
 
             base_ticket.save()
             event = event_form.save()
@@ -124,20 +127,20 @@ class EditEvent(View):
                            'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
 
 
-def pdf_is_safe(file):
+def pdf_is_safe(pdf_file):
     return True
 
 
-def create_base_ticket_object(file, event, price):
+def create_base_ticket_object(pdf_file, event, price):
     file_location = create_base_ticket_file_location(event.id)
-    save_pdf(file, file_location)
+    save_pdf(pdf_file, file_location)
     base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
     base_ticket.save()
 
 
-def save_pdf(file, file_location):
+def save_pdf(pdf_file, file_location):
     with open(file_location, 'wb+') as destination:
-        for chunk in file.chunks():
+        for chunk in pdf_file.chunks():
             destination.write(chunk)
 
 

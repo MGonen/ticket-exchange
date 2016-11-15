@@ -172,8 +172,13 @@ class Purchase(View):
     def post(self, request, ticket_id):
         ticket = self.get_ticket(ticket_id)
         ticket_price_object = self.get_ticket_price_object(ticket.price)
-        nonce_from_the_client = request.POST["payment_method_nonce"]
 
+        if not "payment_method_nonce" in request.POST:
+            messages.add_message(request, messages.ERROR, message_text.input_cc_info)
+            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object,
+                           'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+
+        nonce_from_the_client = request.POST["payment_method_nonce"]
         result = braintree.Transaction.sale({
             "amount": ticket_price_object.total_price,
             "payment_method_nonce": nonce_from_the_client,

@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from ticket_exchange.models import Person, Ticket
 
@@ -12,19 +13,25 @@ class DateSearchForm(forms.Form):
 
 
 class UploadTicket(forms.Form):
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': False}))
+    pdf_file = forms.FileField(widget=forms.FileInput(attrs={'multiple': False}))
 
 
-class TicketPriceForm(forms.ModelForm):
-    price = forms.DecimalField(required=True, min_value=0.01)
+class TicketPriceForm(forms.Form):
+    price = forms.DecimalField(widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
+        self.baseticket_price = kwargs.pop('baseticket_price')
         super(TicketPriceForm, self).__init__(*args, **kwargs)
-        self.fields['price'].widget.attrs['class'] = 'form-control'
 
-    class Meta:
-        model = Ticket
-        fields = ('price',)
+    def clean_price(self):
+        price = float(self.cleaned_data['price'])
+        max_price = float(self.baseticket_price) * 1.2
+
+        if price > max_price:
+            validation_error_text = 'The price of the ticket can only be 20%% more than the original ticket price, in this case %s %.2f' % (u"\u20AC", max_price)
+            raise ValidationError(validation_error_text)
+
+        return price
 
 
 class PersonForm4SellTicket(forms.ModelForm):

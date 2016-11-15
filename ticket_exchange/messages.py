@@ -18,3 +18,6 @@ ticket_already_sold = """Sorry, this ticket has already been bought. Please try 
 
 # Selling ticket
 no_editing_completed_tickets = """For safety reasons, it is not possible to edit completed tickets. If you want to change something, you will have to delete the ticket, and put it up for sale again."""
+
+# Buying ticket
+input_cc_info = "Please input your credit card information before clicking the Purchase button"
