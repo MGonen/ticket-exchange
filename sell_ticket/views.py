@@ -46,7 +46,7 @@ class Sell(View):
         ticket.save()
         file_location = self.save_ticket_pdf(ticket_id=ticket.id, pdf_file=pdf_file)
         ticket.link = file_location
-        ticket.complete = True
+        print 'ticket:', ticket.event, ticket.seller, ticket.price
         ticket.save()
 
     def save_ticket_pdf(self, pdf_file, ticket_id):
@@ -206,33 +206,33 @@ def process_pdf(request, pdf_file):
 def ticket_is_valid(pdf_file, event_id):
     return True
 
-
-def ticket_complete(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    missing_ticket_info = ""
-
-    if not ticket.event:
-        missing_ticket_info +="Event, "
-    if not ticket.original_filename:
-        missing_ticket_info += "PDF, "
-    if not ticket.price:
-        missing_ticket_info += "Ticket Price, "
-    if not ticket.seller.bank_account:
-        missing_ticket_info += "Bank Account (Personal Details)"
-
-    return missing_ticket_info
-
-
-def incomplete_ticket_exists(person, event_id):
-    incomplete_ticket_queryset = Ticket.objects.filter(seller=person).filter(event_id=event_id).filter(complete=False)
-
-    if not incomplete_ticket_queryset.exists():
-        return False
-
-    else:
-        incomplete_ticket = incomplete_ticket_queryset[0]
-
-        if (not incomplete_ticket.link) and (not incomplete_ticket.price):
-            return False
-
-    return True
+#
+# def ticket_complete(request, ticket_id):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     missing_ticket_info = ""
+#
+#     if not ticket.event:
+#         missing_ticket_info +="Event, "
+#     if not ticket.original_filename:
+#         missing_ticket_info += "PDF, "
+#     if not ticket.price:
+#         missing_ticket_info += "Ticket Price, "
+#     if not ticket.seller.bank_account:
+#         missing_ticket_info += "Bank Account (Personal Details)"
+#
+#     return missing_ticket_info
+#
+#
+# def incomplete_ticket_exists(person, event_id):
+#     incomplete_ticket_queryset = Ticket.objects.filter(seller=person).filter(event_id=event_id).filter(complete=False)
+#
+#     if not incomplete_ticket_queryset.exists():
+#         return False
+#
+#     else:
+#         incomplete_ticket = incomplete_ticket_queryset[0]
+#
+#         if (not incomplete_ticket.link) and (not incomplete_ticket.price):
+#             return False
+#
+#     return True

@@ -56,7 +56,7 @@ class AvailableTickets(View):
     def get(self, request, event_id):
         event = Event.objects.get(pk=event_id)
         tickets_available = len(
-            Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=True).filter(complete=True).filter(
+            Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=True).filter(
                 potential_buyer_expiration_moment__lte=time.time()))
         tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=False))
 
@@ -283,7 +283,7 @@ def get_time_left(potential_buyer_expiration_moment):
 
 
 def get_available_tickets(event_id):
-    return Ticket.objects.filter(event_id=event_id).filter(buyer__isnull=True).filter(complete=True).filter(potential_buyer_expiration_moment__lte=time.time()).order_by('price')
+    return Ticket.objects.filter(event_id=event_id).filter(buyer__isnull=True).filter(potential_buyer_expiration_moment__lte=time.time()).order_by('price')
 
 
 def get_selected_ticket(request, event_id):
