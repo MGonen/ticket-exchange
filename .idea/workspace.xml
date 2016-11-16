@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cb9d6fcc-fd6d-4f98-815c-f70ce4d4e119" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ticket_exchange/migrations/0001_initial.py" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ticket_exchange/migrations/0001_initial.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="TS.iws" />
@@ -569,13 +569,6 @@
       <option name="presentableId" value="Default" />
       <updated>1465217976377</updated>
     </task>
-    <task id="LOCAL-00018" summary="buy_ticket added - unfinished.&#10;alphanumeric validator for bank account">
-      <created>1468375553517</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1468375553517</updated>
-    </task>
     <task id="LOCAL-00019" summary="sell-ticket refactor&#10;sell-ticket pagination added">
       <created>1468413209242</created>
       <option name="number" value="00019" />
@@ -912,7 +905,14 @@
       <option name="project" value="LOCAL" />
       <updated>1479335448562</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="migration somehow ended up in git. Now removed from git">
+      <created>1479335586473</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1479335586473</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView">
@@ -980,7 +980,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="false" />
-    <MESSAGE value="Homepage now buy/sell button. &#10;Search events and event-tickets moved to buy_ticket" />
     <MESSAGE value="count down timer&#10;css update" />
     <MESSAGE value="checks no longer on potential_buyer=None, but on potential_buyer_expiration_moment" />
     <MESSAGE value="new: sell_ticket_base.html" />
@@ -1005,7 +1004,8 @@
     <MESSAGE value="CSS clean-up" />
     <MESSAGE value="My profile update" />
     <MESSAGE value="Refactor +  Visual updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor +  Visual updates" />
+    <MESSAGE value="migration somehow ended up in git. Now removed from git" />
+    <option name="LAST_COMMIT_MESSAGE" value="migration somehow ended up in git. Now removed from git" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
