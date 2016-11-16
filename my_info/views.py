@@ -4,27 +4,61 @@ from django.contrib.auth.models import User
 
 from django.contrib import messages
 
-
 from ticket_exchange.models import Person, Ticket
+from ticket_exchange.utils import is_own_ticket
+from ticket_exchange.views import FACEBOOK_LOGIN_URL
+from ticket_exchange import messages as message_text
+
 from my_info.forms import PersonForm4MyInfo, UserForm
 
-from ticket_exchange.views import FACEBOOK_LOGIN_URL
 import time
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def tickets_for_sale(request):
+    print 'tickets for sale reached'
     tickets_for_sale = Ticket.objects.filter(seller__user_id=request.user.id).filter(buyer__isnull=True)
     tickets_being_sold = Ticket.objects.filter(seller__user_id=request.user.id).filter(potential_buyer_expiration_moment__gte=time.time())
     tickets_sold = Ticket.objects.filter(seller__user_id=request.user.id).filter(buyer__isnull=False)
     return render(request, 'my_info/tickets_for_sale.html', {'tickets_for_sale': tickets_for_sale, 'tickets_being_sold': tickets_being_sold, 'tickets_sold': tickets_sold})
 
-@login_required(login_url=FACEBOOK_LOGIN_URL)
+@is_own_ticket
 def ticket_for_sale_details(request, ticket_id):
-    try:
-        ticket = Ticket.objects.get(id=ticket_id)
-        return render(request, 'my_info/ticket_for_sale_details.html', {'ticket': ticket})
-    except Ticket.DoesNotExist:
-        return Http404
+    ticket = get_ticket_or_404(ticket_id)
+    return render(request, 'my_info/ticket_for_sale_details.html', {'ticket': ticket})
+
+@is_own_ticket
+def remove_for_sale_ticket(request, ticket_id):
+    ticket = get_ticket_or_404(ticket_id)
+    print ticket.potential_buyer_expiration_moment >= time.time()
+    print ticket.potential_buyer_expiration_moment - time.time()
+
+
+    if request.user.person != ticket.potential_buyer and ticket.potential_buyer_expiration_moment >= time.time():
+        messages.add_message(request, messages.INFO, message_text.cant_remove_potential_buyer)
+        redirect('my_info:tickets_for_sale')
+
+    if request.method == "GET":
+        ticket.potential_buyer = request.user.person
+        ticket.potential_buyer_expiration_moment = time.time() + 15
+        ticket.save()
+        return render(request, 'my_info/remove_for_sale_ticket.html', {'ticket_id': ticket.id})
+    # show countdown timer on 'Remove' Button
+
+    if request.method == "POST":
+        ticket.delete()
+        return redirect('my_info:tickets_for_sale')
+
+
+@is_own_ticket
+def cancel_remove_ticket(request, ticket_id):
+    print 'cancel ticket reached'
+    ticket = get_ticket_or_404(ticket_id)
+    ticket.potential_buyer_expiration_moment = time.time()
+    ticket.save()
+
+    messages.add_message(request, messages.INFO, message_text.ticket_removal_cancelled)
+    return redirect('my_info:tickets_for_sale')
+
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
@@ -33,14 +67,11 @@ def tickets_bought(request):
     return render(request, 'my_info/bought_tickets.html', {'tickets': tickets})
 
 
-@login_required(login_url=FACEBOOK_LOGIN_URL)
+@is_own_ticket
 def ticket_bought_details(request, ticket_id):
-    try:
-        ticket = Ticket.objects.get(id=ticket_id)
-        return render(request, 'my_info/bought_ticket_details.html', {'ticket': ticket})
-    except Ticket.DoesNotExist:
-        return Http404
+    ticket = get_ticket_or_404(ticket_id)
 
+    return render(request, 'my_info/bought_ticket_details.html', {'ticket': ticket})
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def payouts(request):
@@ -67,3 +98,10 @@ def profile(request):
         user_form = UserForm(instance=user)
 
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
+
+
+def get_ticket_or_404(ticket_id):
+    try:
+        return Ticket.objects.get(id=ticket_id)
+    except Ticket.DoesNotExist:
+        return Http404

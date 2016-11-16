@@ -21,3 +21,9 @@ no_editing_completed_tickets = """For safety reasons, it is not possible to edit
 
 # Buying ticket
 input_cc_info = "Please input your credit card information before clicking the Purchase button"
+
+# My info
+not_own_ticket = """The ticket you tried to view is unfortunately not your ticket (anymore)."""
+ticket_doesnt_exist = """Unfortunately the ticket you tried to view doesn't exist (anymore)."""
+cant_remove_potential_buyer = """Unfortunately you cannot remove this ticket, because someone is trying to buy it at the moment"""
+ticket_removal_cancelled = """Ticket removal cancelled"""

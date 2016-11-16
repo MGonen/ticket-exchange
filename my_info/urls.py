@@ -22,6 +22,9 @@ urlpatterns = (
 
     url(r'tickets/for-sale/$', views.tickets_for_sale, name='tickets_for_sale'),
     url(r'tickets/for-sale/(?P<ticket_id>[0-9]+)/$', views.ticket_for_sale_details, name='ticket_for_sale_details'),
+    url(r'tickets/for-sale/(?P<ticket_id>[0-9]+)/remove/$', views.remove_for_sale_ticket, name='remove_for_sale_ticket'),
+    url(r'tickets/for-sale/(?P<ticket_id>[0-9]+)/cancel-remove/$', views.cancel_remove_ticket, name='cancel_remove_ticket'),
+
     url(r'tickets/bought/$', views.tickets_bought, name='tickets_bought'),
     url(r'tickets/bought/(?P<ticket_id>[0-9]+)/$', views.ticket_bought_details, name='ticket_bought_details'),
     # url(r'my-wanted_listings/$', views.my_wanted_listings, name='my_wanted_listings'),

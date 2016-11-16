@@ -36,6 +36,25 @@ def potential_buyer_checks_decorator(func):
     return inner
 
 
+def is_own_ticket(func):
+    def inner(*args, **kwargs):
+        request = args[0]
+        ticket_id = kwargs['ticket_id']
+
+        try:
+            ticket = Ticket.objects.get(id=ticket_id)
+        except Ticket.DoesNotExist:
+            messages.add_message(request, messages.ERROR, message_text.ticket_doesnt_exist)
+            return redirect('home')
+
+        if request.user.person != ticket.holder:
+            messages.add_message(request, messages.ERROR, message_text.not_own_ticket)
+            return redirect('home')
+
+        return func(*args, **kwargs)
+    return inner
+
+
 def ticket_already_other_potential_buyer(request, ticket):
     if ticket.potential_buyer_expiration_moment >= time.time() and (ticket.potential_buyer.id != request.user.person.id):
         messages.add_message(request, messages.ERROR, message_text.other_potential_buyer)
