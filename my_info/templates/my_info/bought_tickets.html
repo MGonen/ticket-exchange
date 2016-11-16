@@ -1,18 +1,23 @@
 {% extends 'ticket_exchange/base.html' %}
 
 {% block content %}
-    <h4>My Bought tickets</h4>
 
-    {% if tickets %}
-        {% for ticket in tickets %}
-            <p>{{ ticket.event.name }} - {{ ticket.price }}</p>
-        {% endfor %}
+    <div class="container col-sm-12">
+        <h2>My bought tickets </h2>
+        {% if tickets %}
+            <div class="list-group">
+                {% for ticket in tickets %}
+                <a href="{% url 'my_info:ticket_bought_details' ticket.id %}" class="list-group-item">
+                    <h4 class="list-group-item-heading">{{ ticket.event.name }}</h4>
+                    <p class="list-group-item-text">{{ ticket.price }}</p>
+                </a>
+                {% endfor %}
+            </div>
 
-    {% else %}
-        <p>You have not bought any tickets yet</p>
-
-
-    {% endif %}
+        {% else %}
+            <p>You have not bought any tickets yet</p>
+        {% endif %}
+    </div>
 
 
 
