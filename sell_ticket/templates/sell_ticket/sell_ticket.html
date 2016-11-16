@@ -13,23 +13,11 @@
     <div class="form-container">
 
         <div>
-            <h2>Event: {{ event.name }}</h2>
+            <h1 class="h1_title" style="">{{ event.name }}</h1>
 
-{#            <table class="table event-info-table">#}
-{#                <tbody>#}
-{#                    <tr>#}
-{#                        <td class="event-info-table-date">#}
-{#                            <i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }} - {{ event.end_date }}#}
-{#                        </td>#}
-{#                        <td class="event-info-table-location">#}
-{#                            <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}#}
-{#                        </td>#}
-{#                    </tr>#}
-{#                </tbody>#}
-{#            </table>#}
+            <div class="event-location-info"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.location }}, {{ event.city }}, {{ event.country }}</div>
+            <div class="event-date-info"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.start_date }} - {{ event.end_date }}</div>
 
-            <p><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.start_date }} - {{ event.end_date }}</p>
-            <p><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.location }}, {{ event.city }}, {{ event.country }}</p>
         </div>
 
         <hr>

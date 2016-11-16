@@ -14,28 +14,15 @@
 
 {% block content %}
 
+    {% if user.is_staff %}
+        <a href="{% url 'events:edit_event' event.id %}">Edit Event</a>
+    {% endif %}
+
     <div class="available-tickets-info info-container">
-        <h1 class="available-tickets-heading-event">{{ event.name }}</h1>
+        <h1 class="h1_title">{{ event.name }}</h1>
 
-        {% if user.is_staff %}
-            <a href="{% url 'events:edit_event' event.id %}">Edit Event</a>
-        {% endif %}
-
-        <table class="table event-info-table">
-            <tbody>
-                <tr>
-                    <td class="event-info-table-date">
-                        <i class="fa fa-calendar fa-2x" aria-hidden="true"></i> {{ event.start_date }}
-                        {% if event.start_date != event.end_date %}
-                            - {{ event.end_date }}
-                        {% endif %}
-                    </td>
-                    <td class="event-info-table-location">
-                        <i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> {{ event.location }}, {{ event.city }}, {{ event.country }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="event-location-info"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.location }}, {{ event.city }}, {{ event.country }}</div>
+        <div class="event-date-info"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i> &nbsp;&nbsp;{{ event.start_date }} - {{ event.end_date }}</div>
 
         <div>
             <div class="tickets-available">

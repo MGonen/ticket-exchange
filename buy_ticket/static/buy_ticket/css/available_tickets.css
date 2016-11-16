@@ -7,32 +7,6 @@
     border-bottom-right-radius: 0;
 }
 
-
-.available-tickets-heading-event {
-    margin-top: 0;
-    text-align: center;
-    font-size: 50px;
-    font-weight: bold;
-}
-
-.event-info-table > tbody > tr > td {
-    padding-top: 20px !important;
-    width: 50%;
-}
-
-.event-info-table-date {
-    text-align: right;
-    vertical-align: center;
-    padding-right: 24px !important;
-
-}
-
-.event-info-table-location {
-    vertical-align: center;
-    padding-left: 24px !important;
-}
-
-
 .tickets-available {
     float: left;
     margin-left: 200px;

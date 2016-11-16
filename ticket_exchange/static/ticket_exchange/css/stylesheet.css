@@ -83,6 +83,14 @@ background-size: cover;
 }
 
 
+.h1_title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+}
+
 /*Form container*/
 .form-container {
     background-color: #000;
@@ -94,6 +102,19 @@ background-size: cover;
     border-width: 1px;
     color: #fff;
 }
+
+
+.event-location-info {
+    float: right;
+    margin-right: 150px;
+    margin-bottom: 15px;
+}
+
+.event-date-info {
+    margin-left: 143px;
+    margin-bottom: 15px;
+}
+
 
 
 /* Information container */
