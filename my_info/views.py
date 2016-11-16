@@ -100,6 +100,12 @@ def profile(request):
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
 
 
+@login_required(login_url=FACEBOOK_LOGIN_URL)
+def cancel_profile_update(request):
+    messages.add_message(request, messages.WARNING, message_text.profile_changes_discarded)
+    return redirect('home')
+
+
 def get_ticket_or_404(ticket_id):
     try:
         return Ticket.objects.get(id=ticket_id)

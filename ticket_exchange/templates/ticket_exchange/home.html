@@ -1,12 +1,11 @@
 {% extends "ticket_exchange/base.html" %}
 {% load static %}
 
+{% block title %}
+    A safe place to buy and sell your e&#8209;tickets
+{% endblock %}
+
 {% block content %}
-
-    <div class="homepage">
-        <h1>A safe place to buy and sell your e&#8209;tickets</h1>
-    </div>
-
 
     <div class="text-center">
         <form method="POST" >{% csrf_token %}

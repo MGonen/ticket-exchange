@@ -29,6 +29,8 @@ urlpatterns = (
     url(r'tickets/bought/(?P<ticket_id>[0-9]+)/$', views.ticket_bought_details, name='ticket_bought_details'),
     # url(r'my-wanted_listings/$', views.my_wanted_listings, name='my_wanted_listings'),
     url(r'payouts/$', views.payouts, name='payouts'),
+
     url(r'profile/$', views.profile, name='profile'),
+    url(r'cancel-profile-update/$', views.cancel_profile_update, name='cancel_profile_update'),
 
 )

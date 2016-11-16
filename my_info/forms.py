@@ -8,24 +8,21 @@ class PersonForm4MyInfo(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PersonForm4MyInfo, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].widget.attrs.update({'autocomplete': 'off'})
+        self.fields['fullname'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
+        self.fields['bank_account'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
 
     class Meta:
         model = Person
-        fields = ('bank_account',)
+        fields = ('fullname', 'bank_account',)
 
 
 class UserForm(forms.ModelForm):
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
     email = forms.CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].widget.attrs.update({'autocomplete': 'off'})
-        self.fields['last_name'].widget.attrs.update({'autocomplete': 'off'})
-        self.fields['email'].widget.attrs.update({'autocomplete': 'off'})
+        self.fields['email'].widget.attrs.update({'autocomplete': 'off', 'class': 'form-control'})
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('email',)
