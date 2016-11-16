@@ -21,6 +21,8 @@ no_editing_completed_tickets = """For safety reasons, it is not possible to edit
 
 # Buying ticket
 input_cc_info = "Please input your credit card information before clicking the Purchase button"
+successfully_bought_ticket = """You have successfully bought the ticket"""
+ticket_purchase_failed = """Unfortunately the creditcard transaction was not successful. Please try again"""
 
 # My info
 not_own_ticket = """The ticket you tried to view is unfortunately not your ticket (anymore)."""

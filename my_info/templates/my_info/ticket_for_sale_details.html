@@ -1,14 +1,43 @@
 {% extends 'ticket_exchange/base.html' %}
 
+
+
 {% block content %}
-    <h4>Ticket for Sale - Details</h4>
 
+    <div class="form-container">
+        <h1 class="h1_title">Your Ticket for Sale</h1>
 
+        <table class="table borderless">
+            <tr>
+                <td class="borderless-label">Event:</td>
+                <td class="borderless-value">{{ ticket.event.name }}</td>
+            </tr>
+            <tr>
+                <td class="borderless-label">Location:</td>
+                <td class="borderless-value">{{ ticket.event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</td>
+            </tr>
 
-    <p>{{ ticket.event.name }} - {{ ticket.price }}</p>
+            <tr>
+                <td class="borderless-label">Date:</td>
+                <td class="borderless-value">{{ ticket.event.start_date }} - {{ ticket.event.end_date }}</td>
+            </tr>
 
+            <tr>
+                <td class="borderless-label">Price:</td>
+                <td class="borderless-value">&euro; {{ ticket.price }}</td>
+            </tr>
 
+            <tr>
+                <td class="borderless-label">PDF:</td>
+                <td class="borderless-value">{{ ticket.event.name }}</td>
+            </tr>
 
+            <tr>
+                <td><a href="{% url 'my_info:remove_for_sale_ticket' ticket.id %}" class="btn btn-primary">Remove</a></td>
+            </tr>
+        </table>
+
+    </div>
 
 
 {% endblock %}

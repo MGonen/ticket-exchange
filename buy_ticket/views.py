@@ -188,24 +188,34 @@ class Purchase(View):
         })
 
         if result.is_success:
-            return redirect('buy_ticket:purchase_successful', ticket_id)
+            ticket.buyer = request.user.person
+            ticket.potential_buyer = None
+            ticket.potential_buyer_expiration_moment = time.time()
+            ticket.save()
+
+            messages.add_message(request, messages.SUCCESS, message_text.successfully_bought_ticket)
+            return redirect('my_info:ticket_bought_details', ticket_id)
+
         else:
-            return redirect('buy_ticket:purchase_failed', ticket_id)
+            messages.add_message(request, messages.ERROR, message_text.ticket_purchase_failed)
+            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object,
+                                                        'time_left': get_time_left(
+                                                            ticket.potential_buyer_expiration_moment)})
 
 
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def purchase_successful(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    ticket.buyer = request.user.person
-    ticket.potential_buyer = None
-    ticket.save()
-    return render(request, 'buy_ticket/purchase_successful.html', {'ticket': ticket})
+# @login_required(login_url=FACEBOOK_LOGIN_URL)
+# def purchase_successful(request, ticket_id):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     ticket.buyer = request.user.person
+#     ticket.potential_buyer = None
+#     ticket.save()
+#     return render(request, 'buy_ticket/purchase_successful.html', {'ticket': ticket})
 
 
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def purchase_failed(request, ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    return render(request, 'buy_ticket/purchase_failed.html', {'ticket': ticket})
+# @login_required(login_url=FACEBOOK_LOGIN_URL)
+# def purchase_failed(request, ticket_id):
+#     ticket = Ticket.objects.get(id=ticket_id)
+#     return render(request, 'buy_ticket/purchase_failed.html', {'ticket': ticket})
 
 
 

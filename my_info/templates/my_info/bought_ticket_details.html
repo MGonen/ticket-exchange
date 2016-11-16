@@ -1,12 +1,31 @@
 {% extends 'ticket_exchange/base.html' %}
 
 {% block content %}
-    <h4>Ticket bought - Details</h4>
 
+    <div class="form-container">
+        <h1 class="h1_title">Your Purchased Ticket</h1>
 
-    <p>{{ ticket.event.name }} - {{ ticket.price }}</p>
+        <table class="table borderless" style="color: white">
+            <tr>
+                <td class="borderless-label">Event:</td>
+                <td class="borderless-value">{{ ticket.event.name }}</td>
+            </tr>
+            <tr>
+                <td class="borderless-label">Location:</td>
+                <td class="borderless-value">{{ ticket.event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</td>
+            </tr>
 
+            <tr>
+                <td class="borderless-label">Date:</td>
+                <td class="borderless-value">{{ ticket.event.start_date }} - {{ ticket.event.end_date }}</td>
+            </tr>
+            <tr>
+                <td class="borderless-label">PDF:</td>
+                <td class="borderless-value">{{ ticket.event.name }}</td>
+            </tr>
+        </table>
 
+    </div>
 
 
 {% endblock %}

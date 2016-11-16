@@ -93,6 +93,7 @@ background-size: cover;
 
 /*Form container*/
 .form-container {
+    overflow: auto;
     background-color: #000;
     padding: 50px;
     opacity: 0.9;
@@ -103,6 +104,23 @@ background-size: cover;
     color: #fff;
 }
 
+.borderless {
+    color: white;
+}
+
+.borderless td {
+    border: none !important;
+}
+
+.borderless-label {
+    float:right;
+    font-weight: bold;
+}
+
+.borderless-value {
+    table-layout: fixed;
+    /*width: 60%;*/
+}
 
 .event-location-info {
     float: right;

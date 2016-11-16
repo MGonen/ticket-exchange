@@ -65,11 +65,27 @@
         <div>
 
             <h2>Cost:</h2>
-            <p>Ticket Price {{ ticket.price }}</p>
-            <p>Commission: {{ ticket_price_object.commission }}</p>
-            <p>Bank costs: {{ ticket_price_object.bank_costs }}</p>
-            <p>Total Price: {{ ticket_price_object.total_price }}</p>
-        </div>
+            <table class="table borderless">
+            <tr>
+                <td class="borderless-label">Ticket Price:</td>
+                <td class="borderless-value">&euro; {{ ticket.price }}</td>
+            </tr>
+            <tr>
+                <td class="borderless-label">Commission:</td>
+                <td class="borderless-value">&euro; {{ ticket_price_object.commission }}</td>
+            </tr>
+
+            <tr>
+                <td class="borderless-label">Bank costs:</td>
+                <td class="borderless-value">&euro; {{ ticket_price_object.bank_costs }}</td>
+            </tr>
+
+            <tr>
+                <td class="borderless-label">Total Price:</td>
+                <td class="borderless-value">&euro; {{ ticket_price_object.total_price }}</td>
+            </tr>
+
+        </table>
 
         <hr>
 
