@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, Http404
 
 from django.core.urlresolvers import reverse
 from jsonview.decorators import json_view
@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
-from ticket_exchange.models import Event
+from ticket_exchange.models import Event, Ticket
 from ticket_exchange.forms import DateSearchForm
 from django.contrib.auth.views import logout as auth_logout
 
@@ -127,3 +127,8 @@ def get_date(date):
     return datetime.datetime.strptime(date, '%d-%m-%Y').strftime('%Y%m%d')
 
 
+def get_ticket_or_404(ticket_id):
+    try:
+        return Ticket.objects.get(id=ticket_id)
+    except Ticket.DoesNotExist:
+        return Http404

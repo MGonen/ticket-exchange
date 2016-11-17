@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from ticket_exchange.models import Person, Ticket
 from ticket_exchange.utils import is_own_ticket
-from ticket_exchange.views import FACEBOOK_LOGIN_URL
+from ticket_exchange.views import FACEBOOK_LOGIN_URL, get_ticket_or_404
 from ticket_exchange import messages as message_text
 
 from my_info.forms import PersonForm4MyInfo, UserForm
@@ -104,10 +104,3 @@ def profile(request):
 def cancel_profile_update(request):
     messages.add_message(request, messages.WARNING, message_text.profile_changes_discarded)
     return redirect('home')
-
-
-def get_ticket_or_404(ticket_id):
-    try:
-        return Ticket.objects.get(id=ticket_id)
-    except Ticket.DoesNotExist:
-        return Http404

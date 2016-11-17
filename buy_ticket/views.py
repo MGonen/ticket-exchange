@@ -13,7 +13,7 @@ from collections import namedtuple
 
 from ticket_exchange.models import Ticket, Event
 from my_info.forms import UserForm
-from ticket_exchange.views import FACEBOOK_LOGIN_URL
+from ticket_exchange.views import FACEBOOK_LOGIN_URL, get_ticket_or_404
 from ticket_exchange.utils import potential_buyer_checks_decorator
 from ticket_exchange import messages as message_text
 
@@ -139,12 +139,6 @@ class Purchase(View):
     def dispatch(self, *args, **kwargs):
         return super(Purchase, self).dispatch(*args, **kwargs)
 
-    def get_ticket(self, ticket_id):
-        try:
-            return Ticket.objects.get(id=ticket_id)
-        except Ticket.DoesNotExist:
-            raise Http404
-
     def get_ticket_price_object(self, ticket_price):
         commission = COMMISSION_PERCENTAGE * float(ticket_price)
         bank_costs = (0.019 * float(ticket_price)) + 0.6
@@ -158,7 +152,7 @@ class Purchase(View):
                                  total_price=total_price_string)
 
     def get(self, request, ticket_id):
-        ticket = self.get_ticket(ticket_id)
+        ticket = get_ticket_or_404(ticket_id)
         ticket_price_object = self.get_ticket_price_object(ticket.price)
         token = braintree.ClientToken.generate()
         return render(request, self.template_name,
@@ -166,7 +160,7 @@ class Purchase(View):
                        'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
 
     def post(self, request, ticket_id):
-        ticket = self.get_ticket(ticket_id)
+        ticket = get_ticket_or_404(ticket_id)
         ticket.potential_buyer_expiration_moment += 20 # Time for braintree to process the payment
         ticket.save()
         ticket_price_object = self.get_ticket_price_object(ticket.price)
@@ -200,6 +194,12 @@ class Purchase(View):
                                                         'time_left': get_time_left(
                                                             ticket.potential_buyer_expiration_moment)})
 
+@csrf_exempt
+def purchase_time_left(request, ticket_id):
+    ticket = get_ticket_or_404(ticket_id)
+    return JsonResponse({'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+
+
 
 # @login_required(login_url=FACEBOOK_LOGIN_URL)
 # def purchase_successful(request, ticket_id):
@@ -220,13 +220,12 @@ class Purchase(View):
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def cancel_ticket_view(request, ticket_id):
     cancel_ticket(ticket_id)
-    ticket = Ticket.objects.get(id=ticket_id)
-    event_id = ticket.event.id
-    return redirect('buy_ticket:available_tickets', event_id)
+    ticket = get_ticket_or_404(ticket_id)
+    return redirect('buy_ticket:available_tickets', ticket.event.id)
 
 
 def cancel_ticket(ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
+    ticket = get_ticket_or_404(ticket_id)
     ticket.potential_buyer_expiration_moment = 0
     ticket.save()
 

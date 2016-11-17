@@ -1,6 +1,21 @@
 
-function start_count_down_timer(time_left, event_id) {
 
+function ajax_count_down_timer(event_id, ticket_id) {
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        url: '/buy-ticket/' + ticket_id + '/purchase/time-left/',
+        success: function (results) {
+            start_count_down_timer(results.time_left, event_id);
+        },
+        error: function () {
+            console.log('js error')
+        }
+    });
+}
+
+function start_count_down_timer(time_left, event_id) {
     setInterval(function () {
          if (time_left <= 0) {
              window.location.replace('/buy-ticket/' + event_id + '/tickets/');

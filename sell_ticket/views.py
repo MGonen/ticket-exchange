@@ -45,7 +45,6 @@ class Sell(View):
         ticket.save()
         file_location = self.save_ticket_pdf(ticket_id=ticket.id, pdf_file=pdf_file)
         ticket.link = file_location
-        print 'ticket:', ticket.event, ticket.seller, ticket.price
         ticket.save()
 
     def save_ticket_pdf(self, pdf_file, ticket_id):
