@@ -113,12 +113,12 @@ background-size: cover;
 }
 
 .borderless-label {
-    float:right;
+    text-align: right;
     font-weight: bold;
 }
 
 .borderless-value {
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     /*width: 60%;*/
 }
 

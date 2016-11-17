@@ -67,15 +67,11 @@ class AvailableTickets(View):
         # Only applies if the user is already in the process of buying another ticket for the same event
         selected_ticket = get_selected_ticket(request, event_id)
         if not selected_ticket:
+            messages.add_message(request, messages.ERROR, message_text.user_no_longer_potential_buyer)
             return render(request, self.template_name)
 
         else:
-            if 'continue' in request.POST:
-                return redirect('buy_ticket:purchase', selected_ticket.id)
-            elif 'new' in request.POST:
-                selected_ticket.potential_buyer_expiration_moment = 0
-                selected_ticket.save()
-                return redirect('buy_ticket:available_tickets', event_id)
+            return redirect('buy_ticket:purchase', selected_ticket.id)
 
 
 @json_view
@@ -88,7 +84,7 @@ def get_available_tickets_ajax(request, event_id):
 
     if selected_ticket:
         user_is_already_a_potential_buyer_in_this_event = True
-        selected_ticket_info = { 'price': float(selected_ticket.price), 'seller': selected_ticket.seller.fullname }
+        selected_ticket_info = { 'price': float(selected_ticket.price), 'id': selected_ticket.id }
 
     else:
         user_is_already_a_potential_buyer_in_this_event = False
@@ -130,7 +126,7 @@ def potential_buyer_check(request, ticket_id):
 
     else: # User becomes the potential buyer
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_expiration_moment = time.time() + 100
+        ticket.potential_buyer_expiration_moment = time.time() + 25
         ticket.save()
         return redirect('buy_ticket:purchase', ticket_id)
 
@@ -171,6 +167,8 @@ class Purchase(View):
 
     def post(self, request, ticket_id):
         ticket = self.get_ticket(ticket_id)
+        ticket.potential_buyer_expiration_moment += 20 # Time for braintree to process the payment
+        ticket.save()
         ticket_price_object = self.get_ticket_price_object(ticket.price)
 
         if not "payment_method_nonce" in request.POST:
@@ -226,6 +224,13 @@ def cancel_ticket_view(request, ticket_id):
     event_id = ticket.event.id
     return redirect('buy_ticket:available_tickets', event_id)
 
+
+def cancel_ticket(ticket_id):
+    ticket = Ticket.objects.get(id=ticket_id)
+    ticket.potential_buyer_expiration_moment = 0
+    ticket.save()
+
+
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def get_braintree_token(request):
     token = braintree.ClientToken.generate()
@@ -273,10 +278,6 @@ def save_user_info_return_updated_info(user_id, fullname, email):
     return user.person.fullname, user.email
 
 
-def cancel_ticket(ticket_id):
-    ticket = Ticket.objects.get(id=ticket_id)
-    ticket.potential_buyer_expiration_moment = 0
-    ticket.save()
 
 
 def remove_overtime_potential_buyers():

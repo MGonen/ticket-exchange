@@ -16,7 +16,7 @@ function ajax_available_tickets_call(event_id) {
         cache: false,
         success: function(results) {
             $('.list-group').remove();
-            $('.available_ticket_form_content').remove();
+            $('#already_buying').remove();
             if (results.already_a_potential_buyer){
                 create_form_content(results.selected_ticket);
             }
@@ -34,28 +34,34 @@ function ajax_available_tickets_call(event_id) {
 }
 
 function create_form_content(selected_ticket) {
+    var container = document.createElement('div');
+    container.className = 'form-container';
+    container.id = 'already_buying';
+
     var info_text_element = document.createElement('p');
     info_text_element.className = 'available_ticket_form_content';
     info_text_element.innerText = 'You are already in the process of buying a ticket. Would you like to continue, or select a different ticket';
 
     var ticket_info_element = document.createElement('p');
     ticket_info_element.className = 'available_ticket_form_content';
-    ticket_info_element.innerText = selected_ticket.price + ' - ' + selected_ticket.seller;
+    ticket_info_element.innerText = 'Price of the ticket you are buying: \u20AC ' + selected_ticket.price;
 
     var continue_button = document.createElement('button');
     continue_button.name = 'continue';
-    continue_button.className = 'btn btn-primary available_ticket_form_content';
+    continue_button.className = 'btn btn-success';
     continue_button.innerText = 'Continue with selected ticket';
 
-    var different_ticket_button = document.createElement('button');
-    different_ticket_button.name = 'new';
-    different_ticket_button.className = 'btn btn-primary available_ticket_form_content';
+    var different_ticket_button = document.createElement('a');
+    different_ticket_button.href = '/buy-ticket/cancel-ticket/' + selected_ticket.id + '/';
+    different_ticket_button.className = 'btn btn-primary';
     different_ticket_button.innerText = 'Select a different ticket';
 
-    $('.continue_ticket_purchase_form').append(info_text_element);
-    $('.continue_ticket_purchase_form').append(ticket_info_element);
-    $('.continue_ticket_purchase_form').append(continue_button);
-    $('.continue_ticket_purchase_form').append(different_ticket_button);
+    container.append(info_text_element);
+    container.append(ticket_info_element);
+    container.append(continue_button);
+    container.append(different_ticket_button);
+
+    $('.continue_ticket_purchase_form').append(container);
 
 }
 

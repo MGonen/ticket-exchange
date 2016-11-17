@@ -1,7 +1,33 @@
 
 #count-down-timer {
-    /*background-color: white;*/
-    width: 100px;
-    float: right;
+    width: 120px;
+    border: solid;
+    border-width: 3px;
+    padding: 10px;
+    background: black;
+
+    position: fixed;
+    left: 63%;
+    top: 27%;
+
 }
 
+.price-table {
+    color: white;
+    width: 40%
+}
+
+.price-table td {
+    border: none !important;
+}
+
+.price-table-label {
+    text-align: right;
+    font-weight: bold;
+    width: 35%;
+}
+
+.price-table-value {
+    table-layout: fixed;
+    width: 32%;
+}
