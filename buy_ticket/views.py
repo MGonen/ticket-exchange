@@ -126,7 +126,7 @@ def potential_buyer_check(request, ticket_id):
 
     else: # User becomes the potential buyer
         ticket.potential_buyer = request.user.person
-        ticket.potential_buyer_expiration_moment = time.time() + 25
+        ticket.potential_buyer_expiration_moment = time.time() + 302
         ticket.save()
         return redirect('buy_ticket:purchase', ticket_id)
 
