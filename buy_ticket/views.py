@@ -156,8 +156,7 @@ class Purchase(View):
         ticket_price_object = self.get_ticket_price_object(ticket.price)
         token = braintree.ClientToken.generate()
         return render(request, self.template_name,
-                      {'ticket': ticket, 'ticket_price_object': ticket_price_object,
-                       'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+                      {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
     def post(self, request, ticket_id):
         ticket = get_ticket_or_404(ticket_id)
@@ -167,8 +166,7 @@ class Purchase(View):
 
         if not "payment_method_nonce" in request.POST:
             messages.add_message(request, messages.ERROR, message_text.input_cc_info)
-            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object,
-                           'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
+            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
         nonce_from_the_client = request.POST["payment_method_nonce"]
         result = braintree.Transaction.sale({
@@ -190,31 +188,12 @@ class Purchase(View):
 
         else:
             messages.add_message(request, messages.ERROR, message_text.ticket_purchase_failed)
-            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object,
-                                                        'time_left': get_time_left(
-                                                            ticket.potential_buyer_expiration_moment)})
+            return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
 @csrf_exempt
 def purchase_time_left(request, ticket_id):
     ticket = get_ticket_or_404(ticket_id)
     return JsonResponse({'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
-
-
-
-# @login_required(login_url=FACEBOOK_LOGIN_URL)
-# def purchase_successful(request, ticket_id):
-#     ticket = Ticket.objects.get(id=ticket_id)
-#     ticket.buyer = request.user.person
-#     ticket.potential_buyer = None
-#     ticket.save()
-#     return render(request, 'buy_ticket/purchase_successful.html', {'ticket': ticket})
-
-
-# @login_required(login_url=FACEBOOK_LOGIN_URL)
-# def purchase_failed(request, ticket_id):
-#     ticket = Ticket.objects.get(id=ticket_id)
-#     return render(request, 'buy_ticket/purchase_failed.html', {'ticket': ticket})
-
 
 
 @login_required(login_url=FACEBOOK_LOGIN_URL)
