@@ -25,7 +25,7 @@
         <div>
             <h2>Personal Details</h2>
 
-            <form class="form-horizontal" method="POST">{% csrf_token %}
+            <form id="personalInfoForm" class="form-horizontal" method="POST">{% csrf_token %}
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="nameInput">Name:</label>
                     <div class="col-sm-10">
@@ -49,13 +49,14 @@
                         <input type="text" class="form-control" id="ibanInput" value="{{ user.person.bank_account }}" placeholder="IBAN" required>
                     </div>
                 </div>
+
+                <div id="personalInfoButtons" class="col-sm-offset-2 col-sm-10">
+                    <button id="editPersonalInfoButton" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+                    <button id="cancelPersonalInfoChangeButton" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
+                    <button id="savePersonalInfoButton" class="btn btn-primary" type="submit" onclick="savePersonalInfo('sell')">Save Personal Info</button>
+                </div>
             </form>
 
-            <div id="personalInfoButtons" class="col-sm-offset-2 col-sm-10">
-                <button id="editPersonalInfo" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
-                <button id="cancelPersonalInfo" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
-                <button id="savePersonalInfo" class="btn btn-primary" type="submit" onclick="savePersonalInfo('sell')">Save Personal Info</button>
-            </div>
         </div>
 
         <hr>

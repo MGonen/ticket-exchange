@@ -3,7 +3,24 @@
 // When clicking on the 'Edit' button, the form appears, the info disappears
 // Furthermore, until correct data is entered and successfully ajaxed, or canceled, it is not possible to pay
 function editPersonalInfo() {
+    event.preventDefault();
     displayPersonalForm();
+}
+
+function savePersonalInfo(caller) {
+    event.preventDefault();
+    $form = $('#personalInfoForm');
+    $form.parsley().validate();
+    if ($form.parsley().isValid()) {
+        savePersonalInfoAjax(caller)
+    }
+}
+
+function cancelPersonalInfoChange() {
+    event.preventDefault();
+    $form = $('#personalInfoForm');
+    $form.parsley().reset();
+    reset_values()
 }
 
 function get_data(caller) {
@@ -31,13 +48,10 @@ function get_url(caller) {
 
 
 // Ajax function call to update the changes entered in the form
-function savePersonalInfo(caller) {
+function savePersonalInfoAjax(caller) {
 
     data = get_data(caller);
     url = get_url(caller);
-
-    hideFormErrorMessage();
-    // console.log(data);
 
     $.ajax({
         type: 'POST',
@@ -48,10 +62,8 @@ function savePersonalInfo(caller) {
             updatePersonalInfo(results['new_name'], results['new_email'], results['new_iban']);
             displayPersonalInfo();
         },
-        error: function (results) {
-            var errors = (JSON.parse(results.responseText)['errors']);
-            updateErrorMessage(errors.join(', '));
-            showFormErrorMessage();
+        error: function () {
+            console.log('js errors')
         }
     });
 }
@@ -62,28 +74,7 @@ function updatePersonalInfo(fullname, email, iban) {
     $("#ibanStatic").text(iban);
 }
 
-function createFormErrorMessage() {
-    var error_message_element = document.createElement('p');
-    error_message_element.id = "errorMessageElement";
-    $("#personalInfoButtons").prepend(error_message_element);
-    $("#errorMessageElement").hide()
-}
-
-function updateErrorMessage(errors) {
-    var errorMessage = 'The following field(s) are incorrect: ' + errors;
-    console.log(errorMessage);
-    $("#errorMessageElement").text(errorMessage);
-}
-
-function showFormErrorMessage(){
-    $("#errorMessageElement").show()
-}
-
-function hideFormErrorMessage(){
-    $("#errorMessageElement").hide()
-}
-
-function cancelPersonalInfoChange() {
+function reset_values() {
     // re-insert original name and email as value in form-fields
     name_static = $("#nameStatic").text();
     $("#nameInput").val(name_static);
@@ -93,7 +84,6 @@ function cancelPersonalInfoChange() {
     $("#ibanInput").val(iban_static);
 
     displayPersonalInfo();
-    hideFormErrorMessage();
 }
 
 function displayPersonalForm() {
@@ -104,9 +94,9 @@ function displayPersonalForm() {
     $("#emailInput").show();
     $("#ibanInput").show();
 
-    $("#editPersonalInfo").hide();
-    $("#savePersonalInfo").show();
-    $("#cancelPersonalInfo").show();
+    $("#editPersonalInfoButton").hide();
+    $("#savePersonalInfoButton").show();
+    $("#cancelPersonalInfoChangeButton").show();
 
     $("#purchaseButton").hide();
 }
@@ -119,9 +109,9 @@ function displayPersonalInfo(){
     $("#emailStatic").show();
     $("#ibanStatic").show();
 
-    $("#savePersonalInfo").hide();
-    $("#cancelPersonalInfo").hide();
-    $("#editPersonalInfo").show();
+    $("#savePersonalInfoButton").hide();
+    $("#cancelPersonalInfoChangeButton").hide();
+    $("#editPersonalInfoButton").show();
 
     $("#purchaseButton").show();
 }
@@ -129,6 +119,5 @@ function displayPersonalInfo(){
 
 $(document).ready( function() {
     displayPersonalInfo();
-    createFormErrorMessage();
 });
 
