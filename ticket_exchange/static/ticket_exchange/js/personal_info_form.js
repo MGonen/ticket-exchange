@@ -96,23 +96,28 @@ function cancelPersonalInfoChange() {
     hideFormErrorMessage();
 }
 
-
 function displayPersonalForm() {
-    $(".form-control-static").hide();
-    $(".form-control").show();
+    $("#nameStatic").hide();
+    $("#emailStatic").hide();
+    $("#ibanStatic").hide();
+    $("#nameInput").show();
+    $("#emailInput").show();
+    $("#ibanInput").show();
 
     $("#editPersonalInfo").hide();
     $("#savePersonalInfo").show();
     $("#cancelPersonalInfo").show();
 
     $("#purchaseButton").hide();
-
 }
 
-
 function displayPersonalInfo(){
-    $(".form-control-static").show();
-    $(".form-control").hide();
+    $("#nameInput").hide();
+    $("#emailInput").hide();
+    $("#ibanInput").hide();
+    $("#nameStatic").show();
+    $("#emailStatic").show();
+    $("#ibanStatic").show();
 
     $("#savePersonalInfo").hide();
     $("#cancelPersonalInfo").hide();
