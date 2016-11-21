@@ -4,7 +4,7 @@
 {% block scripts %}
     <script src="https://js.braintreegateway.com/js/braintree-2.20.0.js"></script>
     <script src="{% static 'buy_ticket/js/purchase.js' %}"></script>
-    <script src="{% static 'ticket_exchange/js/personal_info_form.js' %}"></script>
+    <script src="{% static 'my_info/js/personal_info_form.js' %}"></script>
     <script>document.onload = ajax_count_down_timer({{ ticket.event.id }}, {{ ticket.id }})</script>
     <script>document.onload = setupBraintreeAjax()</script>
 {% endblock %}
