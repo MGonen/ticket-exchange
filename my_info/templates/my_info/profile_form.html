@@ -1,0 +1,38 @@
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'ticket_exchange/js/personal_info_form.js' %}"></script>
+{% endblock %}
+
+
+<form id="personalInfoForm" class="form-horizontal" method="POST">{% csrf_token %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="nameInput">Name:</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" id="nameStatic">{{ user.person.fullname }}</p>
+            <input type="text" class="form-control" id="nameInput" value="{{ user.person.fullname }}" placeholder="Full Name" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="emailInput">Email:</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" id="emailStatic">{{ user.email }}</p>
+            <input type="email" class="form-control" id="emailInput" value="{{ user.email }}" placeholder="Email address" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="ibanInput">IBAN:</label>
+        <div class="col-sm-10">
+            <p class="form-control-static" id="ibanStatic">{{ user.person.bank_account }}</p>
+            <input type="text" class="form-control" id="ibanInput" value="{{ user.person.bank_account }}" placeholder="IBAN" required>
+        </div>
+    </div>
+
+    <div id="personalInfoButtons" class="col-sm-offset-2 col-sm-10">
+        <button id="editPersonalInfoButton" class="btn btn-primary" type="submit" onclick="editPersonalInfo()">Edit Personal Info</button>
+        <button id="cancelPersonalInfoChangeButton" class="btn btn-primary" type="submit" onclick="cancelPersonalInfoChange()">Cancel</button>
+        <button id="savePersonalInfoButton" class="btn btn-primary" type="submit" onclick="savePersonalInfo()">Save Personal Info</button>
+    </div>
+</form>

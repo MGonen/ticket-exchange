@@ -31,6 +31,6 @@ urlpatterns = (
     url(r'payouts/$', views.payouts, name='payouts'),
 
     url(r'profile/$', views.profile, name='profile'),
-    url(r'cancel-profile-update/$', views.cancel_profile_update, name='cancel_profile_update'),
+    url(r'profile/ajax/$', views.profile_ajax, name='profile_ajax'),
 
 )

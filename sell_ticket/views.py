@@ -102,53 +102,6 @@ class Sell(View):
         return redirect('my_info:tickets_for_sale')
 
 
-@csrf_exempt
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def personal_info_ajax(request):
-    if request.method == 'POST' and request.is_ajax():
-        fullname = request.POST['fullname']
-        email = request.POST['email']
-        iban = request.POST['iban']
-
-        errors = form_errors(fullname, email, iban)
-        if errors:
-            return JsonResponse(data={'errors': errors}, status=500)
-
-        else:
-            new_name, new_email, new_iban = save_user_info_return_updated_info(request.user.id, fullname, email, iban)
-            return JsonResponse({'new_name': new_name, 'new_email': new_email, 'new_iban': new_iban})
-
-
-def form_errors(fullname, email, iban):
-    errors = []
-
-    if not fullname:
-        errors.append('Name')
-
-    try:
-        validate_email(email)
-    except ValidationError:
-        errors.append('Email')
-
-    if not iban.isalnum():
-        errors.append('IBAN')
-
-    return errors
-
-
-def save_user_info_return_updated_info(user_id, fullname, email, iban):
-    user = User.objects.get(id=user_id)
-
-    user.person.fullname = fullname
-    user.person.bank_account = iban
-    user.email = email
-    user.save()
-    user.person.save()
-
-    user = User.objects.get(id=user_id)
-    return user.person.fullname, user.email, user.person.bank_account
-
-
 def process_pdf(request, pdf_file):
     return
 

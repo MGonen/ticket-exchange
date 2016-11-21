@@ -215,49 +215,6 @@ def get_braintree_token(request):
     return JsonResponse({'token': token})
 
 
-@csrf_exempt
-@login_required(login_url=FACEBOOK_LOGIN_URL)
-def personal_info_ajax(request):
-    if request.method == 'POST' and request.is_ajax():
-        fullname = request.POST['fullname']
-        email = request.POST['email']
-
-        errors = form_errors(fullname, email)
-        if errors:
-            return JsonResponse(data={'errors': errors}, status=500)
-
-        else:
-            new_name, new_email = save_user_info_return_updated_info(request.user.id, fullname, email)
-            return JsonResponse({'new_name': new_name, 'new_email':new_email})
-
-
-def form_errors(fullname, email):
-    errors = []
-
-    if not fullname:
-        errors.append('Name')
-
-    try:
-        validate_email(email)
-    except ValidationError:
-        errors.append('Email')
-
-    return errors
-
-def save_user_info_return_updated_info(user_id, fullname, email):
-    user = User.objects.get(id=user_id)
-
-    user.person.fullname = fullname
-    user.email = email
-    user.save()
-    user.person.save()
-
-    user = User.objects.get(id=user_id)
-    return user.person.fullname, user.email
-
-
-
-
 def remove_overtime_potential_buyers():
     current_time = time.time()
     for ticket in Ticket.objects.filter(potential_buyer_expiration_moment__lt=current_time):

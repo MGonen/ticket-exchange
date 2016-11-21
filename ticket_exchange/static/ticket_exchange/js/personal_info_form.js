@@ -23,41 +23,22 @@ function cancelPersonalInfoChange() {
     reset_values()
 }
 
-function get_data(caller) {
+function get_data() {
     var name = $("#nameInput").val();
     var email = $("#emailInput").val();
+    var iban = $("#ibanInput").val();
 
-    if (caller == 'purchase') {
-        return {'fullname': name, 'email': email};
-    }
-    else if (caller == 'sell') {
-        var iban = $("#ibanInput").val();
-        return {'fullname': name, 'email': email, 'iban': iban};
-    }
+    return {'fullname': name, 'email': email, 'iban': iban};
 }
-
-function get_url(caller) {
-    if (caller == 'purchase') {
-        return '/buy-ticket/personal-info-ajax/'
-    }
-
-    else if (caller == 'sell') {
-        return '/sell-ticket/personal-info-ajax/'
-    }
-}
-
 
 // Ajax function call to update the changes entered in the form
-function savePersonalInfoAjax(caller) {
-
-    data = get_data(caller);
-    url = get_url(caller);
+function savePersonalInfoAjax() {
 
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        data: data,
-        url: url,
+        data: get_data(),
+        url: '/my-info/profile/ajax/',
         success: function (results) {
             updatePersonalInfo(results['new_name'], results['new_email'], results['new_iban']);
             displayPersonalInfo();

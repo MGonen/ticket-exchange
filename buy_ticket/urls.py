@@ -29,6 +29,5 @@ urlpatterns = (
 
     url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),
     url(r'^payment/token/$', views.get_braintree_token, name='get_braintree_token'),
-    url(r'^personal-info-ajax/$', views.personal_info_ajax, name='personal_info_ajax'),
 
 )

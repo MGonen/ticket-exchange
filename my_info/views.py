@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from django.http import Http404, JsonResponse
 
 from ticket_exchange.models import Person, Ticket
 from ticket_exchange.utils import is_own_ticket
@@ -100,7 +101,34 @@ def profile(request):
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
 
 
+@csrf_exempt
 @login_required(login_url=FACEBOOK_LOGIN_URL)
-def cancel_profile_update(request):
-    messages.add_message(request, messages.WARNING, message_text.profile_changes_discarded)
-    return redirect('home')
+def profile_ajax(request):
+    if request.method == 'POST' and request.is_ajax():
+        fullname = request.POST['fullname']
+        email = request.POST['email']
+        iban = request.POST['iban'] if 'iban' in request.POST else None
+
+        try:
+            new_name, new_email, new_iban = save_user_info_return_updated_info(request.user.id, fullname, email, iban)
+            return JsonResponse({'new_name': new_name, 'new_email': new_email, 'new_iban': new_iban})
+
+        except:
+            return JsonResponse(data={},status=500)
+
+
+def save_user_info_return_updated_info(user_id, fullname, email, iban):
+    print user_id, fullname, email, iban
+    user = User.objects.get(id=user_id)
+
+    user.person.fullname = fullname
+    if iban:
+        user.person.bank_account = iban
+
+    user.email = email
+    user.save()
+    user.person.save()
+
+    user = User.objects.get(id=user_id)
+    return user.person.fullname, user.email, user.person.bank_account
+
