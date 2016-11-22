@@ -80,6 +80,7 @@ function displayPersonalForm() {
     $("#cancelPersonalInfoChangeButton").show();
 
     $("#purchaseButton").hide();
+    // $("#putUpForSaleButton").hide();
 }
 
 function displayPersonalInfo(){
@@ -95,10 +96,24 @@ function displayPersonalInfo(){
     $("#editPersonalInfoButton").show();
 
     $("#purchaseButton").show();
+    // $("#putUpForSaleButton").show();
+}
+
+// IBAN Validation
+function parsley_iban() {
+    window.Parsley.addValidator('iban', {
+        validateString: function(value) {
+            return IBAN.isValid(value)
+        },
+        messages: {
+            en: 'This is not a valid IBAN (International Bank Account Number)'
+        }
+    });
 }
 
 
 $(document).ready( function() {
     displayPersonalInfo();
+    parsley_iban();
 });
 

@@ -49,7 +49,7 @@ class CreateEvent(View):
         upload_form = UploadBaseTicketNew
         base_ticket_price_form = BaseTicketPriceForm
         return render(request, self.template_name, {'upload_form': upload_form, 'event_form': event_form,
-                                                             'base_ticket_price_form': base_ticket_price_form})
+                                                             'base_ticket_price_form': base_ticket_price_form, 'pdf_exists': 'false'})
 
     def post(self, request):
         event_form = EventForm(request.POST)
@@ -57,7 +57,7 @@ class CreateEvent(View):
         upload_form = UploadBaseTicketNew(request.POST, request.FILES)
         render_failed_post_template = render(request, self.template_name,
                               {'upload_form': upload_form, 'event_form': event_form,
-                               'base_ticket_price_form': base_ticket_price_form})
+                               'base_ticket_price_form': base_ticket_price_form, 'pdf_exists': 'false'})
 
         if not(event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid()):
             return render_failed_post_template
@@ -101,6 +101,11 @@ class EditEvent(View):
             return files['pdf_file']
         return None
 
+    def pdf_exists(self, event_id):
+        baseticket = self.get_base_ticket(event_id)
+        if baseticket.link:
+            return 'true'
+        return 'false'
 
     def get(self, request, event_id):
         event = self.get_event(event_id)
@@ -111,7 +116,7 @@ class EditEvent(View):
         base_ticket_price_form = BaseTicketPriceForm(instance=base_ticket)
         return render(request, self.template_name,
                       {'upload_form': upload_form, 'event_form': event_form,
-                       'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
+                       'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id, 'pdf_exists': self.pdf_exists(event_id)})
 
     def post(self, request, event_id):
         event = self.get_event(event_id)
@@ -122,7 +127,7 @@ class EditEvent(View):
         upload_form = UploadBaseTicketEdit(request.POST, request.FILES)
         render_failed_post_template = render(request, self.template_name,
                           {'upload_form': upload_form, 'event_form': event_form,
-                           'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id})
+                           'base_ticket_price_form': base_ticket_price_form, 'base_ticket': base_ticket, 'event_id': event.id, 'pdf_exists': self.pdf_exists(event_id)})
 
         if not(event_form.is_valid() and base_ticket_price_form.is_valid() and upload_form.is_valid()):
             return render_failed_post_template
