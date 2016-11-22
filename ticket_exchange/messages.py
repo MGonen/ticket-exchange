@@ -28,5 +28,6 @@ ticket_purchase_failed = """Unfortunately the creditcard transaction was not suc
 not_own_ticket = """The ticket you tried to view is unfortunately not your ticket (anymore)."""
 ticket_doesnt_exist = """Unfortunately the ticket you tried to view doesn't exist (anymore)."""
 cant_remove_potential_buyer = """Unfortunately you cannot remove this ticket, because someone is trying to buy it at the moment"""
+ticket_successfully_removed = """The ticket has been removed"""
 ticket_removal_cancelled = """Ticket removal cancelled"""
 profile_changes_discarded = """The changes you made to your profile have not been saved. To change your profile information, return to your profile and save your changes."""

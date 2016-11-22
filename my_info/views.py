@@ -47,6 +47,7 @@ def remove_for_sale_ticket(request, ticket_id):
 
     if request.method == "POST":
         ticket.delete()
+        messages.add_message(request, messages.SUCCESS, message_text.ticket_successfully_removed)
         return redirect('my_info:tickets_for_sale')
 
 
