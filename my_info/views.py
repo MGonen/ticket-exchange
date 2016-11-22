@@ -119,17 +119,16 @@ def profile_ajax(request):
 
 
 def save_user_info_return_updated_info(user_id, fullname, email, iban):
-    print user_id, fullname, email, iban
     user = User.objects.get(id=user_id)
 
     user.person.fullname = fullname
     if iban:
-        user.person.bank_account = iban
+        user.person.iban = iban
 
     user.email = email
     user.save()
     user.person.save()
 
     user = User.objects.get(id=user_id)
-    return user.person.fullname, user.email, user.person.bank_account
+    return user.person.fullname, user.email, user.person.iban
 

@@ -13,7 +13,7 @@ class Person(models.Model):
     user = models.OneToOneField(User, related_name='person', on_delete=models.CASCADE)
     photo = models.TextField(null=True, blank=True)
     tickets = models.ManyToManyField('Event', through='Ticket', related_name='tickets', through_fields=('holder', 'event'))
-    bank_account = models.CharField(max_length=30, null=True, blank=True, validators=[ALPHANUMERIC])
+    iban = models.CharField(max_length=30, null=True, blank=True, validators=[ALPHANUMERIC])
     fullname = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):

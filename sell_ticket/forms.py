@@ -21,12 +21,12 @@ class TicketPriceForm(forms.Form):
 
 
 class PersonForm4SellTicket(forms.ModelForm):
-    bank_account =  forms.CharField(required=True)
+    iban =  forms.CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(PersonForm4SellTicket, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].widget.attrs.update({'autocomplete': 'off'})
+        self.fields['iban'].widget.attrs.update({'autocomplete': 'off'})
 
     class Meta:
         model = Person
-        fields = ('bank_account',)
+        fields = ('iban',)
