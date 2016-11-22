@@ -2,11 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from django.http import Http404, JsonResponse
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.conf import settings
 
 import scriptine

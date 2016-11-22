@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.http import Http404, JsonResponse
 
@@ -102,7 +101,6 @@ def profile(request):
     return render(request, 'my_info/profile.html', {'person_form': person_form, 'user_form': user_form})
 
 
-@csrf_exempt
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def profile_ajax(request):
     if request.method == 'POST' and request.is_ajax():

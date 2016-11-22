@@ -2,13 +2,11 @@ from django.shortcuts import render, redirect, HttpResponse, Http404
 
 from django.core.urlresolvers import reverse
 from jsonview.decorators import json_view
-from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.db.models import Q
 
 from ticket_exchange.models import Event, Ticket
-from ticket_exchange.forms import DateSearchForm
 from django.contrib.auth.views import logout as auth_logout
 
 import datetime
@@ -76,7 +74,6 @@ def _get_access_token(user):
 
 
 @json_view
-@csrf_exempt
 def get_ajax_search_results(request, search_query):
     event_objects = _get_search_results(search_query)
     event_dicts = create_event_dicts(event_objects)

@@ -1,24 +1,19 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.http import Http404, JsonResponse
-from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
 
 import time
 from collections import namedtuple
 
 from ticket_exchange.models import Ticket, Event
-from my_info.forms import UserForm
 from ticket_exchange.views import FACEBOOK_LOGIN_URL, get_ticket_or_404
 from ticket_exchange.utils import potential_buyer_checks_decorator
 from ticket_exchange import messages as message_text
 
 from jsonview.decorators import json_view
-from django.views.decorators.csrf import csrf_exempt
 
 from buy_ticket.forms import NameLocationSearchForm
 
@@ -75,7 +70,6 @@ class AvailableTickets(View):
 
 
 @json_view
-@csrf_exempt
 def get_available_tickets_ajax(request, event_id):
     tickets = get_available_tickets(event_id)
     ticket_dicts = create_ticket_dicts(tickets)
@@ -190,7 +184,6 @@ class Purchase(View):
             messages.add_message(request, messages.ERROR, message_text.ticket_purchase_failed)
             return render(request, self.template_name, {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
-@csrf_exempt
 def purchase_time_left(request, ticket_id):
     ticket = get_ticket_or_404(ticket_id)
     return JsonResponse({'time_left': get_time_left(ticket.potential_buyer_expiration_moment)})
