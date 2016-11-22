@@ -4,6 +4,7 @@
 {% block scripts %}
     <script src="{% static 'sell_ticket/js/validation.js' %}"></script>
     <script>window.max_ticket_price = {{ max_ticket_price }};</script>
+    <script>window.iban_from_db = '{{ user.person.iban }}';</script>
 
 {% endblock %}
 
@@ -31,7 +32,7 @@
         <hr>
 
         <div>
-            <form data-parsley-validate enctype="multipart/form-data" method="POST" class="form-horizontal">{% csrf_token %}
+            <form data-parsley-validate id="sellTicketForm" enctype="multipart/form-data" method="POST" class="form-horizontal">{% csrf_token %}
                 <h2>Price</h2>
                 <p>The price of your ticket may not be more than 20% over the original price, in this case: &euro;{{ max_ticket_price }}</p>
 

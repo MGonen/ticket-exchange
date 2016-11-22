@@ -7,12 +7,13 @@ function editPersonalInfo() {
     displayPersonalForm();
 }
 
-function savePersonalInfo(caller) {
+function savePersonalInfo() {
     event.preventDefault();
     $form = $('#personalInfoForm');
     $form.parsley().validate();
     if ($form.parsley().isValid()) {
-        savePersonalInfoAjax(caller)
+        savePersonalInfoAjax();
+        $('#sellTicketForm').show();
     }
 }
 
@@ -80,7 +81,7 @@ function displayPersonalForm() {
     $("#cancelPersonalInfoChangeButton").show();
 
     $("#purchaseButton").hide();
-    // $("#putUpForSaleButton").hide();
+    $("#putUpForSaleButton").hide();
 }
 
 function displayPersonalInfo(){
@@ -96,7 +97,7 @@ function displayPersonalInfo(){
     $("#editPersonalInfoButton").show();
 
     $("#purchaseButton").show();
-    // $("#putUpForSaleButton").show();
+    $("#putUpForSaleButton").show();
 }
 
 // IBAN Validation
@@ -113,7 +114,12 @@ function parsley_iban() {
 
 
 $(document).ready( function() {
-    displayPersonalInfo();
     parsley_iban();
+    if (IBAN.isValid(iban_from_db)) {
+        displayPersonalInfo();
+    } else {
+        displayPersonalForm();
+        $('#sellTicketForm').hide()
+    }
 });
 
