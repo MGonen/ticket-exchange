@@ -66,20 +66,27 @@ class Sell(View):
         file_location += '.pdf'
         return file_location
 
+    def get_max_ticket_price(self, event_id):
+        event = self.get_event(event_id)
+        max_price = float(event.baseticket.price) * 1.2
+        return "%.2f" % (max_price,)
+
     def get(self, request, event_id):
         event = self.get_event(event_id)
-        price_form = TicketPriceForm(baseticket_price=event.baseticket.price)
+        price_form = TicketPriceForm()
         upload_form = UploadTicket()
-        return render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form})
+        max_ticket_price = self.get_max_ticket_price(event_id)
+        return render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
 
     def post(self, request, event_id):
         seller = self.get_seller(request.user.id)
         event = self.get_event(event_id)
 
-        price_form = TicketPriceForm(request.POST, baseticket_price=event.baseticket.price)
+        price_form = TicketPriceForm(request.POST)
         upload_form = UploadTicket(request.POST, request.FILES)
-        render_failed_post_template = render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form})
+        max_ticket_price = self.get_max_ticket_price(event_id)
+        render_failed_post_template = render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
         if not (price_form.is_valid() and upload_form.is_valid() and 'pdf_file' in request.FILES):
             return render_failed_post_template
