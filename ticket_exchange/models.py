@@ -37,7 +37,7 @@ class Ticket(models.Model):
     seller = models.ForeignKey('Person', related_name='seller')
     buyer = models.ForeignKey('Person', null=True, blank=True, related_name='buyer')
     holder = models.ForeignKey('Person', related_name='holder')
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     link = models.TextField(null=True, blank=True)
     potential_buyer = models.ForeignKey('Person', related_name='potential_buyer', null=True, blank=True)
     potential_buyer_expiration_moment = models.FloatField(default=time.time)
