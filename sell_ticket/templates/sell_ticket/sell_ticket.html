@@ -4,7 +4,6 @@
 {% block scripts %}
     <script src="{% static 'sell_ticket/js/validation.js' %}"></script>
     <script>window.max_ticket_price = {{ max_ticket_price }};</script>
-    <script>window.iban_from_db = '{{ user.person.iban }}';</script>
 
 {% endblock %}
 
