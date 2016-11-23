@@ -4,10 +4,14 @@ function parsley_event_general() {
     $location_input = $('#id_location');
     $city_input = $('#id_city');
     $country_input = $('#id_country');
+    $start_date = $('#id_start_date');
+    $end_date = $('#id_end_date');
 
     $location_input.attr('data-parsley-required',"true");
     $city_input.attr('data-parsley-required',"true");
     $country_input.attr('data-parsley-required',"true");
+    $start_date.attr('data-parsley-required',"true");
+    $end_date.attr('data-parsley-required',"true");
 
 }
 
