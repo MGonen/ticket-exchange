@@ -7,9 +7,11 @@
     background: black;
 
     position: fixed;
-    left: 63%;
-    top: 27%;
+}
 
+.floatcontainer {
+    float: right;
+    width: 120px;
 }
 
 .price-table {
