@@ -6,21 +6,21 @@ from ticket_exchange import messages as message_text
 
 import time
 
-
-def ticket_complete_check(func):
-    def inner(*args, **kwargs):
-        request = args[0]
-        ticket_id = kwargs['ticket_id']
-
-        ticket = Ticket.objects.get(id=ticket_id)
-
-        if ticket.complete:
-            messages.add_message(request, messages.ERROR, message_text.no_editing_completed_tickets)
-            return redirect('my_info:tickets_for_sale')
-
-
-        return func(*args, **kwargs)
-    return inner
+#
+# def ticket_complete_check(func):
+#     def inner(*args, **kwargs):
+#         request = args[0]
+#         ticket_id = kwargs['ticket_id']
+#
+#         ticket = Ticket.objects.get(id=ticket_id)
+#
+#         if ticket.complete:
+#             messages.add_message(request, messages.ERROR, message_text.no_editing_completed_tickets)
+#             return redirect('my_info:tickets_for_sale')
+#
+#
+#         return func(*args, **kwargs)
+#     return inner
 
 
 def potential_buyer_checks_decorator(func):
@@ -75,7 +75,7 @@ def ticket_already_bought(request, ticket):
 
 def user_already_potential_buyer_same_event(request, ticket):
     for ticket in Ticket.objects.filter(event_id=ticket.event_id).filter(potential_buyer=request.user.person).exclude(id=ticket.id):
-        if ticket.potential_buyer_expiration_moment > time.time():
+        if ticket.potential_buyer_expiration_moment >= time.time():
             print 'User already potential buyer other ticket same event'
             messages.add_message(request, messages.ERROR, message_text.user_already_potential_buyer_other_ticket)
             return True

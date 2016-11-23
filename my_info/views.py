@@ -16,7 +16,7 @@ import time
 @login_required(login_url=FACEBOOK_LOGIN_URL)
 def tickets_for_sale(request):
     print 'tickets for sale reached'
-    tickets_for_sale = Ticket.objects.filter(seller__user_id=request.user.id).filter(buyer__isnull=True).filter(potential_buyer_expiration_moment__lte=time.time())
+    tickets_for_sale = Ticket.objects.filter(seller__user_id=request.user.id).filter(buyer__isnull=True).filter(potential_buyer_expiration_moment__lt=time.time())
     tickets_being_sold = Ticket.objects.filter(seller__user_id=request.user.id).filter(potential_buyer_expiration_moment__gte=time.time())
     tickets_sold = Ticket.objects.filter(seller__user_id=request.user.id).filter(buyer__isnull=False)
     return render(request, 'my_info/tickets_for_sale.html', {'tickets_for_sale': tickets_for_sale, 'tickets_being_sold': tickets_being_sold, 'tickets_sold': tickets_sold})
@@ -32,8 +32,7 @@ def remove_for_sale_ticket(request, ticket_id):
     print ticket.potential_buyer_expiration_moment >= time.time()
     print ticket.potential_buyer_expiration_moment - time.time()
 
-
-    if request.user.person != ticket.potential_buyer and ticket.potential_buyer_expiration_moment >= time.time():
+    if ticket.potential_buyer_expiration_moment >= time.time() and (ticket.potential_buyer.id != request.user.person.id): # Ticket has a potential buyer
         messages.add_message(request, messages.INFO, message_text.cant_remove_potential_buyer)
         redirect('my_info:tickets_for_sale')
 
@@ -42,7 +41,6 @@ def remove_for_sale_ticket(request, ticket_id):
         ticket.potential_buyer_expiration_moment = time.time() + 15
         ticket.save()
         return render(request, 'my_info/remove_for_sale_ticket.html', {'ticket': ticket})
-    # show countdown timer on 'Remove' Button
 
     if request.method == "POST":
         ticket.delete()
@@ -54,7 +52,7 @@ def remove_for_sale_ticket(request, ticket_id):
 def cancel_remove_ticket(request, ticket_id):
     print 'cancel ticket reached'
     ticket = get_ticket_or_404(ticket_id)
-    ticket.potential_buyer_expiration_moment = time.time()
+    ticket.potential_buyer_expiration_moment = 0
     ticket.save()
 
     messages.add_message(request, messages.INFO, message_text.ticket_removal_cancelled)

@@ -52,7 +52,7 @@ class AvailableTickets(View):
         event = Event.objects.get(pk=event_id)
         tickets_available = len(
             Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=True).filter(
-                potential_buyer_expiration_moment__lte=time.time()))
+                potential_buyer_expiration_moment__lt=time.time()))
         tickets_sold = len(Ticket.objects.filter(event_id=event.id).filter(buyer__isnull=False))
 
         return render(request, self.template_name, {'event': event, 'tickets_available': tickets_available, 'tickets_sold': tickets_sold})
@@ -105,11 +105,11 @@ def create_ticket_dicts(tickets):
 def potential_buyer_check(request, ticket_id):
     ticket = Ticket.objects.get(id=ticket_id)
 
-    if ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id != request.user.person.id): # User is not the potential buyer
+    if ticket.potential_buyer_expiration_moment >= time.time() and (ticket.potential_buyer.id != request.user.person.id): # User is not the potential buyer
         messages.add_message(request, messages.ERROR, message_text.other_potential_buyer)
         return redirect('buy_ticket:available_tickets', ticket.event.id)
 
-    elif ticket.potential_buyer_expiration_moment > time.time() and (ticket.potential_buyer.id == request.user.person.id): # User is already the potential buyer
+    elif ticket.potential_buyer_expiration_moment >= time.time() and (ticket.potential_buyer.id == request.user.person.id): # User is already the potential buyer
         return redirect('buy_ticket:purchase', ticket_id)
 
     elif Ticket.objects.filter(potential_buyer=request.user.person).filter(potential_buyer_expiration_moment__gte=time.time()): # User is already buying another ticket for this event
@@ -174,7 +174,7 @@ class Purchase(View):
         if result.is_success:
             ticket.buyer = request.user.person
             ticket.potential_buyer = None
-            ticket.potential_buyer_expiration_moment = time.time()
+            ticket.potential_buyer_expiration_moment = 0
             ticket.save()
 
             messages.add_message(request, messages.SUCCESS, message_text.successfully_bought_ticket)
@@ -222,7 +222,7 @@ def get_time_left(potential_buyer_expiration_moment):
 
 
 def get_available_tickets(event_id):
-    return Ticket.objects.filter(event_id=event_id).filter(buyer__isnull=True).filter(potential_buyer_expiration_moment__lte=time.time()).order_by('price')
+    return Ticket.objects.filter(event_id=event_id).filter(buyer__isnull=True).filter(potential_buyer_expiration_moment__lt=time.time()).order_by('price')
 
 
 def get_selected_ticket(request, event_id):
