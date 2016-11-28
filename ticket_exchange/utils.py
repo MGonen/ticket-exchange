@@ -1,11 +1,13 @@
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from ticket_exchange.models import Ticket
 from ticket_exchange import messages as message_text
 
 import time
 
+from ticket_exchange.views import FACEBOOK_LOGIN_URL
 #
 # def ticket_complete_check(func):
 #     def inner(*args, **kwargs):
@@ -37,6 +39,7 @@ def potential_buyer_checks_decorator(func):
 
 
 def is_own_ticket(func):
+    @login_required(login_url=FACEBOOK_LOGIN_URL)
     def inner(*args, **kwargs):
         request = args[0]
         ticket_id = kwargs['ticket_id']

@@ -80,8 +80,8 @@ function displayPersonalForm() {
     $("#savePersonalInfoButton").show();
     $("#cancelPersonalInfoChangeButton").show();
 
-    $("#purchaseButton").hide();
-    $("#putUpForSaleButton").hide();
+    $("#purchaseButton").prop('disabled', true);
+    $("#putUpForSaleButton").prop('disabled', true);
 }
 
 function displayPersonalInfo(){
@@ -96,8 +96,8 @@ function displayPersonalInfo(){
     $("#cancelPersonalInfoChangeButton").hide();
     $("#editPersonalInfoButton").show();
 
-    $("#purchaseButton").show();
-    $("#putUpForSaleButton").show();
+    $("#purchaseButton").prop('disabled', false);
+    $("#putUpForSaleButton").prop('disabled', false);
 }
 
 // IBAN Validation
@@ -112,14 +112,20 @@ function parsley_iban() {
     });
 }
 
-
-$(document).ready( function() {
-    parsley_iban();
-    if (IBAN.isValid(iban_from_db)) {
+// If there is no 'iban input field' or if the iban of the person is valid, show the static info. Else, show the input fields
+function show_on_load() {
+    if (!$('#ibanInput').length || IBAN.isValid(iban_from_db)) {
         displayPersonalInfo();
     } else {
         displayPersonalForm();
         $('#sellTicketForm').hide()
     }
+
+}
+
+
+$(document).ready( function() {
+    parsley_iban();
+    show_on_load();
 });
 
