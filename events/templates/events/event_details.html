@@ -3,7 +3,7 @@
 
 {% block scripts %}
     <script src="{% static 'events/js/validation.js' %}"></script>
-    <script>window.pdf_exists = {{ pdf_exists }};</script>
+    <script>var pdf_exists = {{ pdf_exists }};</script>
 {% endblock %}
 
 {% block content %}

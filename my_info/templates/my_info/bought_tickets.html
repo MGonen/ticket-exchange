@@ -8,8 +8,9 @@
             <div class="list-group">
                 {% for ticket in tickets %}
                 <a href="{% url 'my_info:ticket_bought_details' ticket.id %}" class="list-group-item">
-                    <h4 class="list-group-item-heading">{{ ticket.event.name }}</h4>
-                    <p class="list-group-item-text">{{ ticket.price }}</p>
+                    <h2 class="list-group-item-heading">{{ ticket.event.name }}</h2>
+                    <div class="list-group-item-text">&nbsp;<i class="fa fa-map-marker" aria-hidden="true"></i> &nbsp;&nbsp;{{ ticket.event.location }}, {{ ticket.event.city }}, {{ ticket.event.country }}</div>
+                    <div class="list-group-item-text"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp;&nbsp;{{ ticket.event.start_date }} - {{ ticket.event.end_date }}</div>
                 </a>
                 {% endfor %}
             </div>

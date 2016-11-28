@@ -3,7 +3,7 @@
 
 {% block scripts %}
     <script src="{% static 'sell_ticket/js/validation.js' %}"></script>
-    <script>window.max_ticket_price = {{ max_ticket_price }};</script>
+    <script>var max_ticket_price = {{ max_ticket_price }};</script>
 
 {% endblock %}
 
