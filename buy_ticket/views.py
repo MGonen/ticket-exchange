@@ -148,7 +148,6 @@ class Purchase(View):
     def get(self, request, ticket_id):
         ticket = get_ticket_or_404(ticket_id)
         ticket_price_object = self.get_ticket_price_object(ticket.price)
-        token = braintree.ClientToken.generate()
         return render(request, self.template_name,
                       {'ticket': ticket, 'ticket_price_object': ticket_price_object})
 
