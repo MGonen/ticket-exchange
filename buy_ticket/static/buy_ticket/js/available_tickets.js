@@ -50,7 +50,7 @@ function create_form_content(selected_ticket) {
     continue_button.innerText = 'Continue with selected ticket';
 
     var different_ticket_button = document.createElement('a');
-    different_ticket_button.href = '/buy-ticket/cancel-ticket/' + selected_ticket.id + '/';
+    different_ticket_button.href = '/buy-ticket/ticket/' + selected_ticket.id + '/cancel-ticket/';
     different_ticket_button.className = 'btn btn-primary';
     different_ticket_button.innerText = 'Select a different ticket';
 
@@ -115,7 +115,7 @@ function create_available_ticket_item(ticket){
 
     var ticket_item = document.createElement('a');
 
-    var ticket_link = "/buy-ticket/potential_buyer_check/" + ticket.id + '/';
+    var ticket_link = "/buy-ticket/ticket/" + ticket.id + "/potential_buyer_check/";
     ticket_item.setAttribute('href', ticket_link);
     ticket_item.className = 'list-group-item available-tickets-item';
 

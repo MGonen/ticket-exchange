@@ -20,14 +20,14 @@ import views
 urlpatterns = (
     url(r'^select_event/$', views.SelectEvent.as_view(), name='select_event'),
 
-    url(r'^(?P<event_id>[0-9]+)/tickets/$', views.AvailableTickets.as_view(), name='available_tickets'),
-    url(r'^(?P<event_id>[0-9]+)/get_available_tickets/$', views.get_available_tickets_ajax, name='get_available_tickets'),
-    url(r'^potential_buyer_check/(?P<ticket_id>[0-9]+)/$', views.potential_buyer_check, name='potential_buyer_check'),
+    url(r'^event/(?P<event_id>[0-9]+)/tickets/$', views.AvailableTickets.as_view(), name='available_tickets'),
+    url(r'^event/(?P<event_id>[0-9]+)/get_available_tickets/$', views.get_available_tickets_ajax, name='get_available_tickets'),
+    url(r'^ticket/(?P<ticket_id>[0-9]+)/potential_buyer_check/$', views.potential_buyer_check, name='potential_buyer_check'),
 
-    url(r'^purchase/(?P<ticket_id>[0-9]+)/$', views.Purchase.as_view(), name='purchase'),
-    url(r'^(?P<ticket_id>[0-9]+)/purchase/time-left/$', views.purchase_time_left, name='purchase_time_left'),
+    url(r'^ticket/(?P<ticket_id>[0-9]+)/$', views.Purchase.as_view(), name='purchase'),
+    url(r'^ticket/(?P<ticket_id>[0-9]+)/time-left/$', views.purchase_time_left, name='purchase_time_left'),
 
-    url(r'^cancel-ticket/(?P<ticket_id>[0-9]+)/$', views.cancel_ticket_view, name='cancel_ticket_view'),
+    url(r'^ticket/(?P<ticket_id>[0-9]+)/cancel-ticket/$', views.cancel_ticket_view, name='cancel_ticket_view'),
     url(r'^payment/token/$', views.get_braintree_token, name='get_braintree_token'),
 
 )
