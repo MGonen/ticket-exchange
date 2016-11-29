@@ -118,7 +118,8 @@ function show_on_load() {
         displayPersonalInfo();
     } else {
         displayPersonalForm();
-        $('#sellTicketForm').hide()
+        $('#sellTicketForm').hide();
+        $('#cancelPersonalInfoChangeButton').hide();
     }
 
 }
