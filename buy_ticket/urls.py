@@ -18,7 +18,7 @@ from django.conf.urls import url
 import views
 
 urlpatterns = (
-    url(r'^select_event/$', views.SelectEvent.as_view(), name='select_event'),
+    url(r'^select-event/$', views.SelectEvent.as_view(), name='select_event'),
 
     url(r'^event/(?P<event_id>[0-9]+)/tickets/$', views.AvailableTickets.as_view(), name='available_tickets'),
     url(r'^event/(?P<event_id>[0-9]+)/get_available_tickets/$', views.get_available_tickets_ajax, name='get_available_tickets'),

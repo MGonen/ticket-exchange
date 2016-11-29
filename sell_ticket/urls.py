@@ -18,8 +18,7 @@ from django.conf.urls import url
 import views
 
 urlpatterns = (
-
-    url(r'^(?P<event_id>[0-9]+)/$', views.Sell.as_view(), name='sell_ticket'),
     url(r'^select-event/$', views.select_event, name='select_event'),
+    url(r'^(?P<event_id>[0-9]+)/$', views.Sell.as_view(), name='sell_ticket'),
 
 )
