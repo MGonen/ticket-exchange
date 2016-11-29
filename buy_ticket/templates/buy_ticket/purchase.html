@@ -5,8 +5,12 @@
     <script src="https://js.braintreegateway.com/js/braintree-2.20.0.js"></script>
     <script src="{% static 'buy_ticket/js/purchase.js' %}"></script>
     <script src="{% static 'my_info/js/personal_info_form.js' %}"></script>
-    <script>document.onload = ajax_count_down_timer({{ ticket.event.id }}, {{ ticket.id }})</script>
-    <script>document.onload = setupBraintreeAjax()</script>
+    <script>
+        var purchase_time_left_url = '{% url 'buy_ticket:purchase_time_left' ticket.id %}';
+        var available_tickets_url = '{% url 'buy_ticket:available_tickets' ticket.event.id %}';
+        var get_token_url = '{% url 'buy_ticket:get_braintree_token' %}';
+        document.onload = setupBraintreeAjax();
+    </script>
 {% endblock %}
 
 
@@ -20,7 +24,7 @@
     <div class="form-container">
         <div class="floatcontainer">
             <div id="count-down-timer">
-                Time left: 5:00
+                Time left:
             </div>
         </div>
 

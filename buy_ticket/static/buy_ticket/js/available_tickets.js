@@ -1,17 +1,15 @@
 
-function start_get_available_tickets_js(event_id){
+function start_get_available_tickets_js(){
 
-    ajax_available_tickets_call(event_id);
+    ajax_available_tickets_call();
     setInterval(function() {
-        ajax_available_tickets_call(event_id)
+        ajax_available_tickets_call()
     }, 5000);
 }
 
-function ajax_available_tickets_call(event_id) {
-    url = '/buy-ticket/' + event_id + '/get_available_tickets/';
-
+function ajax_available_tickets_call() {
     $.ajax({
-        url: url,
+        url: get_available_tickets_url,
         type: "GET",
         cache: false,
         success: function(results) {
@@ -148,6 +146,6 @@ function reload_page() {
 /* Functions to execute on loading the document               */
 /**************************************************************/
 $(document).ready( function() {
-    // ajax_available_tickets_call();
+    start_get_available_tickets_js();
     // reload_page();
 });

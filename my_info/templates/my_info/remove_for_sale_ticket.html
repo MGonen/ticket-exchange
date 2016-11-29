@@ -4,9 +4,7 @@
 {% block scripts %}
     <script src="{% static 'my_info/js/count_down_timer.js' %}"></script>
     <script>
-        $(document).ready( function() {
-    remove_ticket_count_down_timer('{{ ticket.id }}');
-});
+        var cancel_remove_url = '{% url 'my_info:cancel_remove_ticket' ticket.id %}';
     </script>
 {% endblock %}
 
