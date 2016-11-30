@@ -80,8 +80,18 @@ function displayPersonalForm() {
     $("#savePersonalInfoButton").show();
     $("#cancelPersonalInfoChangeButton").show();
 
-    $("#purchaseButton").prop('disabled', true);
-    $("#putUpForSaleButton").prop('disabled', true);
+    disableButtons();
+}
+
+function disableButtons() {
+    $purchaseButton = $("#purchaseButton");
+    $putUpForSaleButton = $("#putUpForSaleButton");
+
+    $purchaseButton.prop('disabled', true);
+    $purchaseButton.attr('title', "To Purchase this ticket, please save or cancel your 'Personal Info' changes");
+
+    $putUpForSaleButton.prop('disabled', true);
+    $putUpForSaleButton.attr('title', "To Put your Ticket up for Sale, please save or cancel your 'Personal Info' changes");
 }
 
 function displayPersonalInfo(){
@@ -96,8 +106,18 @@ function displayPersonalInfo(){
     $("#cancelPersonalInfoChangeButton").hide();
     $("#editPersonalInfoButton").show();
 
-    $("#purchaseButton").prop('disabled', false);
-    $("#putUpForSaleButton").prop('disabled', false);
+    enableButtons();
+}
+
+function enableButtons() {
+    $purchaseButton = $("#purchaseButton");
+    $putUpForSaleButton = $("#putUpForSaleButton");
+
+    $purchaseButton.prop('disabled', false);
+    $purchaseButton.attr('title', "");
+
+    $putUpForSaleButton.prop('disabled', false);
+    $putUpForSaleButton.attr('title', "");
 }
 
 // IBAN Validation
@@ -111,6 +131,8 @@ function parsley_iban() {
         }
     });
 }
+
+
 
 // If there is no 'iban input field' or if the iban of the person is valid, show the static info. Else, show the input fields
 function show_on_load() {
@@ -128,5 +150,7 @@ function show_on_load() {
 $(document).ready( function() {
     parsley_iban();
     show_on_load();
+    $('[data-toggle="tooltip"]').tooltip();
 });
+
 
