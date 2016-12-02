@@ -54,11 +54,29 @@ class Ticket(models.Model):
         super(Ticket, self).save(*args, **kwargs)
 
 
+class TicketBarcodeNumber(models.Model):
+    ticket = models.ForeignKey('Ticket')
+    number = models.CharField(max_length=200)
+
+
 class BaseTicket(models.Model):
     event = models.OneToOneField('Event')
-    details = models.TextField()
     link = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return str(self.id)
+
+
+class BaseTicketBarcodeType(models.Model):
+    baseticket = models.ForeignKey('BaseTicket')
+    type = models.CharField(max_length=100)
+
+
+class BaseTicketBarcodeLocation(models.Model):
+    baseticket = models.ForeignKey('BaseTicket')
+    x_min = models.IntegerField()
+    x_max = models.IntegerField()
+    y_min = models.IntegerField()
+    y_max = models.IntegerField()
+

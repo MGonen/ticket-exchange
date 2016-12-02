@@ -3,16 +3,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.http import Http404
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 
 from ticket_exchange.models import Person, Event, Ticket, BaseTicket
 from ticket_exchange import messages as message_text
+from ticket_exchange.pdfs import ProcessBaseTicket, SavePDF
 from events.forms import UploadBaseTicketNew, UploadBaseTicketEdit, EventForm, BaseTicketPriceForm
-from django.contrib.admin.views.decorators import staff_member_required
-
-from django.conf import settings
-
-import scriptine
-import time
 
 
 class CreateEvent(View):
@@ -22,25 +18,10 @@ class CreateEvent(View):
     def dispatch(self, *args, **kwargs):
         return super(CreateEvent, self).dispatch(*args, **kwargs)
 
-    def create_base_ticket_object(self, pdf_file, event, price):
-        file_location = self.create_base_ticket_file_location(event.id)
-        save_pdf(pdf_file, file_location)
-        base_ticket = BaseTicket(event=event, details='Will come later', link=file_location, price=price)
+    def create_base_ticket(self, pdf_object, event, price):
+        filepath = SavePDF.save_base_ticket_return_filepath(pdf_object, event.id)
+        base_ticket = BaseTicket(event=event, link=filepath, price=price)
         base_ticket.save()
-
-    def create_base_ticket_file_location(self, event_id):
-        filename = str(event_id)
-        tickets_directory = scriptine.path(settings.STATIC_ROOT).joinpath('tickets')
-        if not tickets_directory.exists():
-            tickets_directory.mkdir()
-
-        base_tickets_directory = tickets_directory.joinpath('base_tickets')
-        if not base_tickets_directory.exists():
-            base_tickets_directory.mkdir()
-
-        file_location = base_tickets_directory.joinpath(filename)
-        file_location += '.pdf'
-        return file_location
 
 
     def get(self, request):
@@ -65,12 +46,14 @@ class CreateEvent(View):
         pdf_file = request.FILES['pdf_file']
         price = request.POST.get('price')
 
-        if not pdf_is_safe(pdf_file):
-            messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
+        pdf_object = ProcessBaseTicket(pdf_file)
+
+        if not pdf_object.successful:
+            messages.add_message(request, messages.ERROR, pdf_object.message)
             return render_failed_post_template
 
         event = event_form.save()
-        self.create_base_ticket_object(pdf_file, event, price)
+        self.create_base_ticket(pdf_object, event, price)
 
         messages.add_message(request, messages.SUCCESS, message_text.event_creation_successful)
         return redirect('buy_ticket:available_tickets', event.id)
@@ -133,12 +116,16 @@ class EditEvent(View):
 
         # if forms are valid:
         pdf_file = self.get_pdf_file_or_None(request.FILES)
-        if pdf_file and pdf_is_safe(pdf_file):
-            base_ticket.link = pdf_file
 
-        elif pdf_file and not pdf_is_safe(pdf_file):
-            messages.add_message(request, messages.ERROR, message_text.unsafe_pdf)
-            return render_failed_post_template
+        if pdf_file:
+            pdf_object = ProcessBaseTicket(pdf_file)
+
+            if not pdf_object.successful:
+                messages.add_message(request, messages.ERROR, pdf_object.message)
+                return render_failed_post_template
+
+            else:
+                base_ticket.link = SavePDF.save_base_ticket_return_filepath(pdf_object, event_id)
 
         base_ticket.price = request.POST.get('price')
         base_ticket.save()
@@ -148,14 +135,6 @@ class EditEvent(View):
         return redirect('buy_ticket:available_tickets', event.id)
 
 
-def pdf_is_safe(pdf_file):
-    return True
-
-
-def save_pdf(pdf_file, file_location):
-    with open(file_location, 'wb+') as destination:
-        for chunk in pdf_file.chunks():
-            destination.write(chunk)
 
 
 

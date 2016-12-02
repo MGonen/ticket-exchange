@@ -4,14 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import View
 from django.http import Http404
-from django.conf import settings
-
-import scriptine
 
 from ticket_exchange.models import Person, Event, Ticket
-from ticket_exchange import messages as messages_text
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
-from events.views import pdf_is_safe, save_pdf
+from ticket_exchange.pdfs import ProcessTicket, ProcessBaseTicket, SavePDF
 from sell_ticket.forms import NameLocationSearchForm, UploadTicket, TicketPriceForm
 
 
@@ -37,31 +33,11 @@ class Sell(View):
         except Event.DoesNotExist:
             return Http404
 
-    def create_ticket(self, event, seller, price, pdf_file):
+    def create_ticket(self, event, seller, price, pdf_object):
         ticket = Ticket(event=event, seller=seller, price=price)
         ticket.save()
-        file_location = self.save_ticket_pdf(ticket_id=ticket.id, pdf_file=pdf_file)
-        ticket.link = file_location
+        ticket.link = SavePDF.save_festival_ticket_return_filepath(pdf_object, ticket.id)
         ticket.save()
-
-    def save_ticket_pdf(self, pdf_file, ticket_id):
-        file_location = self.create_ticket_file_location(ticket_id)
-        save_pdf(pdf_file, file_location)
-        return file_location
-
-    def create_ticket_file_location(self, ticket_id):
-        filename = str(ticket_id)
-        tickets_directory = scriptine.path(settings.STATIC_ROOT).joinpath('tickets')
-        if not tickets_directory.exists():
-            tickets_directory.mkdir()
-
-        festival_tickets_directory = tickets_directory.joinpath('festival_tickets')
-        if not festival_tickets_directory.exists():
-            festival_tickets_directory.mkdir()
-
-        file_location = festival_tickets_directory.joinpath(filename)
-        file_location += '.pdf'
-        return file_location
 
     def get_max_ticket_price(self, event_id):
         event = self.get_event(event_id)
@@ -92,23 +68,19 @@ class Sell(View):
         pdf_file = request.FILES['pdf_file']
         price = request.POST.get('price')
 
-        if not pdf_is_safe(pdf_file):
-            messages.add_message(request, messages.ERROR, messages_text.unsafe_pdf)
+        pdf_object = ProcessTicket(pdf_file, event_id=event_id)
+
+        # If ticket is safe and valid, then successful is True, otherwise returns message
+        if not pdf_object.successfull:
+            messages.add_message(request, messages.ERROR, pdf_object.message)
             return render_failed_post_template
 
-        if not ticket_is_valid(pdf_file, event_id):
-            messages.add_message(request, messages.ERROR, messages_text.pdf_invalid)
-            return render_failed_post_template
-
-        self.create_ticket(event=event, seller=seller, price=price, pdf_file=pdf_file)
+        self.create_ticket(event=event, seller=seller, price=price, pdf_object=pdf_object)
 
         messages.add_message(request, messages.SUCCESS, 'Ticket successfully put up for sale')
         return redirect('my_info:tickets_for_sale')
 
 
-def process_pdf(request, pdf_file):
-    return
 
 
-def ticket_is_valid(pdf_file, event_id):
-    return True
+
