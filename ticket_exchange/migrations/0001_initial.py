@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import django.core.validators
-import time
 import django.utils.timezone
 from django.conf import settings
+import time
 
 
 class Migration(migrations.Migration):
@@ -18,16 +18,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BaseTicket',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
-                ('details', models.TextField()),
-                ('link', models.CharField(max_length=200)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('link', models.TextField(null=True, blank=True)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=2)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='BaseTicketBarcodeLocation',
+            fields=[
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('x_min', models.IntegerField()),
+                ('x_max', models.IntegerField()),
+                ('y_min', models.IntegerField()),
+                ('y_max', models.IntegerField()),
+                ('baseticket', models.ForeignKey(to='ticket_exchange.BaseTicket')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='BaseTicketBarcodeType',
+            fields=[
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('type', models.CharField(max_length=100)),
+                ('baseticket', models.ForeignKey(to='ticket_exchange.BaseTicket')),
             ],
         ),
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('name', models.CharField(max_length=200)),
                 ('location', models.CharField(max_length=100)),
                 ('city', models.CharField(max_length=100)),
@@ -39,35 +57,43 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
                 ('photo', models.TextField(null=True, blank=True)),
-                ('bank_account', models.CharField(null=True, max_length=30, validators=[django.core.validators.RegexValidator(b'^[0-9a-zA-Z]*$', b'Only alphanumeric characters (numbers and letters) are allowed.')], blank=True)),
-                ('fullname', models.CharField(null=True, max_length=100, blank=True)),
+                ('iban', models.CharField(max_length=30, validators=[django.core.validators.RegexValidator(b'^[0-9a-zA-Z]*$', b'Only alphanumeric characters (numbers and letters) are allowed.')], blank=True, null=True)),
+                ('fullname', models.CharField(null=True, blank=True, max_length=100)),
             ],
         ),
         migrations.CreateModel(
             name='Ticket',
             fields=[
-                ('id', models.AutoField(auto_created=True, serialize=False, primary_key=True, verbose_name='ID')),
-                ('price', models.DecimalField(null=True, max_digits=10, decimal_places=2, blank=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('price', models.DecimalField(max_digits=10, decimal_places=2)),
                 ('link', models.TextField(null=True, blank=True)),
                 ('potential_buyer_expiration_moment', models.FloatField(default=time.time)),
-                ('buyer', models.ForeignKey(null=True, blank=True, to='ticket_exchange.Person', related_name='buyer')),
-                ('event', models.ForeignKey(related_name='event', to='ticket_exchange.Event')),
-                ('holder', models.ForeignKey(related_name='holder', to='ticket_exchange.Person')),
-                ('potential_buyer', models.ForeignKey(null=True, blank=True, to='ticket_exchange.Person', related_name='potential_buyer')),
-                ('seller', models.ForeignKey(related_name='seller', to='ticket_exchange.Person')),
+                ('buyer', models.ForeignKey(null=True, blank=True, related_name='buyer', to='ticket_exchange.Person')),
+                ('event', models.ForeignKey(to='ticket_exchange.Event', related_name='event')),
+                ('holder', models.ForeignKey(to='ticket_exchange.Person', related_name='holder')),
+                ('potential_buyer', models.ForeignKey(null=True, blank=True, related_name='potential_buyer', to='ticket_exchange.Person')),
+                ('seller', models.ForeignKey(to='ticket_exchange.Person', related_name='seller')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='TicketBarcodeNumber',
+            fields=[
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('number', models.CharField(max_length=200)),
+                ('ticket', models.ForeignKey(to='ticket_exchange.Ticket')),
             ],
         ),
         migrations.AddField(
             model_name='person',
             name='tickets',
-            field=models.ManyToManyField(through='ticket_exchange.Ticket', related_name='tickets', to='ticket_exchange.Event'),
+            field=models.ManyToManyField(to='ticket_exchange.Event', through='ticket_exchange.Ticket', related_name='tickets'),
         ),
         migrations.AddField(
             model_name='person',
             name='user',
-            field=models.OneToOneField(related_name='person', to=settings.AUTH_USER_MODEL),
+            field=models.OneToOneField(to=settings.AUTH_USER_MODEL, related_name='person'),
         ),
         migrations.AddField(
             model_name='baseticket',

@@ -24,6 +24,28 @@ class ProcessPdf(object):
         # return virus_scanner(self.pdf)
         return True
 
+    def get_this_ticket_barcode_types(self):
+        types = []
+        for barcode in self.barcode_objects:
+            types.append(barcode.type)
+
+        return types
+
+    def get_this_ticket_barcode_locations(self):
+        locations = []
+        for barcode in self.barcode_objects:
+            locations += barcode.locations
+
+        return locations
+
+    def get_this_ticket_barcode_numbers(self):
+        this_ticket_barcodes = set()
+
+        for barcode in self.barcode_objects:
+            this_ticket_barcodes.add(barcode.number)
+
+        return this_ticket_barcodes
+
 
 class ProcessBaseTicket(ProcessPdf):
 
@@ -42,10 +64,26 @@ class ProcessBaseTicket(ProcessPdf):
         if not self.barcode_objects:
             return
 
-        # Some other checks.
+        if not self.pdf_is_valid:
+            return
+
+        # Perhaps 2 different tickets need to be uploaded to make sure there are no mistakes?
 
         self.successful = True
         return
+
+    def pdf_is_valid(self):
+        """BaseTicket must have at least 1 type, 1, location and 1 number"""
+        if not self.get_this_ticket_barcode_types():
+            return False
+
+        if not self.get_this_ticket_barcode_locations():
+            return False
+
+        if not self.get_this_ticket_barcode_numbers():
+            return False
+
+        return True
 
 
 class ProcessTicket(ProcessPdf):
@@ -70,29 +108,107 @@ class ProcessTicket(ProcessPdf):
         return
 
 
-
     def pdf_is_valid(self):
+        self.message = messages.pdf_invalid
         # If there are no barcodes, the pdf is invalid
         if not self.barcode_objects:
-            self.message = messages.pdf_invalid
             return False
 
-        # If the number of barcodes in the baseticket and this ticket is not equal, the pdf is invalid
-        # if len(barcode_dicts) != len(Barcode.objects.filter(baseticket_event_id=self.event_id)):
-        #     self.message = messages.pdf_invalid
-        #     return False
+        baseticket_id = BaseTicket.objects.get(event_id=self.event_id).id
+        if not self.barcode_types_are_valid(baseticket_id):
+            return False
 
-        # for barcode_dict in barcode_dicts:
-        #     barcode_dictsbase_ticket_barcodes
-        #     base_ticket_barcode_types = ticket.
-        #     if not barcode.type == BaseTicket.objects.get(event_id=self.event_id).type
+        if not self.barcode_locations_are_valid(baseticket_id):
+            return False
 
-            # barcodes = { ticket.barcode for ticket in Ticket.objects.filter(event_id=self.event_id) }
-            # if barcode_dict['number'] in barcodes:
-            #     self.message = messages.pdf_already_uploaded
-            #     return False
+        if not self.barcode_numbers_are_valid():
+            self.message = messages.pdf_already_uploaded
+            return False
+
+        self.message = ''
+        return True
+
+
+    def barcode_types_are_valid(self, baseticket_id):
+        """
+        This function checks whether both baseticket and this ticket have types
+        Whether baseticket and this ticket have the same number of types
+        Whether the set of the baseticket types and set of types of this ticket is equal
+        """
+        base_ticket_types = [ item.type for item in BaseTicketBarcodeType.objects.filter(baseticket_id=baseticket_id) ]
+        this_ticket_types = self.get_this_ticket_barcode_types()
+
+        if not base_ticket_types or not this_ticket_types:
+            return False
+
+        if len(base_ticket_types) != len(this_ticket_types):
+            return False
+
+        if set(base_ticket_types) != set(this_ticket_types):
+            return False
 
         return True
+
+
+    def barcode_locations_are_valid(self, baseticket_id):
+        """
+        This function checks whether both baseticket and this ticket have locations
+        Whether baseticket and this ticket have the same number of locations
+        Whether each location of this ticket is in the same location (+- 20px) as the locations of the baseticket
+        """
+        base_ticket_locations = BaseTicketBarcodeType.objects.filter(baseticket_id=baseticket_id)
+        this_ticket_locations = self.get_this_ticket_barcode_locations()
+
+        if not base_ticket_locations or not this_ticket_locations:
+            return False
+
+        if len(base_ticket_locations) != len(this_ticket_locations):
+            return False
+
+        for location in this_ticket_locations:
+            if not self.barcode_location_in_baseticket_barcode_locations(location, base_ticket_locations):
+                return False
+
+        return True
+
+
+    def barcode_location_in_baseticket_barcode_locations(self, location, base_ticket_locations):
+        for base_ticket_location in base_ticket_locations:
+            x_min_equal = abs(location.x_min - base_ticket_location.x_min) <= 20
+            x_max_equal = abs(location.x_max - base_ticket_location.x_max) <= 20
+            y_min_equal = abs(location.y_min - base_ticket_location.y_min) <= 20
+            y_max_equal = abs(location.y_max - base_ticket_location.y_max) <= 20
+
+            if x_min_equal and x_max_equal and y_min_equal and y_max_equal:
+                return True
+
+        return False
+
+
+    def barcode_numbers_are_valid(self):
+        """
+        Checks whether the barcodes in the ticket are unique.
+        One barcode can correspond to another in the list, as long as the set of barcodes per ticket is unique
+        """
+        this_ticket_barcodes = self.get_this_ticket_barcode_numbers()
+        existing_ticket_barcodes = self.get_existing_ticket_barcode_numbers()
+
+        if this_ticket_barcodes in existing_ticket_barcodes:
+            return False
+
+        return True
+
+
+    def get_existing_ticket_barcode_numbers(self):
+        tickets = Ticket.objects.filter(event_id=self.event_id)
+        existing_ticket_barcodes = []
+
+        for ticket in tickets:
+            barcodes_per_ticket = {barcode.number for barcode in ticket.ticketbarcodenumber_set.all()}
+            existing_ticket_barcodes.append(barcodes_per_ticket)
+
+        return existing_ticket_barcodes
+
 
 
 class GetBarcodesPDF():
@@ -225,6 +341,9 @@ class SavePDF():
     @classmethod
     def save_base_barcode_info(cls, pdf_object, event_id):
         baseticket_id = BaseTicket.objects.get(event_id=event_id).id
+
+        BaseTicketBarcodeType.objects.filter(baseticket_id=baseticket_id).delete()
+        BaseTicketBarcodeLocation.objects.filter(baseticket_id=baseticket_id).delete()
 
         for barcode_object in pdf_object.barcode_objects:
             # Save the barcode type for this Barcode in BaseTicket
