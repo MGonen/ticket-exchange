@@ -19,8 +19,9 @@ class CreateEvent(View):
         return super(CreateEvent, self).dispatch(*args, **kwargs)
 
     def create_base_ticket(self, pdf_object, event, price):
-        filepath = SavePDF.save_base_ticket_return_filepath(pdf_object, event.id)
-        base_ticket = BaseTicket(event=event, link=filepath, price=price)
+        base_ticket = BaseTicket(event=event, price=price)
+        base_ticket.save()
+        base_ticket.link = SavePDF.save_base_ticket_return_filepath(pdf_object, event.id)
         base_ticket.save()
 
 

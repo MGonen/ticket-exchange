@@ -71,7 +71,7 @@ class Sell(View):
         pdf_object = ProcessTicket(pdf_file, event_id=event_id)
 
         # If ticket is safe and valid, then successful is True, otherwise returns message
-        if not pdf_object.successfull:
+        if not pdf_object.successful:
             messages.add_message(request, messages.ERROR, pdf_object.message)
             return render_failed_post_template
 

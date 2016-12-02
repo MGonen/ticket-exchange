@@ -210,6 +210,7 @@ class SavePDF():
     @classmethod
     def save_festival_barcode_number(cls, pdf_object, ticket_id):
         for barcode_objects in pdf_object.barcode_objects:
+            # Save Barcode number for this barcode in Ticket
             number = TicketBarcodeNumber(ticket_id=ticket_id, number=barcode_objects.number)
             number.save()
 
@@ -224,10 +225,14 @@ class SavePDF():
     @classmethod
     def save_base_barcode_info(cls, pdf_object, event_id):
         baseticket_id = BaseTicket.objects.get(event_id=event_id).id
+
         for barcode_object in pdf_object.barcode_objects:
+            # Save the barcode type for this Barcode in BaseTicket
             type = BaseTicketBarcodeType(baseticket_id=baseticket_id, type=barcode_object.type)
             type.save()
+
             for bc_location in barcode_object.locations:
+                # Save the barcode locations
                 barcode_location_db_object = BaseTicketBarcodeLocation(baseticket_id=baseticket_id, x_min= bc_location.x_min, x_max=bc_location.x_max, y_min=bc_location.y_min, y_max=bc_location.y_max)
                 barcode_location_db_object.save()
 
