@@ -27,7 +27,7 @@ class ProcessPdf(object):
     def get_this_ticket_barcode_types(self):
         types = []
         for barcode in self.barcode_objects:
-            types.append(barcode.type)
+            types.append(str(barcode.type))
 
         return types
 
@@ -74,6 +74,8 @@ class ProcessBaseTicket(ProcessPdf):
 
     def pdf_is_valid(self):
         """BaseTicket must have at least 1 type, 1, location and 1 number"""
+        self.message = messages.pdf_invalid
+
         if not self.get_this_ticket_barcode_types():
             return False
 
@@ -116,13 +118,16 @@ class ProcessTicket(ProcessPdf):
 
         baseticket_id = BaseTicket.objects.get(event_id=self.event_id).id
         if not self.barcode_types_are_valid(baseticket_id):
+            print 'types invalid'
             return False
 
         if not self.barcode_locations_are_valid(baseticket_id):
+            print 'locations invalid'
             return False
 
         if not self.barcode_numbers_are_valid():
             self.message = messages.pdf_already_uploaded
+            print 'numbers invalid'
             return False
 
         self.message = ''
@@ -139,12 +144,15 @@ class ProcessTicket(ProcessPdf):
         this_ticket_types = self.get_this_ticket_barcode_types()
 
         if not base_ticket_types or not this_ticket_types:
+            print 'types not present'
             return False
 
         if len(base_ticket_types) != len(this_ticket_types):
+            print 'number of types not equal'
             return False
 
         if set(base_ticket_types) != set(this_ticket_types):
+            print 'type sets not equal'
             return False
 
         return True
@@ -156,17 +164,21 @@ class ProcessTicket(ProcessPdf):
         Whether baseticket and this ticket have the same number of locations
         Whether each location of this ticket is in the same location (+- 20px) as the locations of the baseticket
         """
-        base_ticket_locations = BaseTicketBarcodeType.objects.filter(baseticket_id=baseticket_id)
+        base_ticket_locations = BaseTicketBarcodeLocation.objects.filter(baseticket_id=baseticket_id)
         this_ticket_locations = self.get_this_ticket_barcode_locations()
 
         if not base_ticket_locations or not this_ticket_locations:
+            print 'locations missing'
             return False
 
         if len(base_ticket_locations) != len(this_ticket_locations):
+            print len(base_ticket_locations), len(this_ticket_locations)
+            print 'number of locations not equal'
             return False
 
         for location in this_ticket_locations:
             if not self.barcode_location_in_baseticket_barcode_locations(location, base_ticket_locations):
+                print 'location not present in baseticket'
                 return False
 
         return True

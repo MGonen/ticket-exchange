@@ -59,10 +59,9 @@ class Sell(View):
         price_form = TicketPriceForm(request.POST)
         upload_form = UploadTicket(request.POST, request.FILES)
         max_ticket_price = self.get_max_ticket_price(event_id)
-        render_failed_post_template = render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
         if not (price_form.is_valid() and upload_form.is_valid() and 'pdf_file' in request.FILES):
-            return render_failed_post_template
+            return render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
         # if the forms are valid, and 'pdf_file' is in request.FILES
         pdf_file = request.FILES['pdf_file']
@@ -73,7 +72,7 @@ class Sell(View):
         # If ticket is safe and valid, then successful is True, otherwise returns message
         if not pdf_object.successful:
             messages.add_message(request, messages.ERROR, pdf_object.message)
-            return render_failed_post_template
+            return render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
         self.create_ticket(event=event, seller=seller, price=price, pdf_object=pdf_object)
 
