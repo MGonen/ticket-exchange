@@ -30,7 +30,7 @@ function parsley_pdf_file_extension() {
             return file_extension === 'pdf';
         },
         messages: {
-            en: 'Only PDF files can be uploaded bitch'
+            en: 'Only PDF files can be uploaded'
         }
     });
 
