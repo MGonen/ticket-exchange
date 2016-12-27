@@ -16,5 +16,22 @@ function parsley_price_general() {
 function parsley_pdf_file_required() {
     $pdf_file_upload = $('#id_pdf_file');
     $pdf_file_upload.attr('data-parsley-required',"true");
+    parsley_pdf_file_extension();
 }
 
+
+function parsley_pdf_file_extension() {
+    $pdf_file_upload = $('#id_pdf_file');
+    $pdf_file_upload.attr('data-parsley-pdfonly',"true");
+
+    window.Parsley.addValidator('pdfonly', {
+        validateString: function(value) {
+            const file_extension = value.split('.').pop().toLowerCase();
+            return file_extension === 'pdf';
+        },
+        messages: {
+            en: 'Only PDF files can be uploaded bitch'
+        }
+    });
+
+}
