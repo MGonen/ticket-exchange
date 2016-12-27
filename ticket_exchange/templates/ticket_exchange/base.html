@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="{% static 'ticket_exchange/css/stylesheet.css' %}">
         <script src="{% static 'ticket_exchange/js/iban.js' %}"></script>
         <script src="{% static 'ticket_exchange/js/scripts.js' %}"></script>
-        <script src="{% static 'ticket_exchange/js/parsley_validation.js' %}"></script>
+        <script src="{% static 'ticket_exchange/js/custom_parsley_validation.js' %}"></script>
         <script>var iban_from_db = '{{ user.person.iban }}';</script>
 
         {% block stylesheets %}{% endblock %}

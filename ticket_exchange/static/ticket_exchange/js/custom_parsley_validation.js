@@ -7,7 +7,7 @@ function parsley_price_general() {
     $price_input.attr('data-parsley-required',"true");
     $price_input.attr('min', 0);
 
-    const parsley_price_pattern = "[0-9]+\\.[0-9][0-9]";
+    const parsley_price_pattern = "^(?=.*[0-9])[0-9]*(?:\\.[0-9][0-9])?$";
     $price_input.attr('data-parsley-pattern', parsley_price_pattern);
     $price_input.attr('data-parsley-pattern-message',"Must be a number with 2 decimal places");
 }
