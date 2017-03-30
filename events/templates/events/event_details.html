@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block content %}
+    <form method="POST" >{% csrf_token %}
+        <button name="test_baseticket" class="btn btn-primary" type="submit">Create Test Base Ticket</button>
+    </form>
+
     <div class="form-container">
         <h1>Event Details</h1>
         <form enctype="multipart/form-data" method="POST" class="form-horizontal" data-parsley-validate>{% csrf_token %}

@@ -5,3 +5,4 @@ db.sqlite3
 /tickets
 /static
 .DS_Store
+.idea

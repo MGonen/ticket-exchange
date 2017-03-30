@@ -1,9 +1,16 @@
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import View
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+
+from reportlab.lib.pagesizes import A4, letter
+from reportlab.graphics.barcode import eanbc, qr, usps
+from reportlab.graphics.shapes import Drawing
+from reportlab.pdfgen import canvas
+from reportlab.graphics import renderPDF
+import random
 
 from ticket_exchange.models import Person, Event, Ticket, BaseTicket
 from ticket_exchange import messages as message_text
@@ -33,6 +40,11 @@ class CreateEvent(View):
                                                              'base_ticket_price_form': base_ticket_price_form, 'pdf_exists': 'false'})
 
     def post(self, request):
+        # Temporary part of the method to create tickets for test purposes
+        if 'test_baseticket' in request.POST:
+            response = create_test_baseticket()
+            return response
+
         event_form = EventForm(request.POST)
         base_ticket_price_form = BaseTicketPriceForm(request.POST)
         upload_form = UploadBaseTicketNew(request.POST, request.FILES)
@@ -138,6 +150,36 @@ class EditEvent(View):
 
         messages.add_message(request, messages.SUCCESS, message_text.event_update_successful)
         return redirect('buy_ticket:available_tickets', event.id)
+
+
+def create_test_baseticket():
+    barcode_value = '1234567890'
+
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="TestBaseTicket - Event name.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    c = canvas.Canvas(response, pagesize=A4)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    x_location = random.randrange(15, 350)
+    y_location = random.randrange(50, 600)
+
+    print 'x and y locations:', x_location, y_location
+
+    barcode_eanbc8 = eanbc.Ean8BarcodeWidget(barcode_value)
+    d = Drawing(50, 10)
+    d.add(barcode_eanbc8)
+    renderPDF.draw(d, c, x_location, y_location)
+
+    c.drawString(200, 700, "Test BaseTicket")
+
+    # Close the PDF object cleanly, and we're done.
+    c.showPage()
+    c.save()
+    return response
 
 
 

@@ -3,7 +3,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.generic import View
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.utils.decorators import method_decorator
+
+from reportlab.lib.pagesizes import A4
+from reportlab.graphics.barcode import eanbc
+from reportlab.graphics.shapes import Drawing
+from reportlab.pdfgen import canvas
+from reportlab.graphics import renderPDF
+
+import random
 
 from ticket_exchange.models import Person, Event, Ticket
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
@@ -20,6 +29,10 @@ def select_event(request):
 
 class Sell(View):
     template_name = 'sell_ticket/sell_ticket.html'
+
+    @method_decorator(login_required(login_url=FACEBOOK_LOGIN_URL))
+    def dispatch(self, *args, **kwargs):
+        return super(Sell, self).dispatch(*args, **kwargs)
 
     def get_seller(self, user_id):
         try:
@@ -60,6 +73,11 @@ class Sell(View):
         upload_form = UploadTicket(request.POST, request.FILES)
         max_ticket_price = self.get_max_ticket_price(event_id)
 
+        # Temporary part of the method to create tickets for test purposes
+        if 'test_ticket' in request.POST:
+            response = create_test_ticket(event_id)
+            return response
+
         if not (price_form.is_valid() and upload_form.is_valid() and 'pdf_file' in request.FILES):
             return render(request, self.template_name, {'event': event, 'price_form': price_form, 'upload_form': upload_form, 'max_ticket_price': max_ticket_price})
 
@@ -80,6 +98,36 @@ class Sell(View):
         return redirect('my_info:tickets_for_sale')
 
 
+def create_test_ticket(event_id):
+    event = Event.objects.get(id=event_id)
 
+    barcode_value = str(random.randrange(10000000000))
 
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="%s - %s.pdf"' % (event.name, barcode_value)
+
+    # Create the PDF object, using the response object as its "file."
+    c = canvas.Canvas(response, pagesize=A4)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    baseticket_x_location = event.baseticket.baseticketbarcodelocation_set.all()[0].x_min
+    pdf_x_location = (baseticket_x_location - 34) / 4.17
+
+    baseticket_y_location = event.baseticket.baseticketbarcodelocation_set.all()[0].y_min
+    pdf_y_location = (3202 - baseticket_y_location) / 4.17
+    print 'locations:', baseticket_y_location, pdf_y_location
+
+    barcode_eanbc8 = eanbc.Ean8BarcodeWidget(barcode_value)
+    d = Drawing(50, 10)
+    d.add(barcode_eanbc8)
+    renderPDF.draw(d, c, pdf_x_location, pdf_y_location)
+
+    c.drawString(200, 700, "%s - %s" % (event.name, barcode_value))
+
+    # Close the PDF object cleanly, and we're done.
+    c.showPage()
+    c.save()
+    return response
 
