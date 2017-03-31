@@ -5,16 +5,9 @@ from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 
-from reportlab.lib.pagesizes import A4, letter
-from reportlab.graphics.barcode import eanbc, qr, usps
-from reportlab.graphics.shapes import Drawing
-from reportlab.pdfgen import canvas
-from reportlab.graphics import renderPDF
-import random
-
 from ticket_exchange.models import Person, Event, Ticket, BaseTicket
 from ticket_exchange import messages as message_text
-from ticket_exchange.pdfs import ProcessBaseTicket, SavePDF
+from ticket_exchange.pdfs import ProcessBaseTicket, SavePDF, create_test_baseticket_pdf
 from events.forms import UploadBaseTicketNew, UploadBaseTicketEdit, EventForm, BaseTicketPriceForm
 
 
@@ -153,33 +146,13 @@ class EditEvent(View):
 
 
 def create_test_baseticket():
-    barcode_value = '1234567890'
-
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="TestBaseTicket - Event name.pdf"'
+    barcode_value = '1234567890'
+    return create_test_baseticket_pdf(response, barcode_value)
 
-    # Create the PDF object, using the response object as its "file."
-    c = canvas.Canvas(response, pagesize=A4)
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    x_location = random.randrange(15, 350)
-    y_location = random.randrange(50, 600)
-
-    print 'x and y locations:', x_location, y_location
-
-    barcode_eanbc8 = eanbc.Ean8BarcodeWidget(barcode_value)
-    d = Drawing(50, 10)
-    d.add(barcode_eanbc8)
-    renderPDF.draw(d, c, x_location, y_location)
-
-    c.drawString(200, 700, "Test BaseTicket")
-
-    # Close the PDF object cleanly, and we're done.
-    c.showPage()
-    c.save()
-    return response
 
 
 

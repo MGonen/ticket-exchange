@@ -20,6 +20,4 @@ import views
 urlpatterns = (
     url(r'^select-event/$', views.select_event, name='select_event'),
     url(r'^(?P<event_id>[0-9]+)/$', views.Sell.as_view(), name='sell_ticket'),
-    url(r'^(?P<event_id>[0-9]+)/create-test-ticket', views.create_test_ticket, name='create_test_ticket'),
-
 )

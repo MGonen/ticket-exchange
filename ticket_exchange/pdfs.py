@@ -7,6 +7,13 @@ import scriptine
 import datetime
 from collections import namedtuple
 
+from reportlab.lib.pagesizes import A4
+from reportlab.graphics.barcode import eanbc
+from reportlab.graphics.shapes import Drawing
+from reportlab.pdfgen import canvas
+from reportlab.graphics import renderPDF
+import random
+
 from ticket_exchange.models import Ticket, Event, BaseTicket, BaseTicketBarcodeType, BaseTicketBarcodeLocation, TicketBarcodeNumber
 from ticket_exchange import messages
 
@@ -392,3 +399,40 @@ class SavePDF():
         with open(filepath, 'wb+') as destination:
             for chunk in pdf_file.chunks():
                 destination.write(chunk)
+
+
+def create_test_baseticket_pdf(response, barcode_value):
+    x_location = random.randrange(15, 350)
+    y_location = random.randrange(50, 600)
+
+    return create_ticket_pdf(response, barcode_value, x_location, y_location, 'Test BaseTicket')
+
+def create_test_event_ticket_pdf(response, barcode_value, event):
+    # Get X and Y Locations to make a ticket identical to the base ticket
+    baseticket_x_location = event.baseticket.baseticketbarcodelocation_set.all()[0].x_min
+    x_location = (baseticket_x_location - 34) / 4.17
+
+    baseticket_y_location = event.baseticket.baseticketbarcodelocation_set.all()[0].y_min
+    y_location = (3202 - baseticket_y_location) / 4.17
+
+    return create_ticket_pdf(response, barcode_value, x_location, y_location, event.name)
+
+def create_ticket_pdf(response, barcode_value, x_location, y_location, title):
+    # Create the PDF object, using the response object as its "file."
+    c = canvas.Canvas(response, pagesize=A4)
+
+    # Create the barcode, using the supplied barcode value
+    barcode_eanbc8 = eanbc.Ean8BarcodeWidget(barcode_value)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    d = Drawing(50, 10)
+    d.add(barcode_eanbc8)
+    renderPDF.draw(d, c, x_location, y_location)
+
+    c.drawString(200, 700, "%s - %s" % (title, barcode_value))
+
+    # Close the PDF object cleanly, and we're done.
+    c.showPage()
+    c.save()
+
+    return response

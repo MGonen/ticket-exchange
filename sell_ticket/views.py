@@ -6,17 +6,11 @@ from django.views.generic import View
 from django.http import Http404, HttpResponse
 from django.utils.decorators import method_decorator
 
-from reportlab.lib.pagesizes import A4
-from reportlab.graphics.barcode import eanbc
-from reportlab.graphics.shapes import Drawing
-from reportlab.pdfgen import canvas
-from reportlab.graphics import renderPDF
-
 import random
 
 from ticket_exchange.models import Person, Event, Ticket
 from ticket_exchange.views import FACEBOOK_LOGIN_URL
-from ticket_exchange.pdfs import ProcessTicket, ProcessBaseTicket, SavePDF
+from ticket_exchange.pdfs import ProcessTicket, ProcessBaseTicket, SavePDF, create_test_event_ticket_pdf
 from sell_ticket.forms import NameLocationSearchForm, UploadTicket, TicketPriceForm
 
 
@@ -100,34 +94,10 @@ class Sell(View):
 
 def create_test_ticket(event_id):
     event = Event.objects.get(id=event_id)
-
     barcode_value = str(random.randrange(10000000000))
 
     # Create the HttpResponse object with the appropriate PDF headers.
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="%s - %s.pdf"' % (event.name, barcode_value)
 
-    # Create the PDF object, using the response object as its "file."
-    c = canvas.Canvas(response, pagesize=A4)
-
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    baseticket_x_location = event.baseticket.baseticketbarcodelocation_set.all()[0].x_min
-    pdf_x_location = (baseticket_x_location - 34) / 4.17
-
-    baseticket_y_location = event.baseticket.baseticketbarcodelocation_set.all()[0].y_min
-    pdf_y_location = (3202 - baseticket_y_location) / 4.17
-    print 'locations:', baseticket_y_location, pdf_y_location
-
-    barcode_eanbc8 = eanbc.Ean8BarcodeWidget(barcode_value)
-    d = Drawing(50, 10)
-    d.add(barcode_eanbc8)
-    renderPDF.draw(d, c, pdf_x_location, pdf_y_location)
-
-    c.drawString(200, 700, "%s - %s" % (event.name, barcode_value))
-
-    # Close the PDF object cleanly, and we're done.
-    c.showPage()
-    c.save()
-    return response
-
+    return create_test_event_ticket_pdf(response, barcode_value, event)

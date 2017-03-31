@@ -10,12 +10,11 @@
 
 {% block content %}
 
+    <form method="POST" >{% csrf_token %}
+        <button name="test_ticket" class="btn btn-primary" type="submit">Create Test Ticket</button>
+    </form>
+
     <div class="form-container">
-
-        <form method="POST" >{% csrf_token %}
-            <button name="test_ticket" class="btn btn-primary" type="submit">Create Test Ticket</button>
-        </form>
-
         <div>
             <h1 class="h1_title" style="">{{ event.name }}</h1>
 
