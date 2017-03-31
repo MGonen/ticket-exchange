@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block scripts %}
+    <link rel="stylesheet" href="{% static 'my_info/css/stylesheet.css' %}">
     <script src="{% static 'my_info/js/count_down_timer.js' %}"></script>
     <script>
         var cancel_remove_url = '{% url 'my_info:cancel_remove_ticket' ticket.id %}';
@@ -43,8 +44,8 @@
 
 
         <form method="POST">{% csrf_token %}
-            <a href="{% url 'my_info:cancel_remove_ticket' ticket.id %}" class="btn btn-primary">Cancel</a>
-            <button name="submit" id="submit" class="btn btn-primary">Remove (15)</button>
+            <a id="cancel" href="{% url 'my_info:cancel_remove_ticket' ticket.id %}" class="btn btn-primary cancel-removal">Cancel (15)</a>
+            <button name="submit" id="submit" class="btn btn-primary">Remove</button>
         </form>
     </div>
 

@@ -5,8 +5,8 @@ function remove_ticket_count_down_timer() {
              window.location.replace(cancel_remove_url);
         }
         else {
-            time_left = time_left - 1;
-            $('#submit').text('Remove (' + time_left + ')');
+             time_left = time_left - 1;
+             $('#cancel').text('Cancel (' + time_left + ')');
         }
     }, 1000);
 
