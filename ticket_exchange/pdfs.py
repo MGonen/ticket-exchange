@@ -402,8 +402,8 @@ class SavePDF():
 
 
 def create_test_baseticket_pdf(response, barcode_value):
-    x_location = random.randrange(15, 350)
-    y_location = random.randrange(50, 600)
+    x_location = random.randrange(10, 500)
+    y_location = random.randrange(20, 700)
 
     return create_ticket_pdf(response, barcode_value, x_location, y_location, 'Test BaseTicket')
 
@@ -429,7 +429,7 @@ def create_ticket_pdf(response, barcode_value, x_location, y_location, title):
     d.add(barcode_eanbc8)
     renderPDF.draw(d, c, x_location, y_location)
 
-    c.drawString(200, 700, "%s - %s" % (title, barcode_value))
+    c.drawString(200, 800, "%s - %s" % (title, barcode_value))
 
     # Close the PDF object cleanly, and we're done.
     c.showPage()
